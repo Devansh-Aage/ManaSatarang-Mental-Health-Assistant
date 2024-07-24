@@ -53,7 +53,7 @@ function Profile() {
                     <p className="text-lg text-gray-600">{userData?.phoneNumber || '9892905943'}</p>
                 </div>
                 <div className="flex flex-col items-center mb-8 mr-40">
-                    <div className="relative w-[170px] h-[170px] mb-4 ml-8">
+                    <div className="relative w-[170px] h-[170px] mb-4 ">
                         {user?.photoURL ? (
                             <img
                                 src={user.photoURL} 

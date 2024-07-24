@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import Skeleton from "react-loading-skeleton";
-import { Mic, MicOff } from "lucide-react"; // Add microphone icons
-import { useSpeechSynthesis } from "react-speech-kit"; // Import from react-speech-kit
+import { Mic, MicOff, Send } from "lucide-react";
+import { useSpeechSynthesis } from "react-speech-kit";
 import "react-loading-skeleton/dist/skeleton.css";
 
 const Chatbot = () => {
@@ -11,16 +11,16 @@ const Chatbot = () => {
   const [loading, setLoading] = useState(false);
   const messagesEndRef = useRef(null);
   const [isListening, setIsListening] = useState(false);
-  const [voiceIndex, setVoiceIndex] = useState(0); // State for selected voice
-  const [pitch, setPitch] = useState(1); // State for pitch
-  const [rate, setRate] = useState(1.5); // State for rate
-  const [volume, setVolume] = useState(1); // State for volume
-  const [selectedVoice, setSelectedVoice] = useState(null); // State for selected voice object
+  const [voiceIndex, setVoiceIndex] = useState(0);
+  const [pitch, setPitch] = useState(1);
+  const [rate, setRate] = useState(1.5);
+  const [volume, setVolume] = useState(1);
+  const [selectedVoice, setSelectedVoice] = useState(null);
   const [videoMessages, setVideoMessages] = useState([]);
-  const { speak, speaking, cancel, supported, voices } = useSpeechSynthesis(); // Hook from react-speech-kit
+  const { speak, speaking, cancel, supported, voices } = useSpeechSynthesis();
 
   const recognition = useRef(null);
-  const [readingEnabled, setReadingEnabled] = useState(true); // State for toggle reading
+  const [readingEnabled, setReadingEnabled] = useState(true);
 
   useEffect(() => {
     if (!("webkitSpeechRecognition" in window)) {
@@ -40,29 +40,24 @@ const Chatbot = () => {
     }
   }, []);
 
-  // Function to handle voice selection
   const handleVoiceChange = (event) => {
     const index = parseInt(event.target.value, 10);
     setSelectedVoice(voices[index]);
     setVoiceIndex(index);
   };
 
-  // Function to handle pitch change
   const handlePitchChange = (event) => {
     setPitch(parseFloat(event.target.value));
   };
 
-  // Function to handle rate change
   const handleRateChange = (event) => {
     setRate(parseFloat(event.target.value));
   };
 
-  // Function to handle volume change
   const handleVolumeChange = (event) => {
     setVolume(parseFloat(event.target.value));
   };
 
-  // Function to start or stop listening
   const toggleListening = () => {
     if (isListening) {
       recognition.current.stop();
@@ -71,12 +66,10 @@ const Chatbot = () => {
     }
   };
 
-  // Function to scroll to the bottom of messages
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
-  // Effect to scroll to bottom whenever messages update
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
@@ -134,7 +127,6 @@ const Chatbot = () => {
     setLoading(false);
   };
 
-  // Function to trigger speech synthesis
   const speakResponse = (text) => {
     const cleanedText = text.replace(/[\u{1F600}-\u{1F64F}]/gu, "");
     speak({
@@ -146,97 +138,111 @@ const Chatbot = () => {
     });
   };
 
-  // Function to stop reading
   const stopReading = () => {
     cancel();
   };
 
-  // Function to toggle reading
   const toggleReading = () => {
     setReadingEnabled((prev) => !prev);
   };
 
   return (
-    <div className="flex flex-col lg:w-[65vw] max-h-[80vh] overflow-hidden mx-auto px-3 py-2 backdrop-blur-sm bg-white/30 rounded-lg shadow-lg">
-      <div className="flex-1 min-h-[40vh] overflow-y-auto backdrop-blur-sm bg-slate-200/30 border rounded-lg p-3">
-        <div className="flex flex-col gap-2">
-          {loading && <Skeleton height={50} count={1} className="mb-2" />}
-
-          {messages.map((msg, index) => (
-            <div
-              key={index}
-              className={`flex mb-2 ${
-                msg.sender === "user" ? "justify-end" : "justify-start"
-              }`}
-            >
+    <div>
+      <div className="flex flex-col items-center mb-10">
+        <h2 className="font-extrabold text-3xl text-indigo-950 mb-3">Meet Serena!</h2>
+        <h2 className="font-semibold text-lg text-orange-400">Your Supportive Friend for a Happier You!</h2>
+      </div>
+      <div className="flex flex-col lg:w-[65vw] max-h-[80vh] overflow-hidden mx-auto px-3 py-2 backdrop-blur-sm bg-white/30 rounded-lg">
+        <div className="flex-1 min-h-[40vh] overflow-y-auto backdrop-blur-sm bg-slate-200/30 border rounded-lg p-3 border-orange-400">
+          <div className="flex flex-col gap-2">
+            {loading && <Skeleton height={50} count={1} className="mb-2" />}
+            {messages.map((msg, index) => (
               <div
-                className={`rounded-xl p-3 max-w-xs ${
-                  msg.sender === "user"
-                    ? "bg-violet-300 text-right"
-                    : "bg-white text-left"
+                key={index}
+                className={`flex mb-2 ${
+                  msg.sender === "user" ? "justify-end" : "justify-start"
                 }`}
               >
-                {msg.text}
+                <div
+                  className={`rounded-xl p-3 max-w-xs ${
+                    msg.sender === "user"
+                      ? "bg-violet-300 text-right"
+                      : "bg-white text-left"
+                  }`}
+                >
+                  {msg.text}
+                </div>
               </div>
-            </div>
-          ))}
-
-          <div ref={messagesEndRef} />
-        </div>
-      </div>
-
-      <div className="flex mt-4">
-        <input
-          type="text"
-          value={userInput}
-          onChange={(e) => setUserInput(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter" && !e.shiftKey) {
-              e.preventDefault();
-              handleSendMessage();
-            }
-          }}
-          placeholder="Type a message..."
-          className="flex-1 p-3 border focus:ring-2 focus:ring-violet-400 border-gray-300 rounded-l-lg focus:outline-none"
-        />
-        <button
-          onClick={handleSendMessage}
-          className="p-3 bg-violet-500 mr-1 font-semibold text-white rounded-r-lg hover:bg-violet-600"
-        >
-          Send
-        </button>
-        <button
-          onClick={toggleListening}
-          className="p-3 bg-gray-300 mr-1 font-semibold text-black rounded-lg hover:bg-gray-400"
-        >
-          {isListening ? <Mic /> : <MicOff />}
-        </button>
-        <button
-          onClick={stopReading}
-          className="p-3 bg-pink-800 mr-1  font-semibold text-white rounded-lg hover:bg-pink-700"
-        >
-          Stop Reading
-        </button>
-        <button
-          onClick={toggleReading}
-          className={`p-3 mr-1  ml-2 ${
-            readingEnabled ? "bg-purple-800" : "bg-gray-400"
-          } font-semibold text-white rounded-lg hover:bg-purple-600`}
-        >
-          {readingEnabled ? "Reading Enabled" : "Reading Disabled"}
-        </button>
-      </div>
-
-      {readingEnabled && (
-        <>
-          <div className="mt-4 flex flex-col gap-4">
-            {videoMessages.map((msg, index) => (
-              <div key={index}>{msg.text}</div>
             ))}
+            <div ref={messagesEndRef} />
           </div>
+        </div>
 
-          <div className="mt-0">
-            <label className="block text-gray-700">Select Voice:</label>
+        <div className="flex mt-4 items-center relative">
+          <button
+            onClick={toggleListening}
+            className="mr-2 p-2 bg-gray-300 font-semibold text-black rounded-lg hover:bg-gray-400"
+          >
+            {isListening ? <Mic /> : <MicOff />}
+          </button>
+          
+          <input
+            type="text"
+            value={userInput}
+            onChange={(e) => setUserInput(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && !e.shiftKey) {
+                e.preventDefault();
+                handleSendMessage();
+              }
+            }}
+            placeholder="Enter your prompt here..."
+            className="flex-1 p-3 border focus:ring-2 focus:ring-violet-400 border-gray-300 rounded-l-lg focus:outline-none pr-12"
+          />
+          <button
+            onClick={handleSendMessage}
+            className="absolute right-2 top-1/2 transform -translate-y-1/2 text-violet-500 hover:text-violet-600 mr-28"
+          >
+            <Send size={20} />
+          </button>
+          <div className="ml-4 flex items-center">
+            
+            <select
+              value={rate}
+              onChange={(e) => handleRateChange(parseFloat(e.target.value))}
+              className="ml-2 border focus:ring-2 focus:ring-violet-400 border-gray-300 rounded-lg bg-white"
+            >
+              {[0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75].map((value) => (
+                <option key={value} value={value}>
+                  {value}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+
+        <div className="flex mt-4 gap-2 items-center">
+          {!readingEnabled && (
+            <button
+              onClick={toggleReading}
+              className="p-3 bg-purple-800 font-semibold text-white rounded-lg hover:bg-purple-600"
+            >
+              Enable Reading
+            </button>
+          )}
+          {readingEnabled && (
+            <>
+              <button
+                onClick={toggleReading}
+                className={`p-3 ${
+                  readingEnabled ? "bg-orange-400" : "bg-purple-800"
+                } font-semibold text-white rounded-lg hover:bg-purple-600`}
+              >
+                Disable Reading
+              </button>
+            </>
+          )}
+          <div className="flex-1">
             <select
               value={voiceIndex}
               onChange={handleVoiceChange}
@@ -250,48 +256,18 @@ const Chatbot = () => {
                 ))}
             </select>
           </div>
-          <div className="flex mt-2 w-full items-center justify-around">
-            <div className="flex gap-3">
-              <label className="block text-gray-700">Pitch</label>
-              <input
-                type="range"
-                min="0"
-                max="2"
-                step="0.1"
-                value={pitch}
-                onChange={handlePitchChange}
-                className="mt-1 block w-full"
-              />
-            </div>
+        </div>
 
-            <div className="flex gap-3">
-              <label className="block text-gray-700">Rate</label>
-              <input
-                type="range"
-                min="0.1"
-                max="10"
-                step="0.1"
-                value={rate}
-                onChange={handleRateChange}
-                className="mt-1 block w-full"
-              />
+        {readingEnabled && (
+          <>
+            <div className="mt-4 flex flex-col gap-4">
+              {videoMessages.map((msg, index) => (
+                <div key={index}>{msg.text}</div>
+              ))}
             </div>
-
-            <div className="flex gap-3">
-              <label className="block text-gray-700">Volume</label>
-              <input
-                type="range"
-                min="0"
-                max="1"
-                step="0.1"
-                value={volume}
-                onChange={handleVolumeChange}
-                className="mt-1 block w-full"
-              />
-            </div>
-          </div>
-        </>
-      )}
+          </>
+        )}
+      </div>
     </div>
   );
 };

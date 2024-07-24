@@ -29,6 +29,9 @@ import Chronic from "./Chronic";
 import PointsPage from "./PointsPage";
 import Leaderboard from "./Leaderboard";
 import Coupons from "./Coupons";
+import Forum from "./Forum";
+import { Bell } from "lucide-react";
+import Profile from "./Profile";
 
 const getRandomActivities = (list, count) => {
   const shuffled = [...list].sort(() => 0.5 - Math.random());
@@ -40,6 +43,10 @@ const App = () => {
   const [user, loading, error] = useAuthState(auth);
   const [userData, setUserData] = useState(null);
   const [lastUpdateDate, setLastUpdateDate] = useState(null);
+  const [userTasks, setUserTasks] = useState([]);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
+
 const navigate=useNavigate()
   const redirectToHomeIfAuth=()=>{
     if(user){
@@ -137,42 +144,69 @@ const navigate=useNavigate()
     }
   };
 
+  const handleDropdownToggle = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
+
+  const handleNotificationsToggle = () => {
+    setIsNotificationsOpen(!isNotificationsOpen);
+  };
+
+  const handleLogout = async () => {
+    await signOut(auth);
+    toast.info("Logged out successfully.");
+  };
+
   return (
-    <div className="absolute inset-0 overflow-y-auto -z-10 h-screen w-full bg-white [background:radial-gradient(125%_125%_at_50%_10%,#fff_40%,#63e_100%)]">
+    <div className="absolute inset-0 overflow-y-auto -z-10 h-screen w-full bg-white">
       <ToastContainer />
       <div className="w-full flex justify-between items-center p-4 sticky top-0 z-50">
         <Navbar user={user} />
         {user ? (
-          <div className="hidden lg:flex items-center gap-4 bg-purple-50 rounded-lg p-2">
-            <img
-              src={user?.photoURL}
-              alt="Profile"
-              className="w-8 h-8 rounded-full"
-            />
-            <div>
-              <div className="text-base font-semibold">{user?.displayName}</div>
-              <Link to="/points/leaderboard">
-                <div className="bg-fuchsia-400 w-fit rounded-lg px-2">
-                  Points: {userData?.points}
+          <div className="flex items-center relative">
+            <div className="mr-4">
+            <Bell className="cursor-pointer"/>
+              {isNotificationsOpen && (
+                <div className="absolute right-0 top-full mt-2 w-48 bg-white shadow-lg rounded-lg">
+                  <div className="p-4 text-gray-700">No new notifications.</div>
                 </div>
-              </Link>
+              )}
             </div>
-            <button
-              onClick={async () => {
-                await signOut(auth);
-                toast.info("Logged out successfully.");
-              }}
-              className="bg-red-500 text-white px-3 py-1 rounded-md text-sm hover:bg-red-600 transition-colors"
-            >
-              Logout
-            </button>
+            <div className="relative">
+              <img
+                src={user.photoURL}
+                alt="Profile"
+                className="w-8 h-8 rounded-full cursor-pointer"
+                onClick={handleDropdownToggle}
+              />
+              {isDropdownOpen && (
+                <div className="absolute right-0 top-full mt-2 w-48 bg-white shadow-lg rounded-lg">
+                  <Link
+                    to="/profile"
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  >
+                    Profile
+                  </Link>
+                  <Link
+                    to="/saved-links"
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  >
+                    Saved Links
+                  </Link>
+                  <button
+                    onClick={handleLogout}
+                    className="block w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-gray-100"
+                  >
+                    Logout
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
         ) : (
           <div className="flex items-center">
             <Link to="/login" className="">
-              <div className="bg-purple-900 text-white font-semibold rounded-lg text-base px-3 py-2">
-                Login
-              </div>
+              <div className="bg-purple-900 text-white font-semibold rounded-lg text-base px-3 py-2">Login</div>
             </Link>
           </div>
         )}
@@ -184,9 +218,9 @@ const navigate=useNavigate()
             path="/"
             element={<Home activities={activities} userData={userData} />}
           />
-          <Route path="/points" element={<PointsPage />} />
-          <Route path="/points/leaderboard" element={<Leaderboard />} />
-          <Route path="/points/coupon" element={<Coupons />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/profile/leaderboard" element={<Leaderboard />} />
+          <Route path="/profile/coupon" element={<Coupons />} />
           <Route
             path="/activity"
             element={<Activity activities={activities} user={userData} />}
@@ -195,6 +229,12 @@ const navigate=useNavigate()
             path="/activitydetails"
             element={
               <ActivityDetails activities={activities} user={userData} />
+            }
+          />
+          <Route
+            path="/forum"
+            element={
+              <Forum />
             }
           />
           <Route path="/chatbot" element={<Chatbot />} />

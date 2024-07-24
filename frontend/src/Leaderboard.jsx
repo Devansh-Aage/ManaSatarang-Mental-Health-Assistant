@@ -5,7 +5,7 @@ import PointsSidebar from "./components/PointsSidebar";
 const Leaderboard = () => {
   return (
     <div className=" w-full flex items-center justify-around gap-4 ">
-      <PointsSidebar />
+      {/* <PointsSidebar /> */}
       <div className="w-[50vw] flex flex-col items-center justify-center">
         <h1 className="text-3xl font-bold text-purple-800 mb-2">Leaderboard</h1>
         <ul className="bg-white shadow-lg rounded-lg w-full max-w-md">
