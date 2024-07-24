@@ -1,0 +1,133 @@
+/* Container for the entire chatbot */
+.chatbot-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    max-width: 800px; /* Adjust maximum width as needed */
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f0f0f0; /* Light background color */
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Shadow for elevation */
+  }
+  
+  /* Chat messages container */
+  .chat-messages {
+    flex: 1;
+    overflow-y: auto; /* Enable vertical scrolling */
+    margin-bottom: 20px;
+    padding-right: 10px; /* Space for scrollbar */
+  }
+  
+  /* Individual chat message */
+  .chat-message {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 10px;
+  }
+  
+  /* User message */
+  .user-message .message-bubble {
+    background-color: #007bff; /* Blue bubble for user messages */
+    color: #fff; /* White text color */
+    align-self: flex-end;
+  }
+  
+  /* Bot message */
+  .bot-message .message-bubble {
+    background-color: #6c757d; /* Gray bubble for bot messages */
+    color: #fff; /* White text color */
+    align-self: flex-start;
+  }
+  
+  /* Message bubble styling */
+  .message-bubble {
+    max-width: 70%; /* Limit message width */
+    padding: 10px;
+    border-radius: 10px;
+    margin-right: 5px;
+    margin-left: 5px;
+  }
+  
+  /* User and bot bubble specific styling */
+  .user-bubble {
+    border-top-right-radius: 0; /* Adjust rounded corners */
+  }
+  
+  .bot-bubble {
+    border-top-left-radius: 0; /* Adjust rounded corners */
+  }
+  
+  /* Loading skeleton animation */
+  .loading-skeleton {
+    margin-bottom: 10px;
+  }
+  
+  /* Input area for user message */
+  .input-area {
+    display: flex;
+    align-items: center;
+  }
+  
+  /* Input field */
+  .input-field {
+    flex: 1;
+    padding: 10px;
+    margin-right: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+  }
+  
+  /* Send button */
+  .send-button {
+    padding: 10px 20px;
+    background-color: #007bff; /* Blue button */
+    color: #fff; /* White text color */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .send-button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+  }
+  
+  /* Video column */
+  .video-column {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #fff; /* White background for video section */
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Shadow for elevation */
+  }
+  
+  .video-message {
+    margin-bottom: 10px;
+  }
+  
+  .video-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  
+  .video-link {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: inherit;
+  }
+  
+  .video-thumbnail {
+    width: 120px;
+    height: 90px;
+    margin-right: 10px;
+    border-radius: 5px;
+  }
+  
+  .video-title {
+    font-size: 14px;
+    margin-top: 5px;
+  }

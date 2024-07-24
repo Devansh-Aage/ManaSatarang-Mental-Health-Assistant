@@ -1,0 +1,38 @@
+/* activity.css */
+
+/* Overall layout */
+.min-h-screen {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #f3f4f6; /* Light gray background */
+    padding: 20px;
+  }
+  
+  /* Activity block styling */
+  .activity-block {
+    background-color: #ffffff; /* White background */
+    border: 1px solid #e2e8f0; /* Light border color */
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    width: 100%;
+    max-width: 500px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Shadow for depth */
+  }
+  
+  .activity-title {
+    font-size: 18px;
+    font-weight: bold;
+    color: #f5f0f0; /* Dark text color */
+    margin-bottom: 10px;
+  }
+  
+  .activity-description {
+    font-size: 14px;
+    line-height: 1.6;
+    color: #ededed; /* Medium gray text color */
+  }
+  

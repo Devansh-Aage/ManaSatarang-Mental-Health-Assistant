@@ -1,0 +1,77 @@
+/* Navbar container */
+.navbar {
+  position: sticky;
+  top: 3rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Shadow for elevation */
+  width: 60%; /* Adjust width as needed */
+  max-width: 1200px; /* Maximum width for larger screens */
+  margin: 0 auto; /* Center align */
+  padding: 10px 20px; /* Padding inside the navbar */
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  border-radius: 12px;
+  background-color: white;
+}
+
+/* Links and Menu Icons */
+.navbar .logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-decoration: none;
+  color: #333; /* Dark text color */
+}
+
+.navbar .links {
+  display: flex;
+  gap: 20px;
+}
+
+.navbar .links a {
+  font-size: 1.2rem;
+  font-weight: 600;
+  text-decoration: none;
+  color: #333; /* Dark text color */
+  transition: color 0.3s ease;
+}
+
+.navbar .links a:hover {
+  color: rgb(122, 43, 249); /* Blue color on hover */
+}
+
+/* Responsive Menu Button */
+.navbar .menu-button {
+  display: none; /* Hide on desktop */
+}
+
+@media (max-width: 768px) {
+  .navbar {
+    width: 100%; /* Full width on mobile */
+    border-radius: 0; /* No rounded corners on mobile */
+    padding: 10px; /* Adjust padding */
+    justify-content: space-between; /* Space evenly on mobile */
+  }
+
+  .navbar .links {
+    display: none; /* Hide links on mobile by default */
+    flex-direction: column; /* Stack links vertically */
+    position: absolute;
+    top: 100%; /* Position below navbar */
+    left: 0;
+    right: 0;
+    background-color: rgba(255, 255, 255, 0.9); /* White background */
+    border-radius: 0 0 20px 20px; /* Rounded corners only at the bottom */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Shadow for elevation */
+    padding: 10px; /* Padding inside the menu */
+  }
+
+  .navbar .links a {
+    margin-bottom: 10px; /* Space between links */
+  }
+
+  .navbar .menu-button {
+    display: block; /* Show menu button on mobile */
+    font-size: 1.5rem;
+    cursor: pointer;
+  }
+}

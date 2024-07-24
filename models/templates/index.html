@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Activity Prediction</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+      }
+      h1 {
+        text-align: center;
+      }
+      .form-container {
+        max-width: 600px;
+        margin: 0 auto;
+      }
+      .form-group {
+        margin-bottom: 20px;
+      }
+      .form-group label {
+        display: block;
+        font-weight: bold;
+        margin-bottom: 5px;
+      }
+      .form-group input[type="file"] {
+        display: block;
+        margin-top: 5px;
+      }
+      .form-group select {
+        width: 100%;
+        padding: 8px;
+        font-size: 16px;
+      }
+      .form-group button {
+        padding: 10px 20px;
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        cursor: pointer;
+        font-size: 16px;
+      }
+      .result {
+        margin-top: 20px;
+        padding: 10px;
+        background-color: #f0f0f0;
+        border: 1px solid #ccc;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Activity Prediction</h1>
+    <div class="form-container">
+      <form
+        id="predictionForm"
+        action="/predict"
+        method="post"
+        enctype="multipart/form-data"
+      >
+        <div class="form-group">
+          <label for="image">Upload Image:</label>
+          <input
+            type="file"
+            id="image"
+            name="image"
+            accept="image/*"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="activity">Select Activity:</label>
+          <select id="activity" name="activity" required>
+            <option value="go_to_a_dog_park">Go to a Dog Park</option>
+            <option value="listen_to_music">Listen to Music</option>
+            <option value="read_a_book">Read a Book</option>
+            <option value="ride_a_bicycle">Ride a Bicycle</option>
+            <option value="watch_a_sunrise_or_sunset">
+              Watch a Sunrise or Sunset
+            </option>
+          </select>
+        </div>
+        <div class="form-group">
+          <button type="submit">Predict Activity</button>
+        </div>
+      </form>
+      <div id="result" class="result" style="display: none">
+        <h3>Prediction Result:</h3>
+        <p><strong>Activity:</strong> <span id="activityResult"></span></p>
+        <p><strong>Result:</strong> <span id="predictionResult"></span></p>
+      </div>
+    </div>
+
+    <script>
+      // Handle form submission
+      document
+        .getElementById("predictionForm")
+        .addEventListener("submit", function (event) {
+          event.preventDefault();
+
+          // Fetch form data
+          var formData = new FormData(this);
+
+          // Send POST request to Flask endpoint
+          fetch("/predict", {
+            method: "POST",
+            body: formData,
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              // Update result section
+              document.getElementById("activityResult").textContent =
+                data.activity;
+              document.getElementById("predictionResult").textContent =
+                data.result;
+              document.getElementById("result").style.display = "block";
+            })
+            .catch((error) => {
+              console.error("Error:", error);
+            });
+        });
+    </script>
+  </body>
+</html>

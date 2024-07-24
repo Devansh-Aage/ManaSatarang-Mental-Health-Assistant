@@ -1,0 +1,126 @@
+/* community.css */
+
+/* Overall layout */
+.community-container {
+    display: flex;
+    height: 100%;
+  }
+  
+  .sidebar {
+    display: none; /* Hide on smaller screens */
+    flex: 1;
+    max-width: 250px;
+  }
+  
+  .main-content {
+    flex: 3;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* Message list */
+  .message-list {
+    flex: 1;
+    overflow-y: auto;
+    background-color: #f3f4f6;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 6px;
+  }
+  
+  .message-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-height: 80vh;
+  }
+  
+  .message {
+    display: flex;
+  }
+  
+  .message.sent {
+    justify-content: flex-end;
+  }
+  
+  .message.received {
+    justify-content: flex-start;
+  }
+  
+  .user-avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin: 0 10px;
+  }
+  
+  .message-content {
+    max-width: 70%;
+    padding: 10px;
+    border-radius: 10px;
+    word-wrap: break-word;
+    line-height: 1.4;
+  }
+  
+  .sent-message {
+    align-self: flex-end;
+    background-color: #DCF8C6; /* Light green for user's messages */
+    text-align: right;
+  }
+  
+  .received-message {
+    align-self: flex-start;
+    background-color: #FFFFFF; /* White for others' messages */
+    text-align: left;
+  }
+  
+  .message-text {
+    word-break: break-word;
+  }
+  
+  .message-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+  }
+  
+  .user-name {
+    font-size: 14px;
+    font-weight: bold;
+    margin-right: 5px;
+  }
+  
+  .verified-icon {
+    color: #007BFF; /* Blue color for verified badge */
+  }
+  
+  /* Input area */
+  .input-area {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+  }
+  
+  .message-input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    margin-right: 10px;
+  }
+  
+  .send-button {
+    padding: 10px 20px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .send-button:hover {
+    background-color: #0056b3;
+  }
+  

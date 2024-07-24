@@ -1,0 +1,43 @@
+.activity-block {
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    background: linear-gradient(to right, #4F46E5, #A683FF);
+    color: white;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .activity-block:hover {
+    background-color: #6759F6;
+  }
+  
+  .checkbox {
+    width: 24px;
+    height: 24px;
+    border: 2px solid white;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 12px;
+  }
+  
+  .checkbox.checked {
+    background-color: white;
+  }
+  
+  .check-mark {
+    color: #4F46E5; /* Blue color */
+  }
+  
+  .activity-title {
+    flex: 1;
+    font-size: 16px;
+  }
+  
+  .activity-title.completed {
+    text-decoration: line-through;
+  }
+  
