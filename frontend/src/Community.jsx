@@ -100,7 +100,7 @@ const Community = ({ user, userData, activities, userTasks }) => {
                       className={`max-w-[55%] p-3 rounded-lg break-words ${
                         msg.userId === user.uid
                           ? "bg-violet-300 text-right"
-                          : "bg-slate-100 text-left"
+                          : "bg-white text-left"
                       }`}
                     >
                       <div className="flex justify-end items-center mb-1">

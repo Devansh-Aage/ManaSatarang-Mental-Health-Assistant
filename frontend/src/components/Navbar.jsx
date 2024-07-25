@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import { signOut } from "firebase/auth";
 import { auth } from "../config/firebase-config";
 import { Menu, X } from "lucide-react";
-import "./Navbar.css";
 
 const Navbar = ({ user }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -32,6 +31,9 @@ const Navbar = ({ user }) => {
         </Link>
         <Link to="/activitydetails" className="transition-colors duration-200 hover:text-orange-400 mr-20">
           Activity
+        </Link>
+        <Link to="/therapists" className="transition-colors duration-200 hover:text-orange-400 mr-20">
+          Therapists
         </Link>
         
       </div>

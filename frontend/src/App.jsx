@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Link, redirect, Route, Routes, useNavigate } from "react-router-dom";
+import {
+  Link,
+  redirect,
+  Route,
+  Routes,
+  useLocation,
+  useNavigate,
+} from "react-router-dom";
 import Navbar from "./components/Navbar";
 import { signOut } from "firebase/auth";
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -21,17 +28,18 @@ import Login from "./Login";
 import Community from "./Community";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import "./App.css";
 import { activityList } from "./utils";
 import ActivityDetails from "./ActivityDetails";
 import Workspace from "./Workspace";
 import Chronic from "./Chronic";
-import PointsPage from "./PointsPage";
 import Leaderboard from "./Leaderboard";
 import Coupons from "./Coupons";
 import Forum from "./Forum";
 import { Bell } from "lucide-react";
 import Profile from "./Profile";
+import Therapists from "./Therapists";
+import TherapistDetails from "./components/TherapistDetails";
+import PaymentSuccess from "./PaymentSuccess";
 
 const getRandomActivities = (list, count) => {
   const shuffled = [...list].sort(() => 0.5 - Math.random());
@@ -43,19 +51,21 @@ const App = () => {
   const [user, loading, error] = useAuthState(auth);
   const [userData, setUserData] = useState(null);
   const [lastUpdateDate, setLastUpdateDate] = useState(null);
-  const [userTasks, setUserTasks] = useState([]);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
 
-const navigate=useNavigate()
-  const redirectToHomeIfAuth=()=>{
-    if(user){
-      navigate("/");
+  const location = useLocation();
+
+  const navigate = useNavigate();
+  const redirectToHomeIfAuth = () => {
+    if (location.pathname === "/login") {
+      if (user) {
+        navigate("/");
+      } else {
+        navigate("/login");
+      }
     }
-    else{
-      navigate('/login');
-    }
-  }
+  };
 
   const getUserFromDB = async () => {
     if (user) {
@@ -160,12 +170,12 @@ const navigate=useNavigate()
   return (
     <div className="absolute inset-0 overflow-y-auto -z-10 h-screen w-full bg-white">
       <ToastContainer />
-      <div className="w-full flex justify-between items-center p-4 sticky top-0 z-50">
+      <div className="w-screen mx-0 flex justify-between items-center p-4 sticky top-0 z-50">
         <Navbar user={user} />
         {user ? (
           <div className="flex items-center relative">
             <div className="mr-4">
-            <Bell className="cursor-pointer"/>
+              <Bell className="cursor-pointer" />
               {isNotificationsOpen && (
                 <div className="absolute right-0 top-full mt-2 w-48 bg-white shadow-lg rounded-lg">
                   <div className="p-4 text-gray-700">No new notifications.</div>
@@ -206,12 +216,14 @@ const navigate=useNavigate()
         ) : (
           <div className="flex items-center">
             <Link to="/login" className="">
-              <div className="bg-purple-900 text-white font-semibold rounded-lg text-base px-3 py-2">Login</div>
+              <div className="bg-purple-900 text-white font-semibold rounded-lg text-base px-3 py-2">
+                Login
+              </div>
             </Link>
           </div>
         )}
       </div>
-      <div className="lg:h-[86vh] p-4">
+      <div className="lg:h-[84vh] px-4 py-2">
         <Routes>
           <Route path="/login" element={<Login user={user} />} />
           <Route
@@ -231,13 +243,11 @@ const navigate=useNavigate()
               <ActivityDetails activities={activities} user={userData} />
             }
           />
-          <Route
-            path="/forum"
-            element={
-              <Forum />
-            }
-          />
+          <Route path="/forum" element={<Forum />} />
           <Route path="/chatbot" element={<Chatbot />} />
+          <Route path="/therapists" element={<Therapists />} />
+          <Route path="/therapistDetails" element={<TherapistDetails />} />
+          <Route path="/success" element={<PaymentSuccess />} />
           <Route
             path="/community/student"
             element={
