@@ -5,7 +5,7 @@ import { TimePicker } from "antd";
 import dayjs from "dayjs";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../config/firebase-config";
-import { loadStripe } from "@stripe/stripe-js";
+// import { loadStripe } from "@stripe/stripe-js";
 import { toast } from "react-toastify";
 
 const TherapistDetails = () => {

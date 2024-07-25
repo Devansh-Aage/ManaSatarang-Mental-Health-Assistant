@@ -1,38 +1,52 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { BadgeCheck, Users,ClipboardList } from 'lucide-react';
+import { Users, ArrowRight } from 'lucide-react';
 
 const CommunitySidebar = () => {
   const { pathname } = useLocation();
 
-  const getBgColor = (linkPath) => {
-    return pathname.includes(linkPath) ? 'bg-blue-800' : 'bg-purple-700';
+  const getBorderColor = (linkPath) => {
+    return pathname.includes(linkPath) ? 'border-orange-400' : 'border-gray-400';
   };
+
+  const getBgColor = (linkPath) => {
+    return pathname.includes(linkPath) ? 'bg-orange-400' : '';
+  };
+
+  const getTextColor = (linkPath) => {
+    return pathname.includes(linkPath) ? 'text-white' : '';
+  };
+
 
   return (
     <div>
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2 mb-10">
         <Users size={20} className="text-purple-600 mb-2" />
         <div className="text-2xl mb-3 font-semibold leading-6">Communities</div>
       </div>
 
-      <Link to="/community/student">
-        <div className={`max-w-xs mb-3 hover:bg-purple-600 ${getBgColor('/community/student')} rounded-lg text-white px-4 py-2`}>
-          <div className="text-base font-semibold">Student Circle</div>
-        </div>
-      </Link>
+      <div className="grid grid-cols-1 gap-0">
+        <Link to="/community/student">
+          <div className={`p-4 text-black border ${getTextColor('/community/student')} ${getBorderColor('/community/student')} ${getBgColor('/community/student')} rounded-t-md flex items-center justify-between`}>
+            <div className="text-base font-semibold">Student Circle</div>
+            <ArrowRight size={16} className={`text-black ${getTextColor('/community/student')}`}/>
+          </div>
+        </Link>
 
-      <Link to="/community/chronic">
-        <div className={`max-w-xs mb-3 hover:bg-purple-600 ${getBgColor('/community/chronic')} rounded-lg text-white px-4 py-2`}>
-          <div className="text-base font-semibold">Chronic Illness Support Group</div>
-        </div>
-      </Link>
+        <Link to="/community/chronic">
+          <div className={`p-4 text-black border ${getTextColor('/community/chronic')} ${getBorderColor('/community/chronic')} ${getBgColor('/community/chronic')}  flex items-center justify-between`}>
+            <div className="text-base font-semibold">Chronic Illness Support Group</div>
+            <ArrowRight size={16} className={`text-black ${getTextColor('/community/chronic')}`} />
+          </div>
+        </Link>
 
-      <Link to="/community/workspace">
-        <div className={`max-w-xs mb-3 hover:bg-purple-600 ${getBgColor('/community/workspace')} rounded-lg text-white px-4 py-2`}>
-          <div className="text-base font-semibold">Workplace Wellness</div>
-        </div>
-      </Link>
+        <Link to="/community/workspace">
+          <div className={`p-4 text-black border ${getTextColor('/community/workspace')} ${getBorderColor('/community/workspace')} ${getBgColor('/community/workspace')}  rounded-b-md flex items-center justify-between`}>
+            <div className="text-base font-semibold">Workplace Wellness</div>
+            <ArrowRight size={16} className={`text-black ${getTextColor('/community/workspace')}`} />
+          </div>
+        </Link>
+      </div>
     </div>
   );
 };
