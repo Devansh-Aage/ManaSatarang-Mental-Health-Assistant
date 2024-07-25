@@ -10,8 +10,8 @@ const PointsPage = () => {
   return (
     <div className="flex w-full h-full justify-evenly items-start">
       <PointsSidebar />
-      {pathname === "/points/coupons" && <Coupons />}
-      {pathname === "/points/leaderboard" && <Leaderboard />}
+      {pathname === "/profile/coupons" && <Coupons />}
+      {pathname === "/profile/leaderboard" && <Leaderboard />}
     </div>
   );
 };

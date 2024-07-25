@@ -7,7 +7,7 @@ import PointsSidebar from "./components/PointsSidebar";
 const Coupons = () => {
   return (
     <div className="flex justify-around items-center h-full">
-      <PointsSidebar />
+      {/* <PointsSidebar /> */}
       <div className="flex justify-center  items-center">
         <div className="bg-white shadow-lg mr-7 rounded-lg overflow-hidden w-60">
           <img className="w-full h-[220px] p-2" src={macd} alt="McDonald's" />

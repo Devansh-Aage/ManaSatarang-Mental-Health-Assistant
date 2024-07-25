@@ -5,7 +5,8 @@ import Loader from "./components/Loader";
 import "./css/home.css";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-import { Tabs } from 'antd';
+import { Search } from "lucide-react";
+// import { Tabs } from 'antd';
 const onChange = (key) => {
   console.log(key);
 };
@@ -69,60 +70,62 @@ const Home = ({ activities, userData }) => {
   };
 
   return (
-    <div className="home-container">
-      <div className="activity-column max-w-sm lg:block">
+    <div className="home-container flex flex-col mx-40">
+      {/* <div className="activity-column max-w-sm lg:block">
         <Activity activities={activities} user={userData} />
+      </div> */}
+      <div className="flex flex-col items-center mb-10">
+        <h2 className="font-extrabold text-3xl text-indigo-950 mb-3">Lift Your Spirit!</h2>
+        <h2 className="font-semibold text-lg text-orange-400">Explore Fun Ways to Brighten Your Mind.</h2>
       </div>
       <div className="search-column">
-        <div className="search-bar">
+        <div className="search-bar relative">
           <input
             type="text"
             placeholder="Search Google for articles..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
-          <button onClick={handleSearch}>Search</button>
+          <Search
+            className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-gray-500 "
+            onClick={handleSearch}
+          />
         </div>
-        <div className="search-results overflow-y-scroll">
-          {loadingSearch ? (
-            <Skeleton height={50} />
-          ) : searchResults.length > 0 ? (
-            <ul>
-              {searchResults.map((article, index) => (
-                <li key={index}>
-                  <a
-                    href={article.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    {article.title}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p>No search results</p>
-          )}
-        </div>
-        <div className="recommendations">
-        <Tabs defaultActiveKey="1" items={items} onChange={onChange} />
-          <h2>Recommended Videos</h2>
-
-          {loadingRecommendations ? (
-            <div className="flex">
-              {Array.from({ length: 3 }).map((_, index) => (
-                <Skeleton
-                  key={index}
-                  className="mr-3 mb-3"
-                  height={200}
-                  width={200}
-                />
-              ))}
-            </div>
-          ) : (
-            <div className="video-grid">
-              {recommendations.youtube_videos.length > 0 ? (
-                recommendations.youtube_videos.map((video, index) => (
+        {searchQuery && (
+          <div className="search-results overflow-y-scroll mt-4">
+            {loadingSearch ? (
+              <Skeleton height={50} />
+            ) : searchResults.length > 0 ? (
+              <ul>
+                {searchResults.map((article, index) => (
+                  <li key={index}>
+                    <a
+                      href={article.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {article.title}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p>No search results</p>
+            )}
+          </div>
+        )}
+        {recommendations.youtube_videos.length > 0 && (
+          <div className="recommendations mt-4">
+            <h2 className="text-indigo-950 font-normal">RECOMMENDED VIDEOS</h2>
+            {loadingRecommendations ? (
+              <div className="flex">
+                {Array.from({ length: 3 }).map((_, index) => (
+                  <Skeleton key={index} className="mr-3 mb-3" height={200} width={200} />
+                ))}
+              </div>
+            ) : (
+              <div className="video-grid">
+                {recommendations.youtube_videos.map((video, index) => (
                   <div className="video-item" key={index}>
                     <a
                       href={video.link}
@@ -133,42 +136,37 @@ const Home = ({ activities, userData }) => {
                       <p>{video.title}</p>
                     </a>
                   </div>
-                ))
-              ) : (
-                <p>No recommended videos</p>
-              )}
-            </div>
-          )}
-          <h2>Recommended Articles</h2>
-          {loadingRecommendations ? (
-            <div className="flex">
-              {Array.from({ length: 3 }).map((_, index) => (
-                <Skeleton
-                  key={index}
-                  className="mr-3 mb-3"
-                  height={150}
-                  width={200}
-                />
-              ))}
-            </div>
-          ) : recommendations.articles.length > 0 ? (
-            <ul className="article-list">
-              {recommendations.articles.map((article, index) => (
-                <li key={index}>
-                  <a
-                    href={article.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    {article.title}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p>No recommended articles</p>
-          )}
-        </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+        {recommendations.articles.length > 0 && (
+          <div className="recommendations mt-4">
+            <h2 className="text-indigo-950 font-normal">RECOMMENDED ARTICLES</h2>
+            {loadingRecommendations ? (
+              <div className="flex">
+                {Array.from({ length: 3 }).map((_, index) => (
+                  <Skeleton key={index} className="mr-3 mb-3" height={150} width={200} />
+                ))}
+              </div>
+            ) : (
+              <ul className="article-list">
+                {recommendations.articles.map((article, index) => (
+                  <li key={index}>
+                    <a
+                      href={article.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {article.title}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
