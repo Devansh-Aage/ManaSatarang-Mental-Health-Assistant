@@ -6,9 +6,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { auth, db } from "../config/firebase-config";
 import { loadStripe } from "@stripe/stripe-js";
 import { toast } from "react-toastify";
-import { addDoc, collection, doc, setDoc } from "firebase/firestore";
-import { auth } from "../config/firebase-config";
-import { toast } from "react-toastify";
+import { addDoc, collection, doc,  } from "firebase/firestore";
 import 'antd/dist/reset.css'; // Ensure Ant Design styles are imported
 
 const TherapistDetails = () => {
