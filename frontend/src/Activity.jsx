@@ -11,7 +11,7 @@ const Activity = ({ activities, user }) => {
   const sendMessage = async () => {};
   return (
     <>
-      <div className="flex ">
+      <div className="flex">
         <ClipboardList size={20} className="text-purple-600 mt-1 ml-3" />
         <div className="font-semibold text-2xl ml-4">Daily Activities</div>
       </div>

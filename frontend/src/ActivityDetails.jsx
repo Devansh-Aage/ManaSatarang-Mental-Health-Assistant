@@ -75,7 +75,7 @@ const ActivityDetails = ({ activities, user }) => {
   };
 
   return (
-    <div className="w-full flex justify-between items-center p-4">
+    <div className="w-full flex justify-center items-center p-4 mx-14">
       <div className="w-[40%] lg:w-[30%]">
         <div className="flex mb-3">
           <ClipboardList size={20} className="text-purple-600 mt-1 ml-3" />

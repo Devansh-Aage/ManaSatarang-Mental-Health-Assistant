@@ -24,14 +24,15 @@ const Navbar = ({ user }) => {
 
   return (
     <div className={`relative lg:flex lg:flex-col lg:fixed lg:top-0 lg:left-0 lg:h-screen lg:bg-white transition-all duration-300 ${isOpen ? "lg:w-[250px]" : "lg:w-[60px]"} z-50`}>
-    <div className={`flex items-center justify-between p-3 border-y-0 ${isOpen ? "border rounded-t-2xl" : "border rounded-t-2xl"}`}>
+    
+
+      {/* Sidebar */}
+      <div className={`h-screen bg-white transition-transform transform border border-t-0 ${isOpen ? "translate-x-0 w-[250px] shadow-lg rounded-2xl" : "-translate-x-0 w-[60px] border-r border-gray-200"}`}>
+      <div className={`flex items-center justify-between p-3 border-y-0 `}>
       <button onClick={handleToggle} className="text-gray-700 hover:bg-gray-200 rounded transition-colors duration-200">
         {isOpen ?  <SquareChevronLeft size={28}/> : <SquareChevronRight size={28}/>}
       </button>
     </div>
-
-      {/* Sidebar */}
-      <div className={`h-screen bg-white transition-transform transform border border-t-0 ${isOpen ? "translate-x-0 w-[250px] shadow-lg rounded-b-2xl" : "-translate-x-0 w-[60px] border-r border-gray-200"}`}>
         <div className={`flex flex-col p-4 ${isOpen ? "block" : "hidden"}`}>
           {/* Navigation Links */}
           <nav className="flex flex-col space-y-6">
