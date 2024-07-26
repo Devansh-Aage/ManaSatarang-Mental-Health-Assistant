@@ -3,8 +3,10 @@ import { useLocation } from "react-router-dom";
 import { DatePicker, TimePicker } from "antd";
 import dayjs from "dayjs";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { auth } from "../config/firebase-config";
+import { auth, db } from "../config/firebase-config";
+import { loadStripe } from "@stripe/stripe-js";
 import { toast } from "react-toastify";
+import { addDoc, collection, doc,  } from "firebase/firestore";
 import 'antd/dist/reset.css'; // Ensure Ant Design styles are imported
 
 const TherapistDetails = () => {
@@ -36,41 +38,65 @@ const TherapistDetails = () => {
   };
 
   const payment = async (e) => {
+    e.preventDefault();
+    
     try {
       e.preventDefault();
       console.log("Form State: ", formState);
       console.log("Fees: ", fees);
 
       const stripe = await loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
+      if (!stripe) {
+        throw new Error("Stripe has not loaded correctly.");
+      }
+      
       toast.info("Redirecting to Stripe Payment Gateway");
-      const body = {
-        formstate: formState,
-      };
-
-      const headers = {
-        "Content-Type": "application/json",
-      };
-
+  
       const response = await fetch(`http://localhost:5000/api/payment/checkout`, {
         method: "POST",
-        headers: headers,
-        body: JSON.stringify(body),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ formstate: formState }),
       });
 
-      const session = await response.json();
-      console.log("Session: ", session);
+      // const session = await response.json();
+      // console.log("Session: ", session);
 
-      const result = stripe.redirectToCheckout({
-        sessionId: session.id,
-      });
+      // const result = stripe.redirectToCheckout({
+      //   sessionId: session.id,
+      // });
 
       if (result.error) {
         console.error((await result).error);
       }
+  
+      const session = await response.json();
+      if (!session.id) {
+        throw new Error("No session ID received from the server.");
+      }
+  
+      const result = await stripe.redirectToCheckout({ sessionId: session.id });
+      
+      if (result.error) {
+        throw new Error(result.error.message);
+      }
+  
+      // Assuming Stripe redirect handles appointment creation
+      await addDoc(collection(db, "appointments"), {
+        therapistId: formState.TherapistId,
+        userId: user.uid,
+        date: formState.appDate,
+        time: formState.time,
+        fees: formState.fee,
+      });
+  
+      toast.success("Appointment successfully booked");
+      
     } catch (error) {
-      console.error(error);
+      console.error("Error during payment or appointment creation:", error);
+      toast.error("An error occurred during the payment process.");
     }
   };
+  
 
   return (
     <div className="container mx-auto p-6 bg-gray-100 min-h-screen">
