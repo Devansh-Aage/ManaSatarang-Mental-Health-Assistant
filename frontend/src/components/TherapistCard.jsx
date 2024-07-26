@@ -15,7 +15,7 @@ const TherapistCard = ({ name, degree, experience, specialty, imgPath,fees, }) =
     }})
   }
   return (
-    <div className=" border rounded-lg flex w-[300px] h-[300px] flex-col items-center gap-2 mb-10 mt-10">
+    <div className=" border rounded-lg flex w-[300px] h-[300px] flex-col items-center gap-2 mb-10 mt-10 ">
         <img src={imgPath} alt="" className="w-[80%] h-[50%] aspect-square" />
         <div>{name}</div>
         <div>{degree}</div>
