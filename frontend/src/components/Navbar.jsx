@@ -24,6 +24,13 @@ const Navbar = ({ user }) => {
 
   return (
     <div className="fixed top-0 left-0 h-screen w-[250px] bg-white border-r border-gray-200 shadow-lg z-50">
+      {/* Hamburger Icon for Mobile View */}
+      <div className="lg:hidden fixed top-0 left-0 p-4 z-50">
+        <button onClick={handleToggle} className="text-gray-600">
+          {isOpen ? <X size={24} /> : <Menu size={24} />}
+        </button>
+      </div>
+
       {/* Sidebar */}
       <div
         className={`h-screen bg-white border border-y-0 transition-transform transform ${

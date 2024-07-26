@@ -36,22 +36,6 @@ const therapists = [
     imgPath: "/male2.jpg",
     fees: 1600,
   },
-  {
-    name: "Dr. Laura Wilson",
-    degree: "M.A. in Clinical Mental Health Counseling",
-    experience: "5 years",
-    specialty: "Mindfulness and Stress Management",
-    imgPath: "/female3.jpg",
-    fees: 1300,
-  },
-  {
-    name: "Dr. Laura Wilson",
-    degree: "M.A. in Clinical Mental Health Counseling",
-    experience: "5 years",
-    specialty: "Mindfulness and Stress Management",
-    imgPath: "/female3.jpg",
-    fees: 1300,
-  },
 ];
 
 const Therapists = () => {
@@ -89,7 +73,7 @@ const Therapists = () => {
 
       {/* Therapist Cards */}
       <h2 className="font-extrabold text-2xl text-indigo-950 mb-5">Therapists We Provide</h2>
-      <div className="flex flex-wrap gap-4 justify-between">
+      <div className="flex flex-wrap gap-5 justify-center">
         {therapists.map((therapist, index) => (
             <TherapistCard {...therapist} />
         ))}
