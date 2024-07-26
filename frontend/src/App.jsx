@@ -187,6 +187,7 @@ const App = () => {
             <Route path="/community/workspace" element={user ? <Workspace user={user} userData={userData} activities={activities} /> : <Login />} />
             <Route path="/community/chronic" element={user ? <Chronic user={user} userData={userData} activities={activities} /> : <Login />} />
             <Route path="/therapists" element= {<Therapists />}/>
+            <Route path="/therapists/therapistDetails" element= {<TherapistDetails />}/>
           </Routes>
         </div>
       </div>

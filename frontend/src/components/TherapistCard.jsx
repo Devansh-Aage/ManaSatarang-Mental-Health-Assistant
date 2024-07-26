@@ -5,7 +5,7 @@ const TherapistCard = ({ name, degree, experience, specialty, imgPath, fees }) =
   const navigate = useNavigate();
 
   const toDetails = () => {
-    navigate('/therapistDetails', {
+    navigate('/therapists/therapistDetails', {
       state: {
         name: name,
         degree: degree,

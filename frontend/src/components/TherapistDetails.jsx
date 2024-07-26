@@ -1,21 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import { DatePicker, Space } from "antd";
-import { TimePicker } from "antd";
+import { DatePicker, TimePicker } from "antd";
 import dayjs from "dayjs";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../config/firebase-config";
-// import { loadStripe } from "@stripe/stripe-js";
 import { toast } from "react-toastify";
+import 'antd/dist/reset.css'; // Ensure Ant Design styles are imported
 
 const TherapistDetails = () => {
   const location = useLocation();
-  const { name, degree, experience, specialty, imgPath, fees } =
-    location.state || {};
+  const { name, degree, experience, specialty, imgPath, fees, description } = location.state || {};
   const [user, loading, error] = useAuthState(auth);
 
   const format = "HH:mm";
-
   const [formState, setFormState] = useState({
     userId: user?.uid,
     TherapistId: "oQyoMJNC6oZ3gh2Xxv8LIZTgfuw2",
@@ -42,7 +39,7 @@ const TherapistDetails = () => {
     try {
       e.preventDefault();
       console.log("Form State: ", formState);
-      console.log("Fees: ", fees);  // Ensure this prints the correct fee
+      console.log("Fees: ", fees);
 
       const stripe = await loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
       toast.info("Redirecting to Stripe Payment Gateway");
@@ -61,7 +58,7 @@ const TherapistDetails = () => {
       });
 
       const session = await response.json();
-      console.log("Session: ", session);  // Ensure session is received correctly
+      console.log("Session: ", session);
 
       const result = stripe.redirectToCheckout({
         sessionId: session.id,
@@ -76,41 +73,61 @@ const TherapistDetails = () => {
   };
 
   return (
-    <div>
-      <div className="container mx-auto p-4">
-        {user ? (
-          <>
-            <div className="border rounded-lg flex flex-col items-center gap-4 p-4">
-              <img
-                src={imgPath}
-                alt=""
-                className="w-[20%] h-[20%] aspect-square"
-              />
-              <div>{name}</div>
-              <div>{degree}</div>
-              <div>{experience}</div>
-              <div>{specialty}</div>
-              <div>&#x20b9;{fees}</div>
+    <div className="container mx-auto p-6 bg-gray-100 min-h-screen">
+      {user ? (
+        <>
+          <div className="text-center mb-6">
+            <h1 className="text-3xl font-extrabold text-indigo-950 mb-4">Therapist Details</h1>
+            <p className="text-lg text-gray-600">{description}</p>
+          </div>
+
+          <div className="flex flex-col md:flex-row items-center bg-white shadow-lg rounded-lg p-6 mb-6">
+            <img
+              src={imgPath}
+              alt={name}
+              className="w-60 h-48 object-cover rounded-lg mb-4 md:mb-0 mr-10"
+            />
+            <div className="ml-4 flex flex-col">
+              <h2 className="text-2xl font-extrabold text-indigo-950 mb-2">{name}</h2>
+              <p className="text-lg text-gray-700">{degree}</p>
+              <p className="text-lg text-gray-700">Experience: {experience}</p>
+              <p className="text-lg text-gray-700">{specialty}</p>
+              <p className="text-lg font-semibold text-green-600 mt-2">&#x20b9;{fees} per Appointment</p>
             </div>
-            <form action="">
+          </div>
+
+          <form className="bg-white shadow-lg rounded-lg p-6">
+            <h3 className="text-xl font-semibold text-indigo-950 mb-4">Book an Appointment</h3>
+            <div className="mb-4">
               <DatePicker
                 name="appDate"
                 value={formState.appDate ? dayjs(formState.appDate) : null}
                 onChange={handleDateChange}
+                className="w-full"
+                placeholder="Select Appointment Date"
               />
+            </div>
+            <div className="mb-4">
               <TimePicker
                 name="time"
                 value={formState.time ? dayjs(formState.time, format) : null}
                 format={format}
                 onChange={handleTimeChange}
+                className="w-full"
+                placeholder="Select Appointment Time"
               />
-              <button onClick={payment}>Pay</button>
-            </form>
-          </>
-        ) : (
-          <div>Loading...</div>
-        )}
-      </div>
+            </div>
+            <button
+              onClick={payment}
+              className="w-full bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors"
+            >
+              Pay
+            </button>
+          </form>
+        </>
+      ) : (
+        <div>Loading...</div>
+      )}
     </div>
   );
 };
