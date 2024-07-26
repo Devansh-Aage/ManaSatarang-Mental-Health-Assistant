@@ -18,21 +18,18 @@ const Navbar = ({ user }) => {
 
   const handleLogout = async () => {
     await signOut(auth);
-    setIsOpen(false); // Close the sidebar on logout
-    setDropdownOpen(false); // Close the dropdown on logout
+    setIsOpen(false);
+    setDropdownOpen(false);
   };
 
   return (
-    <div className="relative">
-      {/* Hamburger Icon
-      <div className="lg:hidden flex items-center p-4">
-        <button onClick={handleToggle} className="text-gray-800">
-          {isOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
-      </div> */}
-
+    <div className="fixed top-0 left-0 h-screen w-[250px] bg-white border-r border-gray-200 shadow-lg z-50">
       {/* Sidebar */}
-      <div className={`fixed top-0 left-0 h-full bg-white shadow-md transition-transform transform ${isOpen ? "translate-x-0" : "-translate-x-full"} lg:translate-x-0 lg:relative lg:w-[250px]`}>
+      <div
+        className={`h-screen bg-white border border-y-0 transition-transform transform ${
+          isOpen ? "translate-x-0" : "-translate-x-full"
+        } lg:translate-x-0 lg:relative lg:w-[250px] lg:h-full lg:shadow-none`}
+      >
         <div className="flex items-center justify-between p-4 border-b">
           <Link to="/" className="flex items-center">
             <img src="/manasataranglogo.svg" alt="ManaSatarang" className="h-16" />
@@ -40,7 +37,7 @@ const Navbar = ({ user }) => {
           {user && (
             <div className="relative flex items-center">
               <img
-                src={user.photoURL || "/default-profile.png"} // Provide a default image if photoURL is not available
+                src={user.photoURL || "/default-profile.png"}
                 alt="Profile"
                 className="w-12 h-12 rounded-full border border-gray-300 cursor-pointer"
                 onClick={handleProfileClick}
@@ -73,7 +70,7 @@ const Navbar = ({ user }) => {
           )}
         </div>
         <div className="flex-1 p-4 flex flex-col">
-          <nav className="flex flex-col space-y-6">
+          <nav className="flex flex-col space-y-6 ml-3">
             <Link to="/" className="transition-colors duration-200 hover:text-orange-400 text-left">
               Home
             </Link>
@@ -89,14 +86,14 @@ const Navbar = ({ user }) => {
             <Link to="/activitydetails" className="transition-colors duration-200 hover:text-orange-400 text-left">
               Activity
             </Link>
+            <Link to="/therapists" className="transition-colors duration-200 hover:text-orange-400 text-left">
+              Our Therapists
+            </Link>
             {!user && (
               <Link to="/login" className="text-center bg-purple-900 text-white text-base px-3 py-2 rounded-lg">
                 Login
               </Link>
             )}
-            <Link to="/therapists" className="transition-colors duration-200 hover:text-orange-400 text-left">
-              Our Therapists
-            </Link>
           </nav>
         </div>
       </div>

@@ -170,9 +170,9 @@ const App = () => {
   return (
     <div className="flex">
       <Navbar user={user} />
-      <div className="flex-1 mt-10">
+      <div className="flex-1 ml-[250px] p-4">
         <ToastContainer />
-        <div className="lg:h-[86vh] p-4">
+        <div className="lg:h-[86vh] mt-10">
           <Routes>
             <Route path="/login" element={<Login user={user} />} />
             <Route path="/" element={<Home activities={activities} userData={userData} />} />

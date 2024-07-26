@@ -15,13 +15,13 @@ const TherapistCard = ({ name, degree, experience, specialty, imgPath,fees, }) =
     }})
   }
   return (
-    <div className=" border rounded-lg flex w-[400px] h-[350px] flex-col items-center gap-2">
+    <div className=" border rounded-lg flex w-[300px] h-[300px] flex-col items-center gap-2 mb-10 mt-10">
         <img src={imgPath} alt="" className="w-[80%] h-[50%] aspect-square" />
         <div>{name}</div>
         <div>{degree}</div>
         <div>{experience}</div>
         <div>{specialty}</div>
-        <button onClick={()=>toDetails()} className="bg-blue-500 text-white px-4 py-2 rounded-lg">Book a Session</button>
+        <button onClick={()=>toDetails()} className="bg-blue-500 text-white px-4 py-2 rounded-lg mt-10">Book a Session</button>
       
     </div>
   )
