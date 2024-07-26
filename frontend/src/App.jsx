@@ -1,26 +1,10 @@
 import React, { useEffect, useState } from "react";
-import {
-  Link,
-  redirect,
-  Route,
-  Routes,
-  useLocation,
-  useNavigate,
-} from "react-router-dom";
+import { Routes, Route, useLocation, useNavigate } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import { signOut } from "firebase/auth";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth, db } from "./config/firebase-config";
-import {
-  doc,
-  getDoc,
-  addDoc,
-  collection,
-  Timestamp,
-  query,
-  where,
-  getDocs,
-} from "firebase/firestore";
+import { doc, getDoc, addDoc, collection, Timestamp, query, where, getDocs } from "firebase/firestore";
 import Activity from "./Activity";
 import Home from "./Home";
 import Chatbot from "./Chatbot";
@@ -52,10 +36,11 @@ const App = () => {
   const [lastUpdateDate, setLastUpdateDate] = useState(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
+  const [navbarWidth, setNavbarWidth] = useState('w-[250px]'); // default width for open
 
   const location = useLocation();
-
   const navigate = useNavigate();
+
   const redirectToHomeIfAuth = () => {
     if (location.pathname === "/login") {
       if (user) {
@@ -65,7 +50,6 @@ const App = () => {
       }
     }
   };
-
 
   const getUserFromDB = async () => {
     if (user) {
@@ -91,25 +75,12 @@ const App = () => {
 
         const offset = 5.5 * 60 * 60 * 1000; // 5.5 hours in milliseconds
         const startOfDayUTC530 = new Date(today.getTime() + offset);
-        const endOfDayUTC530 = new Date(
-          startOfDayUTC530.getTime() + 24 * 60 * 60 * 1000
-        );
-        console.log("start", startOfDayUTC530);
-        console.log("end", endOfDayUTC530);
+        const endOfDayUTC530 = new Date(startOfDayUTC530.getTime() + 24 * 60 * 60 * 1000);
         const tasksRef = collection(db, "tasks");
-        const q = query(
-          tasksRef,
-          where("uid", "==", user.uid),
-          where("date", ">=", startOfDayUTC530),
-          where("date", "<", endOfDayUTC530)
-        );
+        const q = query(tasksRef, where("uid", "==", user.uid), where("date", ">=", startOfDayUTC530), where("date", "<", endOfDayUTC530));
 
         const querySnapshot = await getDocs(q);
-        const tasksData = querySnapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-
+        const tasksData = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
         setActivities(tasksData);
       } catch (err) {
         console.error("Error fetching tasks:", err);
@@ -117,7 +88,7 @@ const App = () => {
     }
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     getUserFromDB();
     fetchTaskData();
     redirectToHomeIfAuth();
@@ -127,7 +98,6 @@ const App = () => {
     const storedLastUpdateDate = localStorage.getItem("lastUpdateDate");
 
     const today = new Date().toLocaleDateString("en-GB");
-    console.log(storedLastUpdateDate);
     if (storedLastUpdateDate === today) {
       await getTasksFromDB();
       setLastUpdateDate(storedLastUpdateDate);
@@ -169,8 +139,8 @@ const App = () => {
 
   return (
     <div className="flex">
-      <Navbar user={user} />
-      <div className="flex-1 ml-[250px] p-4">
+      <Navbar user={user} onNavbarToggle={(isOpen) => setNavbarWidth(isOpen ? 'w-[250px]' : 'w-[60px]')} />
+      <div className={`flex-1 ml-[${navbarWidth}] p-4 transition-all duration-300`}>
         <ToastContainer />
         <div className="lg:h-[86vh] mt-10">
           <Routes>
@@ -186,8 +156,8 @@ const App = () => {
             <Route path="/community/student" element={user ? <Community user={user} userData={userData} activities={activities} /> : <Login />} />
             <Route path="/community/workspace" element={user ? <Workspace user={user} userData={userData} activities={activities} /> : <Login />} />
             <Route path="/community/chronic" element={user ? <Chronic user={user} userData={userData} activities={activities} /> : <Login />} />
-            <Route path="/therapists" element= {<Therapists />}/>
-            <Route path="/therapists/therapistDetails" element= {<TherapistDetails />}/>
+            <Route path="/therapists" element={<Therapists />} />
+            <Route path="/therapists/therapistDetails" element={<TherapistDetails />} />
           </Routes>
         </div>
       </div>
