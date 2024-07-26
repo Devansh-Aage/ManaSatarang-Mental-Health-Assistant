@@ -12,7 +12,7 @@ const PointsSidebar = () => {
         <Link to="/profile/coupon">
           <div className=" flex text-base gap-2 max-w-xs mb-3 bg-purple-700 hover:bg-purple-600 rounded-lg text-white px-4 py-2 font-semibold">
             <TicketPercent size={25} className='text-white'/>
-            Coupon
+            Coupons
           </div>
         </Link>
 

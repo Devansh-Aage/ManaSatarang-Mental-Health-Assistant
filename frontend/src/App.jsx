@@ -34,8 +34,7 @@ import Workspace from "./Workspace";
 import Chronic from "./Chronic";
 import Leaderboard from "./Leaderboard";
 import Coupons from "./Coupons";
-import Forum from "./Forum";
-import { Bell } from "lucide-react";
+import Forum from "./ForumPages/Forum";
 import Profile from "./Profile";
 import Therapists from "./Therapists";
 import TherapistDetails from "./components/TherapistDetails";
@@ -47,7 +46,7 @@ const getRandomActivities = (list, count) => {
 };
 
 const App = () => {
-  const [activities, setActivities] = useState([]);
+  const [activities, setActivities] = React.useState([]);
   const [user, loading, error] = useAuthState(auth);
   const [userData, setUserData] = useState(null);
   const [lastUpdateDate, setLastUpdateDate] = useState(null);
@@ -66,6 +65,7 @@ const App = () => {
       }
     }
   };
+
 
   const getUserFromDB = async () => {
     if (user) {
@@ -117,7 +117,7 @@ const App = () => {
     }
   };
 
-  useEffect(() => {
+  React.useEffect(() => {
     getUserFromDB();
     fetchTaskData();
     redirectToHomeIfAuth();
@@ -168,129 +168,28 @@ const App = () => {
   };
 
   return (
-    <div className="absolute inset-0 overflow-y-auto -z-10 h-screen w-full bg-white">
-      <ToastContainer />
-      <div className="w-screen mx-0 flex justify-between items-center p-4 sticky top-0 z-50">
-        <Navbar user={user} />
-        {user ? (
-          <div className="flex items-center relative">
-            <div className="mr-4">
-              <Bell className="cursor-pointer" />
-              {isNotificationsOpen && (
-                <div className="absolute right-0 top-full mt-2 w-48 bg-white shadow-lg rounded-lg">
-                  <div className="p-4 text-gray-700">No new notifications.</div>
-                </div>
-              )}
-            </div>
-            <div className="relative">
-              <img
-                src={user.photoURL}
-                alt="Profile"
-                className="w-8 h-8 rounded-full cursor-pointer"
-                onClick={handleDropdownToggle}
-              />
-              {isDropdownOpen && (
-                <div className="absolute right-0 top-full mt-2 w-48 bg-white shadow-lg rounded-lg">
-                  <Link
-                    to="/profile"
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                  >
-                    Profile
-                  </Link>
-                  <Link
-                    to="/saved-links"
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                  >
-                    Saved Links
-                  </Link>
-                  <button
-                    onClick={handleLogout}
-                    className="block w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-gray-100"
-                  >
-                    Logout
-                  </button>
-                </div>
-              )}
-            </div>
-          </div>
-        ) : (
-          <div className="flex items-center">
-            <Link to="/login" className="">
-              <div className="bg-purple-900 text-white font-semibold rounded-lg text-base px-3 py-2">
-                Login
-              </div>
-            </Link>
-          </div>
-        )}
-      </div>
-      <div className="lg:h-[84vh] px-4 py-2">
-        <Routes>
-          <Route path="/login" element={<Login user={user} />} />
-          <Route
-            path="/"
-            element={<Home activities={activities} userData={userData} />}
-          />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/profile/leaderboard" element={<Leaderboard />} />
-          <Route path="/profile/coupon" element={<Coupons />} />
-          <Route
-            path="/activity"
-            element={<Activity activities={activities} user={userData} />}
-          />
-          <Route
-            path="/activitydetails"
-            element={
-              <ActivityDetails activities={activities} user={userData} />
-            }
-          />
-          <Route path="/forum" element={<Forum />} />
-          <Route path="/chatbot" element={<Chatbot />} />
-          <Route path="/therapists" element={<Therapists />} />
-          <Route path="/therapistDetails" element={<TherapistDetails />} />
-          <Route path="/success" element={<PaymentSuccess />} />
-          <Route
-            path="/community/student"
-            element={
-              user ? (
-                <Community
-                  user={user}
-                  userData={userData}
-                  activities={activities}
-                />
-              ) : (
-                <Login />
-              )
-            }
-          />
-          <Route
-            path="/community/workspace"
-            element={
-              user ? (
-                <Workspace
-                  user={user}
-                  userData={userData}
-                  activities={activities}
-                />
-              ) : (
-                <Login />
-              )
-            }
-          />
-          <Route
-            path="/community/chronic"
-            element={
-              user ? (
-                <Chronic
-                  user={user}
-                  userData={userData}
-                  activities={activities}
-                />
-              ) : (
-                <Login />
-              )
-            }
-          />
-        </Routes>
+    <div className="flex">
+      <Navbar user={user} />
+      <div className="flex-1 ml-[250px] p-4">
+        <ToastContainer />
+        <div className="lg:h-[86vh] mt-10">
+          <Routes>
+            <Route path="/login" element={<Login user={user} />} />
+            <Route path="/" element={<Home activities={activities} userData={userData} />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/profile/leaderboard" element={<Leaderboard />} />
+            <Route path="/profile/coupon" element={<Coupons />} />
+            <Route path="/activity" element={<Activity activities={activities} user={userData} />} />
+            <Route path="/activitydetails" element={<ActivityDetails activities={activities} user={userData} />} />
+            <Route path="/forum" element={<Forum />} />
+            <Route path="/chatbot" element={<Chatbot />} />
+            <Route path="/community/student" element={user ? <Community user={user} userData={userData} activities={activities} /> : <Login />} />
+            <Route path="/community/workspace" element={user ? <Workspace user={user} userData={userData} activities={activities} /> : <Login />} />
+            <Route path="/community/chronic" element={user ? <Chronic user={user} userData={userData} activities={activities} /> : <Login />} />
+            <Route path="/therapists" element= {<Therapists />}/>
+            <Route path="/therapists/therapistDetails" element= {<TherapistDetails />}/>
+          </Routes>
+        </div>
       </div>
     </div>
   );
