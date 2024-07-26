@@ -23,6 +23,7 @@ import Profile from "./Profile";
 import Therapists from "./Therapists";
 import TherapistDetails from "./components/TherapistDetails";
 import PaymentSuccess from "./PaymentSuccess";
+import PostPage from "./ForumPages/PostPage";
 
 const getRandomActivities = (list, count) => {
   const shuffled = [...list].sort(() => 0.5 - Math.random());
@@ -152,6 +153,7 @@ const App = () => {
             <Route path="/activity" element={<Activity activities={activities} user={userData} />} />
             <Route path="/activitydetails" element={<ActivityDetails activities={activities} user={userData} />} />
             <Route path="/forum" element={<Forum />} />
+            <Route path="/forum/post/:postId" element={<PostPage />} />
             <Route path="/chatbot" element={<Chatbot />} />
             <Route path="/community/student" element={user ? <Community user={user} userData={userData} activities={activities} /> : <Login />} />
             <Route path="/community/workspace" element={user ? <Workspace user={user} userData={userData} activities={activities} /> : <Login />} />
