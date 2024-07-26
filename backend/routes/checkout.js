@@ -28,9 +28,9 @@ router.post("/checkout", async (req, res) => {
       cancel_url: `${url}/`,
     });
 
-    console.log("Session Created: ", session);  // Log the created session
 
     res.json({ id: session.id });
+    console.log("Payment success");
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: error.message });
