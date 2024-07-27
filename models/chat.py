@@ -25,7 +25,6 @@ generation_config = {
 }
 model = genai.GenerativeModel(
     model_name="gemini-1.5-pro",
-    model_name="gemini-1.5-pro",
     generation_config=generation_config,
     system_instruction=(
         "First, ask some questions one by one to categorize the user into the following disorders: 1. Anxiety Disorder, 2. Personality Disorder, 3. ADHD, 4. PTSD, 5. Depression, 6. Bipolar Disorder, or Any other if there.\n"
@@ -59,10 +58,10 @@ def chat():
 
     youtube_videos = []
 
-    if response_count == 2:
-        youtube_videos = search_disorder_videos(response.text)
-    elif "search youtube" in user_message.lower():
-        youtube_videos = search_custom_youtube(user_message)
+    # if response_count == 2:
+    #     youtube_videos = search_disorder_videos(response.text)
+    # elif "search youtube" in user_message.lower():
+    #     youtube_videos = search_custom_youtube(user_message)
 
     formatted_response = response.text.replace('*', '')
 

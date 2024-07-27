@@ -16,8 +16,8 @@ const ActivityDetails = ({ activities, user }) => {
   const [botResponse, setBotResponse] = useState("");
   const [youtubeVideos, setYoutubeVideos] = useState([]);
   const [selectedActivity, setSelectedActivity] = useState(null);
-
   const [isDoneState, setIsDoneState] = useState(selectedActivity?.isDone);
+  const [imageFile, setImageFile] = useState(null);
 
   const sendMessage = async () => {
     if (selectedActivity) {
@@ -39,7 +39,7 @@ const ActivityDetails = ({ activities, user }) => {
           toast.error("Failed to update task.");
         }
       }
-      fetchGeminiResponse(); // Fetch Gemini response after submitting the message
+      // fetchGeminiResponse(); // Fetch Gemini response after submitting the message
     }
   };
 
@@ -74,6 +74,44 @@ const ActivityDetails = ({ activities, user }) => {
     setGeminiInput(`Title: ${activity.title} \n`);
   };
 
+  const handleFileChange = (e) => {
+    setImageFile(e.target.files[0]);
+  };
+
+  const verifyActivity = async () => {
+    // if (!selectedActivity || !imageFile) {
+    //   toast.error("Please select an activity and upload an image.");
+    //   return;
+    // }
+
+    const formData = new FormData();
+    formData.append("image", imageFile);
+    // formData.append("activity", selectedActivity.title);
+    formData.append("activity", "ride_a_bicycle");
+
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/predict",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        const result = response.data.result;
+        toast.success(`Activity verification result: ${result}`);
+      } else {
+        toast.error("Failed to verify activity.");
+      }
+    } catch (error) {
+      console.error("Error verifying activity:", error);
+      toast.error("Error verifying activity.");
+    }
+  };
+
   return (
     <div className="w-full flex justify-center items-center p-4 mx-14">
       <div className="w-[40%] lg:w-[30%]">
@@ -103,73 +141,58 @@ const ActivityDetails = ({ activities, user }) => {
         onSubmit={(e) => {
           e.preventDefault();
           sendMessage();
-          fetchGeminiResponse();
+          // fetchGeminiResponse();
         }}
         className="lg:w-[60%] justify-self-end px-4 py-3"
       >
         <div className="font-semibold mb-4 text-2xl">
-          <label htmlFor="">
-            Describe Your Experience of Performing the Activity
+          <label
+            htmlFor="activityTitle"
+            className="block text-lg font-medium text-gray-700"
+          >
+            {selectedActivity ? selectedActivity.title : "Activity Details"}
           </label>
         </div>
-        <div className="border border-violet-200 rounded-xl bg-white">
+        <div className="mb-3">
+          <label
+            htmlFor="summary"
+            className="block text-sm font-medium text-gray-700"
+          >
+            Summary
+          </label>
           <TextareaAutosize
-            onKeyDown={(e) => {
-              if (e.key === "Enter" && !e.shiftKey) {
-                e.preventDefault();
-                sendMessage();
-              }
-            }}
-            rows={4}
+            className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border border-gray-300 rounded-md p-2"
             value={input}
-            onChange={(e) => {
-              setInput(e.target.value);
-            }}
-            placeholder={`Type ...`}
-            className="block w-[95%] lg:min-h-[30vh] px-2 lg:w-full rounded-xl resize-none focus:ring-4 bg-transparent focus:ring-violet-400 text-gray-900 placeholder:text-gray-400 sm:py-1.5 sm:leading-6"
+            onChange={(e) => setInput(e.target.value)}
+          />
+        </div>
+        <div className="mb-3">
+          <label
+            htmlFor="image"
+            className="block text-sm font-medium text-gray-700"
+          >
+            Upload Image
+          </label>
+          <input
+            type="file"
+            className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border border-gray-300 rounded-md p-2"
+            onChange={handleFileChange}
           />
         </div>
         <button
           type="submit"
-          className="w-full h-[3rem] mt-3 text-white bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-purple-300 dark:focus:ring-purple-800 shadow-lg shadow-purple-500/50 dark:shadow-lg dark:shadow-purple-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2"
+          className="w-full inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
         >
           Submit
         </button>
+        <button
+          type="button"
+          className="w-full inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 mt-2"
+          onClick={verifyActivity}
+        >
+          Verify Activity
+        </button>
       </form>
-      {botResponse && (
-        <div className="w-full p-4 border border-gray-300 rounded-md mt-4">
-          <h2 className="text-xl font-semibold mb-2">Gemini Response:</h2>
-          <p>{botResponse}</p>
-          {youtubeVideos.length > 0 && (
-            <>
-              <h3 className="text-lg font-semibold mt-4">
-                Recommended Videos:
-              </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-2">
-                {youtubeVideos.map((video, index) => (
-                  <div
-                    key={index}
-                    className="border border-gray-300 rounded-md p-2"
-                  >
-                    <a
-                      href={video.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <img
-                        src={video.thumbnail}
-                        alt={video.title}
-                        className="mb-2"
-                      />
-                      <p className="text-sm">{video.title}</p>
-                    </a>
-                  </div>
-                ))}
-              </div>
-            </>
-          )}
-        </div>
-      )}
     </div>
   );
 };

@@ -29,14 +29,14 @@ const Home = ({ activities, userData }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [loadingSearch, setLoadingSearch] = useState(false);
-  const [loadingRecommendations, setLoadingRecommendations] = useState(false);
+  const [loadingRecommendations, setLoadingRecommendations] = useState(true);
   const [recommendations, setRecommendations] = useState({
     youtube_videos: [],
     articles: [],
   });
 
   useEffect(() => {
-    // fetchRecommendations();
+    fetchRecommendations();
   }, []);
 
   const fetchRecommendations = async () => {
