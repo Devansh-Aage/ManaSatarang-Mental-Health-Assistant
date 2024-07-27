@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { signOut } from "firebase/auth";
 import { auth } from "../config/firebase-config";
 import { Home, MessageCircle, Users, Activity, User, BookOpen, SquareChevronRight, SquareChevronLeft } from "lucide-react";
@@ -7,6 +7,7 @@ import { Home, MessageCircle, Users, Activity, User, BookOpen, SquareChevronRigh
 const Navbar = ({ user }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const router=useNavigate()
 
   const handleToggle = () => {
     setIsOpen((prev) => !prev); 
@@ -18,6 +19,7 @@ const Navbar = ({ user }) => {
 
   const handleLogout = async () => {
     await signOut(auth);
+    router('/login')
     setIsOpen(false); 
     setDropdownOpen(false); 
   };
@@ -57,6 +59,10 @@ const Navbar = ({ user }) => {
             <Link to="/therapists" className="flex items-center space-x-3 transition-colors duration-200 hover:text-orange-400 text-left">
               <User size={20} />
               <span className={`${isOpen ? "block" : "hidden"}`}>Our Therapists</span>
+            </Link>
+            <Link to="/appointments" className="flex items-center space-x-3 transition-colors duration-200 hover:text-orange-400 text-left">
+              <User size={20} />
+              <span className={`${isOpen ? "block" : "hidden"}`}>Appointments</span>
             </Link>
             {!user && (
               <Link to="/login" className="text-center bg-purple-900 text-white text-base px-3 py-2 rounded-lg">

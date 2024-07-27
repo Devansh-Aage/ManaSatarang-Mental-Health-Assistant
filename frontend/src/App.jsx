@@ -23,7 +23,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { activityList } from "./utils";
 import ActivityDetails from "./ActivityDetails";
-import Workspace from "./Workspace";
+import Workspace from "./Workspace"
 import Chronic from "./Chronic";
 import Leaderboard from "./Leaderboard";
 import Coupons from "./Coupons";
@@ -34,6 +34,8 @@ import TherapistDetails from "./components/TherapistDetails";
 import PaymentSuccess from "./PaymentSuccess";
 import PostPage from "./ForumPages/PostPage";
 import Success from "./Success";
+import Appointments from "./Appointments";
+import Chat from "./Chat";
 
 const getRandomActivities = (list, count) => {
   const shuffled = [...list].sort(() => 0.5 - Math.random());
@@ -116,8 +118,8 @@ const App = () => {
   }, [user]);
 
   const fetchTaskData = async () => {
-    // const storedLastUpdateDate = localStorage.getItem("lastUpdateDate");
-    const storedLastUpdateDate = "26/07/2024";
+    const storedLastUpdateDate = localStorage.getItem("lastUpdateDate");
+    // const storedLastUpdateDate = "26/07/2024";
     const today = new Date().toLocaleDateString("en-GB");
     if (storedLastUpdateDate === today) {
       await getTasksFromDB();
@@ -191,6 +193,10 @@ const App = () => {
               }
             />
             <Route path="/forum" element={<Forum />} />
+            <Route
+              path="/appointments"
+              element={<Appointments user={user} />}
+            />
             <Route path="/forum/post/:postId" element={<PostPage />} />
             <Route path="/chatbot" element={<Chatbot />} />
             <Route
@@ -241,6 +247,7 @@ const App = () => {
               path="/therapists/therapistDetails"
               element={<TherapistDetails />}
             />
+            <Route path="/chat/:chatId" element={<Chat user={user} />} />
           </Routes>
         </div>
       </div>

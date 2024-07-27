@@ -30,7 +30,6 @@ router.post("/checkout", async (req, res) => {
 
 
     res.json({ id: session.id });
-    console.log("Payment success");
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: error.message });

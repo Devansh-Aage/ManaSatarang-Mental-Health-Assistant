@@ -43,7 +43,7 @@ const TherapistDetails = () => {
       e.preventDefault();
       console.log("Form State: ", formState);
       console.log("Fees: ", fees);
-      const mycollection = collection(db, "test");
+      const mycollection = collection(db, "appointments");
 
       const myDocumentData = {
         therapistId: formState.TherapistId,
