@@ -155,7 +155,7 @@ const Chatbot = () => {
       <div className="flex flex-col lg:w-[65vw] max-h-[80vh] overflow-hidden mx-auto px-3 py-2 backdrop-blur-sm bg-white/30 rounded-lg">
         <div className="flex-1 min-h-[40vh] overflow-y-auto backdrop-blur-sm bg-slate-200/30 border rounded-lg p-3 border-orange-400">
           <div className="flex flex-col gap-2">
-            {loading && <Skeleton height={50} count={1} className="mb-2" />}
+           
             {messages.map((msg, index) => (
               <div
                 key={index}
@@ -166,7 +166,7 @@ const Chatbot = () => {
                 <div
                   className={`rounded-xl p-3 max-w-xs ${
                     msg.sender === "user"
-                      ? "bg-violet-300 text-right"
+                      ? "bg-orange-300 text-right"
                       : "bg-white text-left"
                   }`}
                 >
@@ -174,6 +174,7 @@ const Chatbot = () => {
                 </div>
               </div>
             ))}
+            {loading && <Skeleton height={50} count={1} className="mb-2 w-[50%]" />}
             <div ref={messagesEndRef} />
           </div>
         </div>
@@ -197,11 +198,11 @@ const Chatbot = () => {
               }
             }}
             placeholder="Enter your prompt here..."
-            className="flex-1 p-3 border focus:ring-2 focus:ring-violet-400 border-gray-300 rounded-l-lg focus:outline-none pr-12"
+            className="flex-1 p-3 border focus:ring-2 focus:border-transparent focus:ring-orange-400 border-gray-300 rounded-lg focus:outline-none pr-12"
           />
           <button
             onClick={handleSendMessage}
-            className="absolute right-2 top-1/2 transform -translate-y-1/2 text-violet-500 hover:text-violet-600 mr-28"
+            className="absolute right-2 top-1/2 transform -translate-y-1/2 text-orange-500 hover:text-orange-600 mr-28"
           >
             <Send size={20} />
           </button>
@@ -210,7 +211,7 @@ const Chatbot = () => {
             <select
               value={rate}
               onChange={(e) => handleRateChange(parseFloat(e.target.value))}
-              className="ml-2 border focus:ring-2 focus:ring-violet-400 border-gray-300 rounded-lg bg-white"
+              className="ml-2 border focus:ring-2 focus:ring-orange-400 border-gray-300 rounded-lg bg-white"
             >
               {[0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75].map((value) => (
                 <option key={value} value={value}>
@@ -225,7 +226,7 @@ const Chatbot = () => {
           {!readingEnabled && (
             <button
               onClick={toggleReading}
-              className="p-3 bg-purple-800 font-semibold text-white rounded-lg hover:bg-purple-600"
+              className="p-3 bg-purple-800 font-semibold text-white rounded-lg hover:bg-orange-600"
             >
               Enable Reading
             </button>
@@ -235,8 +236,8 @@ const Chatbot = () => {
               <button
                 onClick={toggleReading}
                 className={`p-3 ${
-                  readingEnabled ? "bg-orange-400" : "bg-purple-800"
-                } font-semibold text-white rounded-lg hover:bg-purple-600`}
+                  readingEnabled ? "bg-orange-400" : "bg-orange-800"
+                } font-semibold text-white rounded-lg hover:bg-orange-600`}
               >
                 Disable Reading
               </button>
@@ -246,7 +247,7 @@ const Chatbot = () => {
             <select
               value={voiceIndex}
               onChange={handleVoiceChange}
-              className="mt-1 block w-full p-2 border focus:ring-2 focus:ring-violet-400 border-gray-300 rounded-lg focus:outline-none"
+              className="mt-1 block w-full p-2 border focus:ring-2 focus:ring-orange-400 border-gray-300 rounded-lg focus:outline-none"
             >
               {supported &&
                 voices.map((voice, index) => (

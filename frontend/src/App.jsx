@@ -144,7 +144,7 @@ const App = () => {
       <Navbar user={user} onNavbarToggle={(isOpen) => setNavbarWidth(isOpen ? 'w-[250px]' : 'w-[60px]')} />
       <div className={`flex-1 ml-[${navbarWidth}] p-4 transition-all duration-300`}>
         <ToastContainer />
-        <div className="lg:h-[86vh] mt-10">
+        <div className=" mt-10">
           <Routes>
             <Route path="/login" element={<Login user={user} />} />
             <Route path="/" element={<Home activities={activities} userData={userData} />} />
