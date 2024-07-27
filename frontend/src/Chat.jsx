@@ -33,10 +33,11 @@ const Chat = ({}) => {
 
   // Use therapistId as the collection name
   //   const therapistId = user.uid === userId1 ? userId2 : userId1;
-  const therapistId = "oQyoMJNC6oZ3gh2Xxv8LIZTgfuw2"
+  const therapistId = "oQyoMJNC6oZ3gh2Xxv8LIZTgfuw2";
+  const patientId=therapistId===userId1?userId2:userId1;
 
   useEffect(() => {
-    const q = query(collection(db, therapistId), orderBy("timestamp", "asc"));
+    const q = query(collection(db, patientId), orderBy("timestamp", "asc"));
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
       const messages = [];
       querySnapshot.forEach((doc) => {
@@ -46,12 +47,12 @@ const Chat = ({}) => {
       setLoading(false);
     });
     return () => unsubscribe();
-  }, [therapistId]);
+  }, [patientId]);
 
   const handleSendMessage = async () => {
     if (newMessage.trim()) {
       try {
-        await addDoc(collection(db, therapistId), {
+        await addDoc(collection(db, patientId), {
           userId: user.uid,
           text: newMessage,
           timestamp: new Date(),
@@ -73,7 +74,7 @@ const Chat = ({}) => {
 
   return (
     <div className="flex flex-col lg:w-[65vw] max-h-[80vh] overflow-hidden mx-auto px-3 py-2 backdrop-blur-sm bg-white/30 rounded-lg">
-      <div className="flex-1 min-h-[40vh] overflow-y-auto backdrop-blur-sm bg-slate-200/30 border rounded-lg p-3 border-orange-400">
+      <div className="flex-1 min-h-[40vh] overflow-y-auto backdrop-blur-sm bg-slate-200/30 border rounded-lg p-3 border-purple-400">
         <div className="flex flex-col gap-2">
           {loading
             ? Array.from({ length: 10 }).map((_, index) => (
@@ -100,7 +101,7 @@ const Chat = ({}) => {
                   <div
                     className={`rounded-xl p-3 max-w-xs ${
                       msg.userId === user.uid
-                        ? "bg-orange-300 text-right"
+                        ? "bg-purple-300 text-right"
                         : "bg-white text-left"
                     }`}
                   >
@@ -139,11 +140,11 @@ const Chat = ({}) => {
             }
           }}
           placeholder="Enter your message here..."
-          className="flex-1 p-3 border focus:ring-2 focus:border-transparent focus:ring-orange-400 border-gray-300 rounded-lg focus:outline-none pr-12"
+          className="flex-1 p-3 border focus:ring-2 focus:border-transparent focus:ring-purple-400 border-gray-300 rounded-lg focus:outline-none pr-12"
         />
         <button
           onClick={handleSendMessage}
-          className="absolute right-2 top-1/2 transform -translate-y-1/2 text-orange-500 hover:text-orange-600 mr-28"
+          className="absolute right-2 top-1/2 transform -translate-y-1/2 text-purple-500 hover:text-purple-600 mr-28"
         >
           Send
         </button>

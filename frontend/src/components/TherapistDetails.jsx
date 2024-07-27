@@ -92,7 +92,7 @@ const TherapistDetails = () => {
   };
 
   return (
-    <div className="mx-auto p-6 bg-white min-h-screen">
+    <div className="mx-auto p-6 bg-white ">
       {user ? (
         <>
           <div className="text-center mb-6">

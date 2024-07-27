@@ -162,7 +162,7 @@ const App = () => {
   };
 
   return (
-    <div className="flex">
+    <div className="flex  absolute inset-0  h-full w-full bg-white [background:radial-gradient(125%_125%_at_50%_10%,#fff_40%,#63e_100%)]">
       <Navbar
         user={user}
         onNavbarToggle={(isOpen) =>
@@ -170,10 +170,10 @@ const App = () => {
         }
       />
       <div
-        className={`flex-1 ml-[${navbarWidth}] p-4 transition-all duration-300`}
+        className={`flex-1 h-screen overflow-hidden ml-[${navbarWidth}] transition-all duration-300`}
       >
         <ToastContainer />
-        <div className=" mt-10">
+        <div className="overflow-hidden">
           <Routes>
             <Route path="/login" element={<Login user={user} />} />
             <Route

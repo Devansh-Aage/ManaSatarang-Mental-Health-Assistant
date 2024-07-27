@@ -25,7 +25,7 @@ const Navbar = ({ user }) => {
   };
 
   return (
-    <div className={`relative lg:flex lg:flex-col lg:top-0 lg:left-0 lg:h-screen lg:bg-white transition-all duration-300 ${isOpen ? "lg:w-[250px]" : "lg:w-[60px]"} z-50`}>
+    <div className={`relative z-50 lg:flex lg:flex-col lg:top-0 lg:left-0 lg:h-screen lg:bg-white transition-all duration-300 ${isOpen ? "lg:w-[250px]" : "lg:w-[60px]"} z-50`}>
       {/* Sidebar */}
       <div className={`h-screen bg-white transition-transform transform border border-t-0 ${isOpen ? "translate-x-0 w-[250px] shadow-lg rounded-2xl" : "-translate-x-0 w-[60px] border-r border-gray-200"}`}>
       <div className={`flex items-center justify-between p-3 border-y-0 `}>
@@ -60,7 +60,7 @@ const Navbar = ({ user }) => {
               <User size={20} />
               <span className={`${isOpen ? "block" : "hidden"}`}>Our Therapists</span>
             </Link>
-            <Link to="/appointments" className="flex items-center space-x-3 transition-colors duration-200 hover:text-orange-400 text-left">
+            <Link to="/appointments" className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left">
               <User size={20} />
               <span className={`${isOpen ? "block" : "hidden"}`}>Appointments</span>
             </Link>
