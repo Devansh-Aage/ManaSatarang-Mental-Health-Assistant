@@ -25,7 +25,6 @@ generation_config = {
 }
 model = genai.GenerativeModel(
     model_name="gemini-1.5-pro",
-    model_name="gemini-1.5-pro",
     generation_config=generation_config,
     system_instruction=(
         "First, ask some questions one by one to categorize the user into the following disorders: 1. Anxiety Disorder, 2. Personality Disorder, 3. ADHD, 4. PTSD, 5. Depression, 6. Bipolar Disorder, or Any other if there.\n"

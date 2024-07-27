@@ -64,13 +64,13 @@ const Workspace = ({ user, userData, activities, userTasks }) => {
   };
 
   return (
-    <div className="flex h-[83vh] overflow-hidden items-end justify-end mx-14">
+    <div className="flex h-[90vh] overflow-hidden items-end justify-end ">
       <div className="hidden  lg:block  min-h-[85vh] justify-self-center self-center lg:w-[25vw] flex-shrink-0">
         <div className="mt-14"></div>
         <CommunitySidebar/>
       </div>
       <div className="flex flex-col justify-end h-[90vh] mt-[6rem] flex-grow px-2">
-        <div className="flex-1 overflow-y-auto  backdrop-blur-sm bg-slate-200/30 border border-gray-300  p-3">
+        <div className="flex-1 overflow-y-auto rounded-t-lg  backdrop-blur-sm bg-slate-200/30 border border-gray-300  p-3">
           <div className="mb-12"></div>
           <div className="flex flex-col gap-2">
             {loading

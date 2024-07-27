@@ -24,6 +24,7 @@ import Therapists from "./Therapists";
 import TherapistDetails from "./components/TherapistDetails";
 import PaymentSuccess from "./PaymentSuccess";
 import PostPage from "./ForumPages/PostPage";
+import Success from "./Success";
 
 const getRandomActivities = (list, count) => {
   const shuffled = [...list].sort(() => 0.5 - Math.random());
@@ -159,6 +160,7 @@ const App = () => {
             <Route path="/community/workspace" element={user ? <Workspace user={user} userData={userData} activities={activities} /> : <Login />} />
             <Route path="/community/chronic" element={user ? <Chronic user={user} userData={userData} activities={activities} /> : <Login />} />
             <Route path="/therapists" element={<Therapists />} />
+            <Route path="/success" element={<Success />} />
             <Route path="/therapists/therapistDetails" element={<TherapistDetails />} />
           </Routes>
         </div>

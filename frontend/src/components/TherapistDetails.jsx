@@ -4,7 +4,7 @@ import { DatePicker, TimePicker } from "antd";
 import dayjs from "dayjs";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth, db } from "../config/firebase-config";
-// import { loadStripe } from "@stripe/stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
 import { toast } from "react-toastify";
 import { addDoc, collection, doc,  } from "firebase/firestore";
 import 'antd/dist/reset.css'; // Ensure Ant Design styles are imported
@@ -38,8 +38,6 @@ const TherapistDetails = () => {
   };
 
   const payment = async (e) => {
-    e.preventDefault();
-    
     try {
       e.preventDefault();
       console.log("Form State: ", formState);
@@ -65,9 +63,9 @@ const TherapistDetails = () => {
       //   sessionId: session.id,
       // });
 
-      if (result.error) {
-        console.error((await result).error);
-      }
+      // if (result.error) {
+      //   console.error((await result).error);
+      // }
   
       const session = await response.json();
       if (!session.id) {
