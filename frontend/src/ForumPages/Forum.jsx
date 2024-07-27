@@ -40,31 +40,31 @@ function Forum() {
     <div className='relative mx-14 my-10 pb-10'>
       <div className="flex flex-col items-center mb-10">
         <h2 className="font-extrabold text-3xl text-indigo-950 mb-3">Public Forum</h2>
-        <h2 className="font-semibold text-lg text-orange-400 mb-10">Join the conversation to connect with the community!</h2>
+        <h2 className="font-semibold text-lg text-purple-400 mb-10">Join the conversation to connect with the community!</h2>
       </div>
       <div className={`flex flex-col justify-center items-center ${isModalOpen ? 'blur-sm' : ''}`}>
         {/* Sidebar */}
         <div className='w-1/4 pr-6'>
           <button
-            className='w-full bg-indigo-950 text-white px-4 py-2 rounded mb-6 hover:bg-orange-400 transition-colors duration-300'
+            className='w-full bg-indigo-950 text-white px-4 py-2 rounded mb-6 hover:bg-purple-400 transition-colors duration-300'
             onClick={handleOpenModal}
           >
             Create a New Discussion
           </button>
           {/* <div className='space-y-4'>
-            <div className='flex items-center cursor-pointer hover:text-orange-400 transition-colors duration-300'>
+            <div className='flex items-center cursor-pointer hover:text-purple-400 transition-colors duration-300'>
               <List className='w-5 h-5 mr-5 text-red-500' />
               <h3 className='font-semibold'>All Discussions</h3>
             </div>
-            <div className='flex items-center cursor-pointer hover:text-orange-400 transition-colors duration-300'>
+            <div className='flex items-center cursor-pointer hover:text-purple-400 transition-colors duration-300'>
               <Backpack className='w-5 h-5 mr-5 text-yellow-600' />
               <h3 className='font-semibold text-base'>Student Circle</h3>
             </div>
-            <div className='flex items-center cursor-pointer hover:text-orange-400 transition-colors duration-300'>
+            <div className='flex items-center cursor-pointer hover:text-purple-400 transition-colors duration-300'>
               <Heart className='w-5 h-5 mr-5 text-green-600' />
               <h3 className='font-semibold text-base'>Chronic Illness Support Group</h3>
             </div>
-            <div className='flex items-center cursor-pointer hover:text-orange-400 transition-colors duration-300'>
+            <div className='flex items-center cursor-pointer hover:text-purple-400 transition-colors duration-300'>
               <Briefcase className='w-5 h-5 mr-5 text-purple-800' />
               <h3 className='font-semibold text-base'>Workplace Wellness</h3>
             </div>
@@ -139,7 +139,7 @@ function Forum() {
                 Cancel
               </button>
               <button
-                className='bg-indigo-950 text-white px-4 py-2 rounded hover:bg-orange-400 transition-colors duration-300'
+                className='bg-indigo-950 text-white px-4 py-2 rounded hover:bg-purple-400 transition-colors duration-300'
                 onClick={handleSavePost}
               >
                 Save

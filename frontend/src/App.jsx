@@ -36,6 +36,7 @@ import PostPage from "./ForumPages/PostPage";
 import Success from "./Success";
 import Appointments from "./Appointments";
 import Chat from "./Chat";
+import './App.css'
 
 const getRandomActivities = (list, count) => {
   const shuffled = [...list].sort(() => 0.5 - Math.random());

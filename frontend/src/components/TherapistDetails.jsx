@@ -92,7 +92,7 @@ const TherapistDetails = () => {
   };
 
   return (
-    <div className="   mx-auto p-6 bg-gray-100 min-h-screen">
+    <div className="mx-auto p-6 bg-white min-h-screen">
       {user ? (
         <>
           <div className="text-center mb-6">
@@ -102,7 +102,7 @@ const TherapistDetails = () => {
             <p className="text-lg text-gray-600">{description}</p>
           </div>
 
-          <div className="flex flex-col md:flex-row items-center bg-white shadow-lg rounded-lg p-6 mb-6">
+          <div className="flex flex-row items-center bg-white shadow-lg rounded-lg p-6 mb-6">
             <img
               src={imgPath}
               alt={name}

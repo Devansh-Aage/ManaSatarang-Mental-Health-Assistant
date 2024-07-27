@@ -36,27 +36,27 @@ const Navbar = ({ user }) => {
         <div className={`flex flex-col p-4 ${isOpen ? "block" : "hidden"}`}>
           {/* Navigation Links */}
           <nav className="flex flex-col space-y-6">
-            <Link to="/" className="flex items-center space-x-3 transition-colors duration-200 hover:text-orange-400 text-left">
+            <Link to="/" className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left">
               <Home size={20} />
               <span className={`${isOpen ? "block" : "hidden"}`}>Home</span>
             </Link>
-            <Link to="/chatbot" className="flex items-center space-x-3 transition-colors duration-200 hover:text-orange-400 text-left">
+            <Link to="/chatbot" className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left">
               <MessageCircle size={20} />
               <span className={`${isOpen ? "block" : "hidden"}`}>SerenaAI</span>
             </Link>
-            <Link to="/community/student" className="flex items-center space-x-3 transition-colors duration-200 hover:text-orange-400 text-left">
+            <Link to="/community/student" className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left">
               <Users size={20} />
               <span className={`${isOpen ? "block" : "hidden"}`}>Community</span>
             </Link>
-            <Link to="/forum" className="flex items-center space-x-3 transition-colors duration-200 hover:text-orange-400 text-left">
+            <Link to="/forum" className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left">
               <BookOpen size={20} />
               <span className={`${isOpen ? "block" : "hidden"}`}>Forum</span>
             </Link>
-            <Link to="/activitydetails" className="flex items-center space-x-3 transition-colors duration-200 hover:text-orange-400 text-left">
+            <Link to="/activitydetails" className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left">
               <Activity size={20} />
               <span className={`${isOpen ? "block" : "hidden"}`}>Activity</span>
             </Link>
-            <Link to="/therapists" className="flex items-center space-x-3 transition-colors duration-200 hover:text-orange-400 text-left">
+            <Link to="/therapists" className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left">
               <User size={20} />
               <span className={`${isOpen ? "block" : "hidden"}`}>Our Therapists</span>
             </Link>
@@ -74,22 +74,22 @@ const Navbar = ({ user }) => {
 
         {/* Icon Container in Closed View */}
         <div className={`flex flex-col items-center space-y-6 p-4 ${isOpen ? "hidden" : "block"}`}>
-          <Link to="/" className="flex items-center space-x-3 transition-colors duration-200 hover:text-orange-400 text-left">
+          <Link to="/" className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left">
             <Home size={20} />
           </Link>
-          <Link to="/chatbot" className="flex items-center space-x-3 transition-colors duration-200 hover:text-orange-400 text-left">
+          <Link to="/chatbot" className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left">
             <MessageCircle size={20} />
           </Link>
-          <Link to="/community/student" className="flex items-center space-x-3 transition-colors duration-200 hover:text-orange-400 text-left">
+          <Link to="/community/student" className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left">
             <Users size={20} />
           </Link>
-          <Link to="/forum" className="flex items-center space-x-3 transition-colors duration-200 hover:text-orange-400 text-left">
+          <Link to="/forum" className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left">
             <BookOpen size={20} />
           </Link>
-          <Link to="/activitydetails" className="flex items-center space-x-3 transition-colors duration-200 hover:text-orange-400 text-left">
+          <Link to="/activitydetails" className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left">
             <Activity size={20} />
           </Link>
-          <Link to="/therapists" className="flex items-center space-x-3 transition-colors duration-200 hover:text-orange-400 text-left">
+          <Link to="/therapists" className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left">
             <User size={20} />
           </Link>
         </div>
