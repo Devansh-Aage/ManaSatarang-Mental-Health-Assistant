@@ -151,7 +151,7 @@ const TherapistDetails = () => {
               Pay
             </button>
           </form>
-        </div>
+        </>
       ) : (
         <div>Loading...</div>
       )}
