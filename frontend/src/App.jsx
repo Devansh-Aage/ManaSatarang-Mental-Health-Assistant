@@ -4,7 +4,16 @@ import Navbar from "./components/Navbar";
 import { signOut } from "firebase/auth";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth, db } from "./config/firebase-config";
-import { doc, getDoc, addDoc, collection, Timestamp, query, where, getDocs } from "firebase/firestore";
+import {
+  doc,
+  getDoc,
+  addDoc,
+  collection,
+  Timestamp,
+  query,
+  where,
+  getDocs,
+} from "firebase/firestore";
 import Activity from "./Activity";
 import Home from "./Home";
 import Chatbot from "./Chatbot";
@@ -38,7 +47,7 @@ const App = () => {
   const [lastUpdateDate, setLastUpdateDate] = useState(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
-  const [navbarWidth, setNavbarWidth] = useState('w-[250px]'); // default width for open
+  const [navbarWidth, setNavbarWidth] = useState("w-[250px]"); // default width for open
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -77,12 +86,22 @@ const App = () => {
 
         const offset = 5.5 * 60 * 60 * 1000; // 5.5 hours in milliseconds
         const startOfDayUTC530 = new Date(today.getTime() + offset);
-        const endOfDayUTC530 = new Date(startOfDayUTC530.getTime() + 24 * 60 * 60 * 1000);
+        const endOfDayUTC530 = new Date(
+          startOfDayUTC530.getTime() + 24 * 60 * 60 * 1000
+        );
         const tasksRef = collection(db, "tasks");
-        const q = query(tasksRef, where("uid", "==", user.uid), where("date", ">=", startOfDayUTC530), where("date", "<", endOfDayUTC530));
+        const q = query(
+          tasksRef,
+          where("uid", "==", user.uid),
+          where("date", ">=", startOfDayUTC530),
+          where("date", "<", endOfDayUTC530)
+        );
 
         const querySnapshot = await getDocs(q);
-        const tasksData = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+        const tasksData = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
         setActivities(tasksData);
       } catch (err) {
         console.error("Error fetching tasks:", err);
@@ -97,8 +116,8 @@ const App = () => {
   }, [user]);
 
   const fetchTaskData = async () => {
-    const storedLastUpdateDate = localStorage.getItem("lastUpdateDate");
-
+    // const storedLastUpdateDate = localStorage.getItem("lastUpdateDate");
+    const storedLastUpdateDate = "26/07/2024";
     const today = new Date().toLocaleDateString("en-GB");
     if (storedLastUpdateDate === today) {
       await getTasksFromDB();
@@ -141,27 +160,87 @@ const App = () => {
 
   return (
     <div className="flex">
-      <Navbar user={user} onNavbarToggle={(isOpen) => setNavbarWidth(isOpen ? 'w-[250px]' : 'w-[60px]')} />
-      <div className={`flex-1 ml-[${navbarWidth}] p-4 transition-all duration-300`}>
+      <Navbar
+        user={user}
+        onNavbarToggle={(isOpen) =>
+          setNavbarWidth(isOpen ? "w-[250px]" : "w-[60px]")
+        }
+      />
+      <div
+        className={`flex-1 ml-[${navbarWidth}] p-4 transition-all duration-300`}
+      >
         <ToastContainer />
         <div className="lg:h-[86vh] mt-10">
           <Routes>
             <Route path="/login" element={<Login user={user} />} />
-            <Route path="/" element={<Home activities={activities} userData={userData} />} />
+            <Route
+              path="/"
+              element={<Home activities={activities} userData={userData} />}
+            />
             <Route path="/profile" element={<Profile />} />
             <Route path="/profile/leaderboard" element={<Leaderboard />} />
             <Route path="/profile/coupon" element={<Coupons />} />
-            <Route path="/activity" element={<Activity activities={activities} user={userData} />} />
-            <Route path="/activitydetails" element={<ActivityDetails activities={activities} user={userData} />} />
+            <Route
+              path="/activity"
+              element={<Activity activities={activities} user={userData} />}
+            />
+            <Route
+              path="/activitydetails"
+              element={
+                <ActivityDetails activities={activities} user={userData} />
+              }
+            />
             <Route path="/forum" element={<Forum />} />
             <Route path="/forum/post/:postId" element={<PostPage />} />
             <Route path="/chatbot" element={<Chatbot />} />
-            <Route path="/community/student" element={user ? <Community user={user} userData={userData} activities={activities} /> : <Login />} />
-            <Route path="/community/workspace" element={user ? <Workspace user={user} userData={userData} activities={activities} /> : <Login />} />
-            <Route path="/community/chronic" element={user ? <Chronic user={user} userData={userData} activities={activities} /> : <Login />} />
+            <Route
+              path="/community/student"
+              element={
+                user ? (
+                  <Community
+                    user={user}
+                    userData={userData}
+                    activities={activities}
+                  />
+                ) : (
+                  <Login />
+                )
+              }
+            />
+            <Route
+              path="/community/workspace"
+              element={
+                user ? (
+                  <Workspace
+                    user={user}
+                    userData={userData}
+                    activities={activities}
+                  />
+                ) : (
+                  <Login />
+                )
+              }
+            />
+            <Route
+              path="/community/chronic"
+              element={
+                user ? (
+                  <Chronic
+                    user={user}
+                    userData={userData}
+                    activities={activities}
+                  />
+                ) : (
+                  <Login />
+                )
+              }
+            />
             <Route path="/therapists" element={<Therapists />} />
             <Route path="/success" element={<Success />} />
-            <Route path="/therapists/therapistDetails" element={<TherapistDetails />} />
+            <Route
+              path="/therapists/therapistDetails"
+              element={<TherapistDetails />}
+            />
           </Routes>
         </div>
       </div>
