@@ -58,10 +58,10 @@ def chat():
 
     youtube_videos = []
 
-    if response_count == 2:
-        youtube_videos = search_disorder_videos(response.text)
-    elif "search youtube" in user_message.lower():
-        youtube_videos = search_custom_youtube(user_message)
+    # if response_count == 2:
+    #     youtube_videos = search_disorder_videos(response.text)
+    # elif "search youtube" in user_message.lower():
+    #     youtube_videos = search_custom_youtube(user_message)
 
     formatted_response = response.text.replace('*', '')
 
