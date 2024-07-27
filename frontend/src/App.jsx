@@ -24,6 +24,7 @@ import Therapists from "./Therapists";
 import TherapistDetails from "./components/TherapistDetails";
 import PaymentSuccess from "./PaymentSuccess";
 import PostPage from "./ForumPages/PostPage";
+import './App.css'
 
 const getRandomActivities = (list, count) => {
   const shuffled = [...list].sort(() => 0.5 - Math.random());

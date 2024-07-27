@@ -41,7 +41,7 @@ function Profile() {
 
     return (
         <div className="flex flex-col items-center w-[1120px] h-[513px] mx-auto px-3 py-2 backdrop-blur-sm bg-white/30 rounded-xl">
-            <div className="flex flex-row items-center justify-between gap-4 bg-slate-200/30 border rounded-lg p-4 border-orange-400 w-full h-full">
+            <div className="flex flex-row items-center justify-between gap-4 bg-slate-200/30 border rounded-lg p-4 border-purple-400 w-full h-full">
             <div className="flex flex-col ml-40">
                     <h1 className="text-xl font-bold text-indigo-950 mb-1">Name</h1>
                     <h2 className="text-lg text-indigo-950 mb-1">{userData?.name || 'Rahul Dhanak'}</h2>

@@ -74,7 +74,7 @@ const Home = ({ activities, userData }) => {
       </div> */}
       <div className="flex flex-col items-center mb-10">
         <h2 className="font-extrabold text-3xl text-indigo-950 mb-3">Lift Your Spirit!</h2>
-        <h2 className="font-semibold text-lg text-orange-400">Explore Fun Ways to Brighten Your Mind.</h2>
+        <h2 className="font-semibold text-lg text-purple-400">Explore Fun Ways to Brighten Your Mind.</h2>
       </div>
       <div className="search-column">
         <div className="search-bar relative">

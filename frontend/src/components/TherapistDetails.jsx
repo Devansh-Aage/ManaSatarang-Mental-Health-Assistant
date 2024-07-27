@@ -9,6 +9,7 @@ import { toast } from "react-toastify";
 import { addDoc, collection, doc,  } from "firebase/firestore";
 import 'antd/dist/reset.css'; // Ensure Ant Design styles are imported
 
+
 const TherapistDetails = () => {
   const location = useLocation();
   const { name, degree, experience, specialty, imgPath, fees, description } = location.state || {};
@@ -99,15 +100,15 @@ const TherapistDetails = () => {
   
 
   return (
-    <div className="   mx-auto p-6 bg-gray-100 min-h-screen">
+    <div className="mx-auto p-6 bg-white min-h-screen">
       {user ? (
-        <>
-          <div className="text-center mb-6">
+        <div>
+          <div className=" mb-6">
             <h1 className="text-3xl font-extrabold text-indigo-950 mb-4">Therapist Details</h1>
             <p className="text-lg text-gray-600">{description}</p>
           </div>
 
-          <div className="flex flex-col md:flex-row items-center bg-white shadow-lg rounded-lg p-6 mb-6">
+          <div className="flex flex-row items-center bg-white shadow-lg rounded-lg p-6 mb-6">
             <img
               src={imgPath}
               alt={name}
@@ -150,7 +151,7 @@ const TherapistDetails = () => {
               Pay
             </button>
           </form>
-        </>
+        </div>
       ) : (
         <div>Loading...</div>
       )}

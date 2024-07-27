@@ -6,11 +6,11 @@ const CommunitySidebar = () => {
   const { pathname } = useLocation();
 
   const getBorderColor = (linkPath) => {
-    return pathname.includes(linkPath) ? 'border-orange-400' : 'border-gray-200';
+    return pathname.includes(linkPath) ? 'border-purple-400' : 'border-gray-200';
   };
 
   const getBgColor = (linkPath) => {
-    return pathname.includes(linkPath) ? 'bg-orange-400' : '';
+    return pathname.includes(linkPath) ? 'bg-purple-400' : '';
   };
 
   const getTextColor = (linkPath) => {

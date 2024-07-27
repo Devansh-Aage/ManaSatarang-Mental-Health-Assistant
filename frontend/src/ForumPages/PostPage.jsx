@@ -43,7 +43,7 @@ function PostPage() {
         <h1 className='font-bold text-3xl text-indigo-950 mb-4'>{post.title}</h1>
         <p className='text-gray-700 mb-6'>{post.description}</p>
         <button
-          className={`px-4 py-2 rounded transition-colors duration-300 ${post.likedByUser ? 'text-white bg-red-500' : 'bg-indigo-950 text-white hover:bg-orange-400'}`}
+          className={`px-4 py-2 rounded transition-colors duration-300 ${post.likedByUser ? 'text-white bg-red-500' : 'bg-indigo-950 text-white hover:bg-purple-400'}`}
           onClick={handleLike}
         >
           <HeartIcon className={`w-5 h-5 inline-block mr-2 ${post.likedByUser ? 'text-white' : 'text-gray-700'}`} />
@@ -73,7 +73,7 @@ function PostPage() {
               rows='3'
             />
             <button
-              className='bg-indigo-950 text-white px-4 py-2 rounded hover:bg-orange-400 transition-colors duration-300'
+              className='bg-indigo-950 text-white px-4 py-2 rounded hover:bg-purple-400 transition-colors duration-300'
               onClick={handlePostComment}
             >
               Post Comment
