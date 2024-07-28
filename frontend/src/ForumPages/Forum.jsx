@@ -27,20 +27,7 @@ function Forum({}) {
   const [user, loading, error] = useAuthState(auth);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [posts, setPosts] = useState([
-    {
-      title: "Post Title 1",
-      description:
-        "This is a brief description of the post content. It provides a summary or introduction to the full discussion.",
-      likes: 12,
-      comments: 5,
-    },
-    {
-      title: "Post Title 2",
-      description:
-        "This is a brief description of the post content. It provides a summary or introduction to the full discussion.",
-      likes: 8,
-      comments: 2,
-    },
+    
   ]);
   const [newPost, setNewPost] = useState({ title: "", description: "" });
   const [dropdownOpen, setDropdownOpen] = useState(null);
