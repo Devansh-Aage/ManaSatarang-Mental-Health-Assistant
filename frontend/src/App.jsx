@@ -23,7 +23,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { activityList } from "./utils";
 import ActivityDetails from "./ActivityDetails";
-import Workspace from "./Workspace";
+import Workspace from "./Workspace"
 import Chronic from "./Chronic";
 import Leaderboard from "./Leaderboard";
 import Coupons from "./Coupons";
@@ -34,6 +34,8 @@ import TherapistDetails from "./components/TherapistDetails";
 import PaymentSuccess from "./PaymentSuccess";
 import PostPage from "./ForumPages/PostPage";
 import Success from "./Success";
+import Appointments from "./Appointments";
+import Chat from "./Chat";
 import './App.css'
 
 const getRandomActivities = (list, count) => {
@@ -117,8 +119,8 @@ const App = () => {
   }, [user]);
 
   const fetchTaskData = async () => {
-    // const storedLastUpdateDate = localStorage.getItem("lastUpdateDate");
-    const storedLastUpdateDate = "26/07/2024";
+    const storedLastUpdateDate = localStorage.getItem("lastUpdateDate");
+    // const storedLastUpdateDate = "26/07/2024";
     const today = new Date().toLocaleDateString("en-GB");
     if (storedLastUpdateDate === today) {
       await getTasksFromDB();
@@ -160,7 +162,7 @@ const App = () => {
   };
 
   return (
-    <div className="flex">
+    <div className="flex  absolute inset-0  h-full w-full bg-white [background:radial-gradient(125%_125%_at_50%_10%,#fff_40%,#63e_100%)]">
       <Navbar
         user={user}
         onNavbarToggle={(isOpen) =>
@@ -168,10 +170,10 @@ const App = () => {
         }
       />
       <div
-        className={`flex-1 ml-[${navbarWidth}] p-4 transition-all duration-300`}
+        className={`flex-1 h-screen overflow-hidden ml-[${navbarWidth}] transition-all duration-300`}
       >
         <ToastContainer />
-        <div className=" mt-10">
+        <div className="overflow-hidden">
           <Routes>
             <Route path="/login" element={<Login user={user} />} />
             <Route
@@ -192,6 +194,10 @@ const App = () => {
               }
             />
             <Route path="/forum" element={<Forum />} />
+            <Route
+              path="/appointments"
+              element={<Appointments user={user} />}
+            />
             <Route path="/forum/post/:postId" element={<PostPage />} />
             <Route path="/chatbot" element={<Chatbot />} />
             <Route
@@ -242,6 +248,7 @@ const App = () => {
               path="/therapists/therapistDetails"
               element={<TherapistDetails />}
             />
+            <Route path="/chat/:chatId" element={<Chat user={user} />} />
           </Routes>
         </div>
       </div>

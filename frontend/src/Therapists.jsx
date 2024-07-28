@@ -41,14 +41,10 @@ const therapists = [
 const Therapists = () => {
   const navigate = useNavigate();
 
-  const toDetails = (therapist) => {
-    navigate('/therapistDetails', {
-      state: { ...therapist }
-    });
-  };
+
 
   return (
-    <div className="relative mx-20 my-10 mt-12 pb-20">
+    <div className="relative w-full  px-20  pt-12 h-screen overflow-y-auto">
        <div className="flex flex-col items-center mb-10">
         <h2 className="font-extrabold text-3xl text-indigo-950 mb-3">Meet Our Therapists</h2>
         <p className="font-semibold text-lg text-purple-400 mb-10 text-center">
@@ -72,7 +68,7 @@ const Therapists = () => {
       </div>
 
       {/* Therapist Cards */}
-      <h2 className="font-extrabold text-2xl text-indigo-950 mb-5">Therapists We Provide</h2>
+      <h2 className="font-extrabold text-2xl text-indigo-950 mb-5 ml-36">Therapists We Provide</h2>
       <div className="flex flex-wrap gap-5 justify-center">
         {therapists.map((therapist, index) => (
             <TherapistCard {...therapist} />

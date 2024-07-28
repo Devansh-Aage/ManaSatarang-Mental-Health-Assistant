@@ -113,7 +113,7 @@ const ActivityDetails = ({ activities, user }) => {
   };
 
   return (
-    <div className="w-full flex justify-center items-center p-4 mx-14">
+    <div className="w-full flex justify-center items-center p-4 mx-2 overscroll-none">
       <div className="w-[40%] lg:w-[30%]">
         <div className="flex mb-3">
           <ClipboardList size={20} className="text-purple-600 mt-1 ml-3" />
@@ -163,6 +163,7 @@ const ActivityDetails = ({ activities, user }) => {
           <TextareaAutosize
             className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border border-gray-300 rounded-md p-2"
             value={input}
+            rows={3}
             onChange={(e) => setInput(e.target.value)}
           />
         </div>

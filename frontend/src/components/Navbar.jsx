@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { signOut } from "firebase/auth";
 import { auth } from "../config/firebase-config";
 import { Home, MessageCircle, Users, Activity, User, BookOpen, SquareChevronRight, SquareChevronLeft } from "lucide-react";
@@ -7,6 +7,7 @@ import { Home, MessageCircle, Users, Activity, User, BookOpen, SquareChevronRigh
 const Navbar = ({ user }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const router=useNavigate()
 
   const handleToggle = () => {
     setIsOpen((prev) => !prev); 
@@ -18,12 +19,13 @@ const Navbar = ({ user }) => {
 
   const handleLogout = async () => {
     await signOut(auth);
+    router('/login')
     setIsOpen(false); 
     setDropdownOpen(false); 
   };
 
   return (
-    <div className={`relative flex flex-col justify-between lg:flex lg:flex-col lg:top-0 lg:left-0 lg:h-screen lg:bg-white transition-all duration-300 ${isOpen ? "lg:w-[250px]" : "lg:w-[60px]"} z-50`}>
+    <div className={`relative z-50 flex flex-col justify-between lg:flex lg:flex-col lg:top-0 lg:left-0 lg:h-screen lg:bg-white transition-all duration-300 ${isOpen ? "lg:w-[250px]" : "lg:w-[60px]"} z-50`}>
       {/* Sidebar */}
       <div className={`fixed h-screen bg-white transition-transform transform border border-t-0 ${isOpen ? "translate-x-0 w-[250px] shadow-lg rounded-2xl" : "-translate-x-0 w-[60px] border-r border-gray-200"}`}>
       <div className={`flex items-center justify-between p-3 border-y-0 `}>
@@ -57,6 +59,10 @@ const Navbar = ({ user }) => {
             <Link to="/therapists" className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left">
               <User size={20} />
               <span className={`${isOpen ? "block" : "hidden"}`}>Our Therapists</span>
+            </Link>
+            <Link to="/appointments" className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left">
+              <User size={20} />
+              <span className={`${isOpen ? "block" : "hidden"}`}>Appointments</span>
             </Link>
             {!user && (
               <Link to="/login" className="text-center bg-purple-900 text-white text-base px-3 py-2 rounded-lg">

@@ -43,7 +43,7 @@ const TherapistDetails = () => {
       e.preventDefault();
       console.log("Form State: ", formState);
       console.log("Fees: ", fees);
-      const mycollection = collection(db, "test");
+      const mycollection = collection(db, "appointments");
 
       const myDocumentData = {
         therapistId: formState.TherapistId,
@@ -92,7 +92,7 @@ const TherapistDetails = () => {
   };
 
   return (
-    <div className="mx-auto p-6 bg-white min-h-screen">
+    <div className="mx-auto p-6 bg-white ">
       {user ? (
         <>
           <div className="text-center mb-6">

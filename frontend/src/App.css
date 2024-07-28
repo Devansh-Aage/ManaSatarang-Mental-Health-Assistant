@@ -7,13 +7,13 @@
   box-sizing: border-box;
 }
 
-body {
+/* body {
   font-family: 'Roboto', sans-serif;
   background: linear-gradient(-10deg, #bcb3cc, #ffffff); /* Light purple gradient */
-  overflow-x: hidden; /* Prevent horizontal scrolling */
-  background-attachment: fixed; /* Keep background fixed while scrolling */
-  background-size: cover;
-}
+  /* overflow-x: hidden; /* Prevent horizontal scrolling */
+  /* background-attachment: fixed; Keep background fixed while scrolling */
+  /* background-size: cover; */ 
+/* } */ 
 
 /* Navbar styles */
 .navbarBox {

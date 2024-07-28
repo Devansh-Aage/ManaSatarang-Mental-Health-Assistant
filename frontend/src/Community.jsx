@@ -6,12 +6,11 @@ import {
   orderBy,
   onSnapshot,
 } from "firebase/firestore";
-import { db } from "./config/firebase-config";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-import { BadgeCheck,Users } from "lucide-react";
+import { BadgeCheck, Users } from "lucide-react";
 import CommunitySidebar from "./components/CommunitySidebar";
-
+import { db } from "./config/firebase-config";
 
 const groupNames = [
   "Student Circle",
@@ -67,7 +66,7 @@ const Community = ({ user, userData, activities, userTasks }) => {
       <div className="hidden  lg:block  min-h-[85vh] justify-self-center self-center lg:w-[25vw] flex-shrink-0">
         <div className="mt-14"></div>
         <div className="ml-4">
-          <CommunitySidebar/>
+          <CommunitySidebar />
         </div>
       </div>
       <div className="flex flex-col justify-end h-[90vh] mt-[6rem] flex-grow px-2">
