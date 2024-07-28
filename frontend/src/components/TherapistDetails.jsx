@@ -65,7 +65,7 @@ const TherapistDetails = () => {
       toast.info("Redirecting to Stripe Payment Gateway");
 
       const response = await fetch(
-        `http://localhost:5000/api/payment/checkout`,
+        `http://localhost:5001/api/payment/checkout`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
