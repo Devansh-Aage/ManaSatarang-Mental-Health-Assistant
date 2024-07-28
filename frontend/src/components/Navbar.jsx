@@ -23,9 +23,9 @@ const Navbar = ({ user }) => {
   };
 
   return (
-    <div className={`relative lg:flex lg:flex-col lg:top-0 lg:left-0 lg:h-screen lg:bg-white transition-all duration-300 ${isOpen ? "lg:w-[250px]" : "lg:w-[60px]"} z-50`}>
+    <div className={`relative flex flex-col justify-between lg:flex lg:flex-col lg:top-0 lg:left-0 lg:h-screen lg:bg-white transition-all duration-300 ${isOpen ? "lg:w-[250px]" : "lg:w-[60px]"} z-50`}>
       {/* Sidebar */}
-      <div className={`h-screen bg-white transition-transform transform border border-t-0 ${isOpen ? "translate-x-0 w-[250px] shadow-lg rounded-2xl" : "-translate-x-0 w-[60px] border-r border-gray-200"}`}>
+      <div className={`fixed h-screen bg-white transition-transform transform border border-t-0 ${isOpen ? "translate-x-0 w-[250px] shadow-lg rounded-2xl" : "-translate-x-0 w-[60px] border-r border-gray-200"}`}>
       <div className={`flex items-center justify-between p-3 border-y-0 `}>
       <button onClick={handleToggle} className="text-gray-700 hover:bg-gray-200 rounded transition-colors duration-200">
         {isOpen ?  <SquareChevronLeft size={28}/> : <SquareChevronRight size={28}/>}
@@ -33,7 +33,7 @@ const Navbar = ({ user }) => {
     </div>
         <div className={`flex flex-col p-4 ${isOpen ? "block" : "hidden"}`}>
           {/* Navigation Links */}
-          <nav className="flex flex-col space-y-6">
+          <nav className="flex flex-col space-y-10 mt-24">
             <Link to="/" className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left">
               <Home size={20} />
               <span className={`${isOpen ? "block" : "hidden"}`}>Home</span>
@@ -67,7 +67,7 @@ const Navbar = ({ user }) => {
         </div>
 
         {/* Icon Container in Closed View */}
-        <div className={`flex flex-col items-center space-y-6 p-4 ${isOpen ? "hidden" : "block"}`}>
+        <div className={`flex flex-col items-center space-y-10 mt-24 p-4 ${isOpen ? "hidden" : "block"}`}>
           <Link to="/" className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left">
             <Home size={20} />
           </Link>
@@ -90,12 +90,12 @@ const Navbar = ({ user }) => {
 
         {/* Profile Section */}
         {user && (
-          <div className={`p-4 mt-60 bg-white shadow-md rounded-t-lg border-t border-gray-300 ${isOpen ? "block" : "hidden"}`}>
+          <div className={`p-4 mt-24 bg-white shadow-md rounded-t-lg border-t border-gray-300 ${isOpen ? "block" : "hidden"}`}>
             <div className="flex items-center space-x-3">
               <img
                 src={user.photoURL || "/default-profile.png"}
                 alt="Profile"
-                className="w-12 h-12 rounded-full border border-gray-300 cursor-pointer"
+                className="w-8 h-8 rounded-full border border-gray-300 cursor-pointer"
                 onClick={handleProfileClick}
               />
               <div className="flex-1">

@@ -44,13 +44,13 @@ function Profile() {
             <div className="flex flex-row items-center justify-between gap-4 bg-slate-200/30 border rounded-lg p-4 border-purple-400 w-full h-full">
             <div className="flex flex-col ml-40">
                     <h1 className="text-xl font-bold text-indigo-950 mb-1">Name</h1>
-                    <h2 className="text-lg text-indigo-950 mb-1">{userData?.name || 'Rahul Dhanak'}</h2>
+                    <h2 className="text-lg text-indigo-950 mb-1">{user.displayName || 'Rahul Dhanak'}</h2>
                     <div className="h-[40px]"></div>
                     <h2 className="text-xl font-bold text-indigo-950 mb-1">Email</h2>
-                    <p className="text-lg text-gray-600">{userData?.email || 'rahuldhanak11@gmail.com'}</p>
+                    <p className="text-lg text-gray-600">{user.email || 'rahuldhanak11@gmail.com'}</p>
                     <div className="h-[40px]"></div>
                     <h2 className="text-xl font-bold text-indigo-950 mb-1">Phone Number</h2>
-                    <p className="text-lg text-gray-600">{userData?.phoneNumber || '9892905943'}</p>
+                    <p className="text-lg text-gray-600">{user.phoneNumber || '9892905943'}</p>
                 </div>
                 <div className="flex flex-col items-center mb-8 mr-40">
                     <div className="relative w-[170px] h-[170px] mb-4 ">
