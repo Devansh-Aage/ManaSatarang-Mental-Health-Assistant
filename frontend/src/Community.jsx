@@ -62,7 +62,7 @@ const Community = ({ user, userData, activities, userTasks }) => {
   };
 
   return (
-    <div className="flex h-[90vh] overflow-hidden items-end justify-end">
+    <div className="flex h-[90vh] overflow-hidden items-end justify-end mx-10">
       <div className="hidden  lg:block  min-h-[85vh] justify-self-center self-center lg:w-[25vw] flex-shrink-0">
         <div className="mt-14"></div>
         <div className="ml-4">

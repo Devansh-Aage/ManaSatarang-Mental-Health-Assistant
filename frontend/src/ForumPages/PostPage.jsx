@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { Heart as HeartIcon, MessageCircle as CommentIcon } from 'lucide-react';
+
 
 function PostPage() {
   const [post, setPost] = useState({
@@ -14,6 +15,18 @@ function PostPage() {
     ],
   });
   const [newComment, setNewComment] = useState('');
+
+  const commentsEndRef = useRef(null);
+
+  // Function to handle scrolling to the bottom
+  const scrollToBottom = () => {
+    commentsEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  // Scroll to bottom when new comments are added
+  useEffect(() => {
+    scrollToBottom();
+  }, [post.comments]);
 
   const handleLike = () => {
     setPost(prev => ({
@@ -38,7 +51,7 @@ function PostPage() {
   };
 
   return (
-    <div className='mx-14 my-10 pb-10'>
+    <div className='mx-14'>
       <div className='w-full bg-gray-100 p-6 rounded shadow-md'>
         <h1 className='font-bold text-3xl text-indigo-950 mb-4'>{post.title}</h1>
         <p className='text-gray-700 mb-6'>{post.description}</p>
@@ -51,18 +64,19 @@ function PostPage() {
         </button>
       </div>
 
-      <div className='mt-8'>
+      <div className='mt-8 '>
         <div className='bg-gray-100 p-6 rounded shadow-md'>
           <h2 className='font-semibold text-xl text-indigo-950 mb-4'>
             Comments ({post.comments.length})
           </h2>
-          <div className='max-h-[300px] overflow-y-auto space-y-4 mb-4'>
+          <div className='max-h-[200px] overflow-y-auto space-y-4 mb-4 h-[210px]'>
             {post.comments.map(comment => (
               <div key={comment.id} className='bg-white p-4 rounded shadow-sm'>
                 <p className='font-semibold text-gray-800'>{comment.username}:</p>
                 <p className='text-gray-700'>{comment.text}</p>
               </div>
             ))}
+            <div ref={commentsEndRef} />
           </div>
           <div className='flex flex-col'>
             <textarea

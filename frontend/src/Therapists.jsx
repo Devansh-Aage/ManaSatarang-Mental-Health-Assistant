@@ -44,7 +44,7 @@ const Therapists = () => {
 
 
   return (
-    <div className="relative w-full  px-20  pt-12 h-screen overflow-y-auto">
+    <div className="relative w-full  px-20 pb-10 pt-12 h-screen overflow-y-auto">
        <div className="flex flex-col items-center mb-10">
         <h2 className="font-extrabold text-3xl text-indigo-950 mb-3">Meet Our Therapists</h2>
         <p className="font-semibold text-lg text-purple-400 mb-10 text-center">

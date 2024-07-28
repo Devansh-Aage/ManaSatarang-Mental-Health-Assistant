@@ -50,7 +50,7 @@ function Profile() {
                     <p className="text-lg text-gray-600">{user.email || 'rahuldhanak11@gmail.com'}</p>
                     <div className="h-[40px]"></div>
                     <h2 className="text-xl font-bold text-indigo-950 mb-1">Phone Number</h2>
-                    <p className="text-lg text-gray-600">{user.phoneNumber || '9892905943'}</p>
+                    <p className="text-lg text-gray-600">{userData?.phoneNumber || '9892905943'}</p>
                 </div>
                 <div className="flex flex-col items-center mb-8 mr-40">
                     <div className="relative w-[170px] h-[170px] mb-4 ">

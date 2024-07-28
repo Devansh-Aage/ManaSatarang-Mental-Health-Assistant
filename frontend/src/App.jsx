@@ -37,6 +37,7 @@ import Success from "./Success";
 import Appointments from "./Appointments";
 import Chat from "./Chat";
 import './App.css'
+import Journal from "./Journal/Journal";
 
 const getRandomActivities = (list, count) => {
   const shuffled = [...list].sort(() => 0.5 - Math.random());
@@ -162,7 +163,7 @@ const App = () => {
   };
 
   return (
-    <div className="flex  absolute inset-0  h-full w-full bg-white [background:radial-gradient(125%_125%_at_50%_10%,#fff_40%,#63e_100%)]">
+    <div className="flex  absolute inset-0 h-full w-full bg-white [background:radial-gradient(125%_125%_at_50%_10%,#fff_40%,#63e_100%)]">
       <Navbar
         user={user}
         onNavbarToggle={(isOpen) =>
@@ -173,7 +174,7 @@ const App = () => {
         className={`flex-1 h-screen overflow-hidden ml-[${navbarWidth}] transition-all duration-300`}
       >
         <ToastContainer />
-        <div className="overflow-hidden">
+        <div className="overflow-hidden py-10">
           <Routes>
             <Route path="/login" element={<Login user={user} />} />
             <Route
@@ -249,6 +250,10 @@ const App = () => {
               element={<TherapistDetails />}
             />
             <Route path="/chat/:chatId" element={<Chat user={user} />} />
+            <Route
+              path="/journal"
+              element={<Journal />}
+            />
           </Routes>
         </div>
       </div>
