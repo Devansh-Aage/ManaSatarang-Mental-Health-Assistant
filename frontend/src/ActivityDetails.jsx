@@ -91,7 +91,7 @@ const ActivityDetails = ({ activities, user }) => {
 
     try {
       const response = await axios.post(
-        "http://localhost:5000/predict",
+        "http://127.0.0.1:8080/predict",
         formData,
         {
           headers: {
