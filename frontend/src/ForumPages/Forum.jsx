@@ -168,7 +168,7 @@ function Forum({}) {
                 </div>
               ))
             ) : (
-              <div>Loading...</div>
+              <div>No posts</div>
             )}
           </div>
         </div>
