@@ -95,9 +95,8 @@ const Home = ({ activities, userData }) => {
         )}
         <div className="recommendations mt-4">
           <Tabs defaultActiveKey="1"
-          
           >
-            <TabPane tab="Recommended Videos" key="1">
+            <TabPane className="text-purple-900" tab="Recommended Videos" key="1">
               {loadingRecommendations ? (
                 <div className="flex">
                   {Array.from({ length: 3 }).map((_, index) => (
