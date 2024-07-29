@@ -1,52 +1,102 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { Heart as HeartIcon, MessageCircle as CommentIcon } from 'lucide-react';
-
+import { db, auth } from '../config/firebase-config';
+import { doc, getDoc, updateDoc, arrayUnion, increment } from 'firebase/firestore';
+import { useParams } from 'react-router-dom';
 
 function PostPage() {
+  const { postId } = useParams();
   const [post, setPost] = useState({
-    title: 'Post Title',
-    description: 'This is a detailed description of the post content. It provides a comprehensive view of the discussion topic.',
-    likes: 12,
-    likedByUser: false, // Track if the post is liked by the user
-    comments: [
-      { id: 1, username: 'User1', text: 'Great post!' },
-      { id: 2, username: 'User2', text: 'Very informative, thanks!' },
-      // Add more comments here to test scrolling
-    ],
+    title: '',
+    description: '',
+    likes: 0,
+    likedByUser: false,
+    comments: [], // Ensure comments is always initialized as an array
   });
   const [newComment, setNewComment] = useState('');
-
   const commentsEndRef = useRef(null);
 
-  // Function to handle scrolling to the bottom
+  useEffect(() => {
+    const fetchPost = async () => {
+      const postRef = doc(db, 'forumPosts', postId);
+      const postSnap = await getDoc(postRef);
+
+      if (postSnap.exists()) {
+        const postData = postSnap.data();
+        setPost({
+          title: postData.title || '',
+          description: postData.description || '',
+          likes: postData.likes || 0,
+          likedByUser: postData.likedByUser || false,
+          comments: postData.comments || [], // Ensure comments is an array
+        });
+      } else {
+        console.log('No such document!');
+      }
+    };
+
+    fetchPost();
+  }, [postId]);
+
   const scrollToBottom = () => {
     commentsEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  // Scroll to bottom when new comments are added
   useEffect(() => {
     scrollToBottom();
   }, [post.comments]);
 
-  const handleLike = () => {
-    setPost(prev => ({
-      ...prev,
-      likes: prev.likedByUser ? prev.likes - 1 : prev.likes + 1,
-      likedByUser: !prev.likedByUser,
-    }));
+  const handleLike = async () => {
+    const postRef = doc(db, 'forumPosts', postId);
+
+    try {
+      await updateDoc(postRef, {
+        likes: post.likedByUser ? increment(-1) : increment(1),
+        likedByUser: !post.likedByUser,
+      });
+
+      setPost(prev => ({
+        ...prev,
+        likes: prev.likedByUser ? prev.likes - 1 : prev.likes + 1,
+        likedByUser: !prev.likedByUser,
+      }));
+    } catch (error) {
+      console.error('Error updating document: ', error);
+    }
   };
 
   const handleCommentChange = (e) => {
     setNewComment(e.target.value);
   };
 
-  const handlePostComment = () => {
+  const handlePostComment = async () => {
     if (newComment.trim()) {
-      setPost(prev => ({
-        ...prev,
-        comments: [...prev.comments, { id: Date.now(), username: 'CurrentUser', text: newComment }]
-      }));
-      setNewComment('');
+      const postRef = doc(db, 'forumPosts', postId);
+      const user = auth.currentUser; // Get the currently logged-in user
+
+      if (user) {
+        const newCommentObj = {
+          id: Date.now(),
+          username: user.displayName || 'Anonymous', // Use the display name of the logged-in user
+          text: newComment,
+        };
+
+        try {
+          await updateDoc(postRef, {
+            comments: arrayUnion(newCommentObj),
+          });
+
+          setPost(prev => ({
+            ...prev,
+            comments: prev.comments ? [...prev.comments, newCommentObj] : [newCommentObj],
+          }));
+          setNewComment('');
+        } catch (error) {
+          console.error('Error updating document: ', error);
+        }
+      } else {
+        console.log('User is not logged in');
+      }
     }
   };
 
@@ -64,13 +114,13 @@ function PostPage() {
         </button>
       </div>
 
-      <div className='mt-8 '>
+      <div className='mt-8'>
         <div className='bg-gray-100 p-6 rounded shadow-md'>
           <h2 className='font-semibold text-xl text-indigo-950 mb-4'>
-            Comments ({post.comments.length})
+            Comments ({post.comments ? post.comments.length : 0})
           </h2>
           <div className='max-h-[200px] overflow-y-auto space-y-4 mb-4 h-[210px]'>
-            {post.comments.map(comment => (
+            {post.comments && post.comments.map(comment => (
               <div key={comment.id} className='bg-white p-4 rounded shadow-sm'>
                 <p className='font-semibold text-gray-800'>{comment.username}:</p>
                 <p className='text-gray-700'>{comment.text}</p>

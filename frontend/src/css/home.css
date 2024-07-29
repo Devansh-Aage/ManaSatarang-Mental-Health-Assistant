@@ -8,6 +8,30 @@
   flex: 1;
   max-width: 300px; /* Adjust as needed */
 }
+.ant-tabs-nav-list{
+  width: 100%;
+
+  .ant-tabs-tab{
+    flex: 1;
+  }
+}
+.ant-tabs-tab{
+  justify-content: center;
+}
+.ant-tabs-tab:active{
+  justify-content: center;
+  border-color: purple;
+}
+#rc-tabs-1-tab-1{
+  color: purple;
+  font-size: medium;
+  font-weight: 600;
+}
+#rc-tabs-1-tab-2{
+  color: purple;
+  font-size: medium;
+  font-weight: 600;
+}
 
 .search-column {
   flex: 2;

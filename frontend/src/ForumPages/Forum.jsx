@@ -23,12 +23,10 @@ import {
 import { auth, db } from "../config/firebase-config";
 import { useAuthState } from "react-firebase-hooks/auth";
 
-function Forum({}) {
+function Forum() {
   const [user, loading, error] = useAuthState(auth);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [posts, setPosts] = useState([
-    
-  ]);
+  const [posts, setPosts] = useState([]);
   const [newPost, setNewPost] = useState({ title: "", description: "" });
   const [dropdownOpen, setDropdownOpen] = useState(null);
   const navigate = useNavigate();
@@ -42,9 +40,9 @@ function Forum({}) {
         uid: user.uid,
         title: newPost.title,
         desc: newPost.description,
-        like: 0,
+        likes: 0,
+        comments: [],
         timestamp: new Date(),
-        replies: [],
       });
     } catch (error) {
       console.error("Error adding document: ", error);
@@ -56,19 +54,17 @@ function Forum({}) {
       addForumPostToDB();
       handleCloseModal();
       setNewPost({ title: "", description: "" });
-      setPosts([...posts, newPost]);
     }
   };
 
   useEffect(() => {
-    const q = query(collection(db, "forumPosts"), orderBy("timestamp", "asc"));
+    const q = query(collection(db, "forumPosts"), orderBy("timestamp", "desc"));
     const unsubscribe = onSnapshot(q, (qSnapShot) => {
       const posts = [];
       qSnapShot.forEach((doc) => {
-        posts.push(doc.data());
+        posts.push({ id: doc.id, ...doc.data() });
       });
       setPosts(posts);
-      console.log(posts);
     });
     return () => unsubscribe();
   }, []);
@@ -78,12 +74,12 @@ function Forum({}) {
     setNewPost((prev) => ({ ...prev, [id]: value }));
   };
 
-  const handlePostClick = (index) => {
-    navigate(`/forum/post/${index}`);
+  const handlePostClick = (postId) => {
+    navigate(`/forum/post/${postId}`);
   };
 
-  const handleDropdownToggle = (index) => {
-    setDropdownOpen(dropdownOpen === index ? null : index);
+  const handleDropdownToggle = (postId) => {
+    setDropdownOpen(dropdownOpen === postId ? null : postId);
   };
 
   return (
@@ -109,6 +105,7 @@ function Forum({}) {
           >
             Create a New Discussion
           </button>
+          {/* Sidebar options can be uncommented if needed */}
           {/* <div className='space-y-4'>
             <div className='flex items-center cursor-pointer hover:text-purple-400 transition-colors duration-300'>
               <List className='w-5 h-5 mr-5 text-red-500' />
@@ -132,22 +129,23 @@ function Forum({}) {
         {/* Main Content */}
         <div className="w-3/4">
           <div className="space-y-8">
-            {posts ? (
-              posts.map((post, index) => (
+            {posts.length > 0 ? (
+              posts.map((post) => (
                 <div
+                  key={post.id}
                   className="w-full bg-gray-100 p-6 rounded shadow-md relative cursor-pointer"
-                  onClick={() => handlePostClick(index)}
+                  onClick={() => handlePostClick(post.id)}
                 >
                   <button
                     className="absolute top-2 right-2 p-2 text-gray-600 hover:text-red-600"
                     onClick={(e) => {
                       e.stopPropagation();
-                      handleDropdownToggle(index);
+                      handleDropdownToggle(post.id);
                     }}
                   >
                     <MoreHorizontal className="w-5 h-5" />
                   </button>
-                  {dropdownOpen === index && (
+                  {dropdownOpen === post.id && (
                     <div className="absolute top-10 right-2 bg-white border border-gray-300 shadow-lg rounded p-2 z-10">
                       <div className="flex items-center text-red-600">
                         <MoreHorizontal className="w-4 h-4 mr-2" />
@@ -158,17 +156,17 @@ function Forum({}) {
                   <h2 className="font-bold text-xl text-indigo-950 mb-2">
                     {post.title}
                   </h2>
-                  <p className="text-gray-700 mb-4">{post.description}</p>
+                  <p className="text-gray-700 mb-4">{post.desc}</p>
                   <div className="flex items-center text-gray-600">
                     <HeartIcon className="w-4 h-4 mr-2 text-red-500" />
-                    <span>{post.likes}</span>
+                    <span>{post.likes || 0}</span>
                     <CommentIcon className="w-4 h-4 ml-4 mr-2 text-blue-500" />
-                    <span>{post.comments}</span>
+                    <span>{(post.comments || []).length}</span>
                   </div>
                 </div>
               ))
             ) : (
-              <div>Loading...</div>
+              <div>No posts</div>
             )}
           </div>
         </div>
