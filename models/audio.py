@@ -1,21 +1,25 @@
-import pandas as pd
-import numpy as np
+from flask import Flask, request, jsonify
 import os
+import numpy as np
 import librosa
-import joblib
 from sklearn.preprocessing import OneHotEncoder
-from sklearn.model_selection import train_test_split
-from keras.models import Sequential
-from keras.layers import Dense, LSTM, Dropout, BatchNormalization
-from keras.optimizers import Adam
-from keras.callbacks import EarlyStopping
-from tensorflow.keras.models import load_model
+from keras.models import load_model
 import speech_recognition as sr
+import joblib
 
-# Load the pre-trained model
+app = Flask(__name__)
+
 model = load_model('model.h5')
 
-# Function to transcribe audio
+labels = ['angry', 'happy', 'sad', 'neutral', 'surprise', 'disgust', 'fear']
+encoder = OneHotEncoder()
+enc = encoder.fit(np.array(labels).reshape(-1, 1))
+
+def extract_mfcc(filename):
+    y, sr = librosa.load(filename, sr=None)
+    mfcc = librosa.feature.mfcc(y=y, sr=sr, n_mfcc=13)
+    return mfcc.T
+
 def transcribe_audio(filename):
     recognizer = sr.Recognizer()
     audio_file = sr.AudioFile(filename)
@@ -24,20 +28,38 @@ def transcribe_audio(filename):
     transcription = recognizer.recognize_google(audio)
     return transcription
 
-# Path to the audio file you want to test
-test_audio_path = '/content/drive/MyDrive/Kumail2 (1) (1).wav'
+@app.route('/', methods=['GET'])
+def welcome():
+    return "Welcome to the Emotion Detection and Transcription App!"
 
-# Extract MFCC features from the test audio file
-mfcc_features = extract_mfcc(test_audio_path)
+@app.route('/predict', methods=['POST'])
+def predict():
+    if 'audio' not in request.files:
+        return jsonify({"message": "Audio file is required!"}), 400
+    
+    audio_file = request.files['audio']
+    audio_path = os.path.join('./uploads', audio_file.filename)
+    audio_file.save(audio_path)
+    
+    try:
+        mfcc_features = extract_mfcc(audio_path)
+        
+        # Predict emotion
+        mfcc_features = np.expand_dims(mfcc_features, axis=(0, -1))  # Reshape for model input
+        emotion_prediction = model.predict(mfcc_features)
+        emotion_label = enc.inverse_transform(emotion_prediction)[0][0]
+        
+        # Transcribe audio
+        transcription = transcribe_audio(audio_path)
+        
+        return jsonify({
+            "emotion": emotion_label,
+            "transcription": transcription
+        }), 200
+    except Exception as e:
+        return jsonify({"message": str(e)}), 500
 
-# Predict emotion
-mfcc_features = np.expand_dims(mfcc_features, axis=(0, -1))  # Reshape for model input
-emotion_prediction = model.predict(mfcc_features)
-emotion_label = enc.inverse_transform(emotion_prediction)[0][0]
-
-# Transcribe audio
-transcription = transcribe_audio(test_audio_path)
-
-# Display results
-print("Emotion Detected:", emotion_label)
-print("Transcription:", transcription)
+if __name__ == '__main__':
+    if not os.path.exists('./uploads'):
+        os.mkdir('./uploads')
+    app.run(port=3036)
