@@ -31,9 +31,14 @@ const Login = ({ userProp }) => {
       if (userSnapshot.docs.length > 0) {
         // User exists, fetch existing data
         const userData = userSnapshot.docs[0].data();
-        toast.success(`Welcome back, ${userData.name}!`);
-        console.log("User already exists:", userData);
-        // Here you can set states or update context with user data
+        
+        if(userData.hasBiometric){
+          navigate('/scan')
+        }
+        else{
+          navigate('/')
+          toast.success(`Welcome back, ${userData.name}!`);
+        }
       } else {
         // User does not exist, create new entry
         await setDoc(doc(db, "users", user.uid), {
@@ -45,12 +50,14 @@ const Login = ({ userProp }) => {
           verified: false,
           points: 0,
           isTherapist:false,
+          hasBiometric:false
         });
+        navigate('/');
         toast.success(`Welcome, ${user.displayName}!`);
         console.log("New user created.");
         // Here you can set states or update context with new user data
       }
-      navigate('/');
+     
     } catch (error) {
       const errorCode = error.code;
       const errorMessage = error.message;
