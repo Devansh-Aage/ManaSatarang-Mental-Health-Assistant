@@ -71,7 +71,7 @@ const Home = ({ activities, userData }) => {
           />
         </div>
         {searchQuery && (
-          <div className="search-results overflow-y-scroll mt-4">
+          <div className="search-results overflow-y-auto mt-4">
             {loadingSearch ? (
               <Skeleton height={50} />
             ) : searchResults.length > 0 ? (
@@ -96,7 +96,7 @@ const Home = ({ activities, userData }) => {
         <div className="recommendations mt-4">
           <Tabs defaultActiveKey="1"
           >
-            <TabPane className="text-purple-900" tab="Recommended Videos" key="1">
+            <TabPane className="text-purple-400" tab="Recommended Videos" key="1">
               {loadingRecommendations ? (
                 <div className="flex">
                   {Array.from({ length: 3 }).map((_, index) => (
