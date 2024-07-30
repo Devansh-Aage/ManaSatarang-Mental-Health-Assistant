@@ -38,6 +38,8 @@ import Appointments from "./Appointments";
 import Chat from "./Chat";
 import "./App.css";
 import Journal from "./Journal/Journal";
+import ScanFace from "./ScanFace";
+
 
 const getRandomActivities = (list, count) => {
   const shuffled = [...list].sort(() => 0.5 - Math.random());
@@ -181,7 +183,7 @@ const App = () => {
               path="/"
               element={<Home activities={activities} userData={userData} />}
             />
-            <Route path="/profile" element={<Profile />} />
+            <Route path="/profile" element={<Profile user={user} userData={userData} />} />
             <Route path="/profile/leaderboard" element={<Leaderboard />} />
             <Route path="/profile/coupon" element={<Coupons />} />
             <Route
@@ -251,6 +253,7 @@ const App = () => {
             />
             <Route path="/chat/:chatId" element={<Chat user={user} />} />
             <Route path="/journal" element={<Journal />} />
+            <Route path="/scan" element={<ScanFace />} />
           </Routes>
         </div>
       </div>

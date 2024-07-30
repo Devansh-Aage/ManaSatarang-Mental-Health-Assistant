@@ -123,9 +123,9 @@ function Journal() {
           </Collapse>
         ) : (
           <div>
-            <Skeleton className="w-full h-6"/>
-            <Skeleton className="w-full h-6"/>
-            <Skeleton className="w-full h-6"/>
+            <Skeleton className="w-full h-9 mb-3"/>
+            <Skeleton className="w-full h-9 mb-3"/>
+            <Skeleton className="w-full h-9 mb-3"/>
           </div>
         )}
       </div>
