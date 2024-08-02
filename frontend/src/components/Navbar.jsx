@@ -124,7 +124,7 @@ const Navbar = ({ user }) => {
 
         {/* Profile Section */}
         {user && (
-          <div className={`p-4 bg-white shadow-md rounded-t-lg border-t border-gray-300 ${isOpen ? "block" : "hidden"}`}>
+          <div className={`p-4 bg-white shadow-md  border-t border-gray-300 ${isOpen ? "block" : "hidden"}`}>
             <div className="flex items-center space-x-3">
               <img
                 src={user.photoURL || "/default-profile.png"}

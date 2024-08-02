@@ -147,7 +147,7 @@ const Chatbot = () => {
   };
 
   return (
-    <div>
+    <div className="pt-10">
       <div className="flex flex-col items-center mb-10">
         <h2 className="font-extrabold text-3xl text-indigo-950 mb-3">
           Meet Serena!

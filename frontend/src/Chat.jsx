@@ -109,9 +109,6 @@ const Chat = ({}) => {
                       <span className="font-bold text-slate-600  mr-1">
                         {msg.name}
                       </span>
-                      {msg.verified && (
-                        <BadgeCheck className="text-blue-500" size={20} />
-                      )}
                     </div>
                     <div className="break-words">{msg.text}</div>
                   </div>

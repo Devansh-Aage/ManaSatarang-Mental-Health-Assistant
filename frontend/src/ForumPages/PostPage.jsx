@@ -12,6 +12,7 @@ function PostPage() {
     likes: 0,
     likedByUser: false,
     comments: [], // Ensure comments is always initialized as an array
+    author: '' // New field for author's username
   });
   const [newComment, setNewComment] = useState('');
   const commentsEndRef = useRef(null);
@@ -25,10 +26,11 @@ function PostPage() {
         const postData = postSnap.data();
         setPost({
           title: postData.title || '',
-          description: postData.description || '',
+          description: postData.desc || '',
           likes: postData.likes || 0,
           likedByUser: postData.likedByUser || false,
-          comments: postData.comments || [], // Ensure comments is an array
+          comments: postData.comments || [], 
+          displayName: postData.displayName || 'Unknown Author' // Set author information
         });
       } else {
         console.log('No such document!');
@@ -101,10 +103,20 @@ function PostPage() {
   };
 
   return (
-    <div className='mx-14'>
+    <div className='w-full px-5 h-screen overflow-y-auto py-10'>
       <div className='w-full bg-gray-100 p-6 rounded shadow-md'>
-        <h1 className='font-bold text-3xl text-indigo-950 mb-4'>{post.title}</h1>
-        <p className='text-gray-700 mb-6'>{post.description}</p>
+        <h1 className='font-bold text-3xl text-indigo-950 mb-2'>{post.title}</h1>
+        
+        {/* Posted by section */}
+        <p className='text-gray-600 mb-4'>
+          Posted by: <span className='font-semibold'>{post.displayName}</span>
+        </p>
+        
+        {/* White container for post description */}
+        <div className='bg-white p-6 rounded shadow-md mb-6'>
+          <p className='text-gray-700'>{post.description}</p>
+        </div>
+        
         <button
           className={`px-4 py-2 rounded transition-colors duration-300 ${post.likedByUser ? 'text-white bg-red-500' : 'bg-indigo-950 text-white hover:bg-purple-400'}`}
           onClick={handleLike}

@@ -54,7 +54,6 @@ const Workspace = ({ user, userData, activities, userTasks }) => {
           timestamp: new Date(),
           name: user.displayName,
           photo: user.photoURL,
-          verified: userData.verified,
         });
         setNewMessage("");
       } catch (e) {
@@ -64,7 +63,7 @@ const Workspace = ({ user, userData, activities, userTasks }) => {
   };
 
   return (
-    <div className="flex h-[90vh] overflow-hidden items-end justify-end mx-10">
+    <div className="flex h-[90vh] overflow-hidden items-end justify-end mx-10 mt-10">
       <div className="hidden  lg:block  min-h-[85vh] justify-self-center self-center lg:w-[25vw] flex-shrink-0">
         <div className="mt-14"></div>
         <CommunitySidebar/>
@@ -102,13 +101,10 @@ const Workspace = ({ user, userData, activities, userTasks }) => {
                           : "bg-white text-left"
                       }`}
                     >
-                      <div className="flex justify-end items-center mb-1">
+                      <div className={`flex ${ msg.userId === user.uid ? 'justify-end':'justify-start'}  items-center mb-1`}>
                         <span className="font-bold text-slate-600 text-sm mr-1">
                           {msg.name}
                         </span>
-                        {msg.verified && (
-                          <BadgeCheck className="text-blue-500" size={20} />
-                        )}
                       </div>
                       <div className="break-words">{msg.text}</div>
                     </div>

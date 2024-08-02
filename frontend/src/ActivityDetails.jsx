@@ -121,7 +121,7 @@ const ActivityDetails = ({ activities, user }) => {
           <div className="font-semibold text-2xl ml-4">Daily Activities</div>
         </div>
         {activities
-          ? activities.slice(0, 2).map((activity) => (
+          ? activities.slice(0, 5).map((activity) => (
               <div
                 key={activity.id}
                 onClick={() => handleActivityClick(activity)}

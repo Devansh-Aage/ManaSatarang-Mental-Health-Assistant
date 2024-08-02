@@ -111,7 +111,7 @@ const Login = () => {
           email: user.email,
           photoURL: user.photoURL,
           lastLogin: new Date(),
-          verified: false,
+          isBiometricRegistered:false,
           points: 0,
           isTherapist: false,
           hasBiometric: false,
