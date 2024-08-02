@@ -83,7 +83,7 @@ function Forum() {
   };
 
   return (
-    <div className="relative mx-14 my-10 pb-10">
+    <div className="relative mb-24 pb-32   overflow-y-auto h-screen">
       <div className="flex flex-col items-center mb-10">
         <h2 className="font-extrabold text-3xl text-indigo-950 mb-3">
           Public Forum

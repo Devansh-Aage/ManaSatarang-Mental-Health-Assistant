@@ -3,7 +3,7 @@ import CameraCapture from './components/CameraCapture'
 
 const ScanFace = () => {
   return (
-    <div>
+    <div className='min-h-[80vh] my-4 overflow-y-auto'>
         Scan the Face To access the website
       <CameraCapture/>
     </div>

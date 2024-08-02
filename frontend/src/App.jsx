@@ -123,13 +123,13 @@ const App = () => {
 
   const fetchTaskData = async () => {
     const storedLastUpdateDate = localStorage.getItem("lastUpdateDate");
-    // const storedLastUpdateDate = "27/07/2024";
+    // const storedLastUpdateDate = "27/06/2024";
     const today = new Date().toLocaleDateString("en-GB");
     if (storedLastUpdateDate === today) {
       await getTasksFromDB();
       setLastUpdateDate(storedLastUpdateDate);
     } else {
-      const todayActivities = getRandomActivities(activityList, 5);
+      const todayActivities = getRandomActivities(activityList, 2);
       localStorage.setItem("lastUpdateDate", today);
 
       if (user) {
@@ -150,6 +150,7 @@ const App = () => {
       }
     }
   };
+  console.log(activities);
 
   const handleDropdownToggle = () => {
     setIsDropdownOpen(!isDropdownOpen);
@@ -176,7 +177,7 @@ const App = () => {
         className={`flex-1 h-screen overflow-hidden ml-[${navbarWidth}] transition-all duration-300`}
       >
         <ToastContainer />
-        <div className="overflow-hidden py-10">
+        <div className="overflow-hidden py-5">
           <Routes>
             <Route path="/login" element={<Login user={user} />} />
             <Route

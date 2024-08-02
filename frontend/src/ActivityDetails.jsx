@@ -18,6 +18,7 @@ const ActivityDetails = ({ activities, user }) => {
   const [selectedActivity, setSelectedActivity] = useState(null);
   const [isDoneState, setIsDoneState] = useState(selectedActivity?.isDone);
   const [imageFile, setImageFile] = useState(null);
+  console.log(activities);
 
   const sendMessage = async () => {
     if (selectedActivity) {
@@ -86,8 +87,8 @@ const ActivityDetails = ({ activities, user }) => {
 
     const formData = new FormData();
     formData.append("image", imageFile);
-    // formData.append("activity", selectedActivity.title);
-    formData.append("activity", "ride_a_bicycle");
+    formData.append("activity", selectedActivity.title);
+    // formData.append("activity", "ride_a_bicycle");
 
     try {
       const response = await axios.post(
@@ -120,7 +121,7 @@ const ActivityDetails = ({ activities, user }) => {
           <div className="font-semibold text-2xl ml-4">Daily Activities</div>
         </div>
         {activities
-          ? activities.slice(0, 5).map((activity) => (
+          ? activities.slice(0, 2).map((activity) => (
               <div
                 key={activity.id}
                 onClick={() => handleActivityClick(activity)}
