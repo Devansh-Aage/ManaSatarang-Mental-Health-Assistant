@@ -177,7 +177,7 @@ const App = () => {
         }
       />
       <div
-        className={`flex-1 h-screen overflow-hidden ml-[${navbarWidth}] transition-all duration-300`}
+        className={`flex-1 h-screen overflow-auto ml-[${navbarWidth}] transition-all duration-300`}
       >
         <ToastContainer />
         <div className="overflow-hidden ">
