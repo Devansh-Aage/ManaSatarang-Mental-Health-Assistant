@@ -5,7 +5,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { db } from "../config/firebase-config";
 
-const CameraCapture = ({ userData,userId,username }) => {
+const CameraCapture = ({ userData, userId, username }) => {
   const navigate = useNavigate();
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
@@ -48,7 +48,7 @@ const CameraCapture = ({ userData,userId,username }) => {
 
     const dataUrl = canvasRef.current.toDataURL("image/jpg");
     setPhoto(dataUrl);
-    console.log(dataUrl);
+    console.log(userData);
     const registerFormData = new FormData();
     registerFormData.append("uid", userData.uid);
     registerFormData.append("image", dataUrl);
@@ -92,7 +92,7 @@ const CameraCapture = ({ userData,userId,username }) => {
       closeCamera();
       if (res.data.success) {
         navigate("/");
-          toast.success(`Welcome back, ${username}!`);
+        toast.success(`Welcome back, ${username}!`);
       } else {
         toast.error("Biometric authentication failed.");
       }

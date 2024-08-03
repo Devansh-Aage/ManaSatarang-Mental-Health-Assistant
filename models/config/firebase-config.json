@@ -1,8 +1,13 @@
 {
-  "apiKey": "AIzaSyCGgDcQQDKG-iH2c0Zz-AqBkcRkXOI2ltU",
-  "authDomain": "hackathon-8127b.firebaseapp.com",
-  "projectId": "hackathon-8127b",
-  "storageBucket": "hackathon-8127b.appspot.com",
-  "messagingSenderId": "179895391523",
-  "appId": "1:179895391523:web:83d88a7ace49569dfaa896"
+  "type": "service_account",
+  "project_id": "hackathon-8127b",
+  "private_key_id": "6ecd23b68b11adecda19d4111b5df2b1f5375b6f",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDOJi0DsKOkbqyq\nRJqnAiL0QokF07YQh8ZlanTlFulXOwlB2O/sCSdYrxwErcHUaoitQN++btk0hvcw\nz7OdZKG58mZ2DAP+DR99aJcBdJfqjv0AgGj0drX1DjzGGuS6QNga+bkCTEnTRcrb\nnf7xozG/EvNl7kdkEZONw/SZxmhFFpI2abj6cVeT8zJYYwOLIdJ/YGU7PLwKohwC\nSa+xky8jprg2zRH+K9qwhmt8Q/xnCnodDg3JeacV7gRYrKRDIbzOA0ZlNARaNIqV\nQ8mBPGvTE8zn0HqSr+VC5RlZbMZhGxbtauN7uWqECZjTs252wiTaTIf/Y0Q/qldG\nr+RvEuKjAgMBAAECggEAB8kDTC9gjrYrSSbcHFCFV2on2JN9PbSS9oOFtJ0f5M5y\n9AyoSuaxmLTMPxT8y/PWA4z+pidzhntOXIaLhvck8GvKGM0tXWvLc6X+heyMTCxo\nO5ud2xWcm4uVGfosByipwKMLrJ2K8DKjjZWy6hc6qrehf4j3Iz1SsDjlROVsTKeT\nMo2Fk3+vcDc+E00YCFClg2uWHXPiiKOmKSY1UABHs8hrMhst06UxDuRXu3DRwyEf\nJYOW1Du4dReUCyfwEqNiPFcafsm/2I3TL9KjBYJLhdhtZWAAC4GJnWJ7BgyQAmN2\n7SX4kCdH7/u2dXk9cxOnVyqN8LWOQgqWE/wI2OY/yQKBgQDu/1tkptN7gyD68dgQ\nZgEr+CcY9pzbuwGX7vdOWj9CiGvDHH+wMrU3hIBgTHimcyZNXDJNv7Cv+ycONttd\nHCpaIil8h7igpKFhJzQD5qUv1miuK4Hefq9oMVVaxIPCvaOCWsz2CkG14fkZ4zHY\nZjYSxBFOQahfVr5B6U8SvfZ7JQKBgQDc0JTiVwC/1p7iAtCGzpYQ9IspnQ+WMqWA\nX2lLfqzOFjODKtAhRRmuOxVkDyfI+hwANfkxhijhgZZVUbWjJjHxO3xngqQuM8x9\nw+4r/SGF0xfN+UrXtRelNYv6hNE34MExa1KNwOvaW/jd+fMqQNce7muEtCms/llm\ntWOhFaOgJwKBgGlvXfJZZpLmlnYemyMg3QN4xkbNBQYqydktIwz940qGxIOe3vXs\naOXFHp1dHxzPT+Zw9gA2wMviEKjEqqG4+zYoPAUkGt9Dwa4KjXfrGJSyEhxENVbi\nrJ9apD0W1Mnkv22SgTlJ7RNATZSOFj9RWCmPNdNAQ/dLXUPWmXu7MjHBAoGBAMao\nfRn4rjrpSr4JTDPMDmSorb69h/VYEV+h9ygtiihK/wMl9GPKOCVxEHiZzfBZW/Gw\nnUW57nObU3Xk8iYaydm+69hwR2ctwO7w5Aj9TjiIxqTPgE76pJBE0W+MKHI+KXFd\nncLcaxRjpE2IfwVnmmJAm8ijEc+KcUIfNMgKoNAHAoGAcIE8Oh8mhI0lfj15c0hz\nftGDrV89KbSFnZy8xdUS1jbjw+pdAK26gA2s4JT0ybamjegnjGIWswridx2KJ2Wx\nWfECZtMhUvpIQDUS2UVr0w4g4FPVIsfmlPq0wVCyY/8/gmGB9qZyGbqNNb2s8XiD\ns5W7pBWJYIY2+A2CO8FaVN4=\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-1j276@hackathon-8127b.iam.gserviceaccount.com",
+  "client_id": "110515998707244374672",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-1j276%40hackathon-8127b.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
 }

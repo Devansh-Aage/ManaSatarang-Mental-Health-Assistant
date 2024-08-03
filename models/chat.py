@@ -11,7 +11,7 @@ import google.generativeai as genai
 app = Flask(__name__)
 CORS(app)
 
-cred = credentials.Certificate("config/firebase_config.json")
+cred = credentials.Certificate("./config/firebase-config.json")
 initialize_app(cred)
 db = firestore.client()
 
@@ -47,26 +47,6 @@ chat_session = model.start_chat(history=[])
 response_count = 0
 chat_history = []
 
-def classify_emotion(text):
-    response = llm_chain.run({"text": text})
-    return response.strip()
-
-def fetch_user_journals(uid):
-    journals_ref = db.collection('journals')
-    query = journals_ref.where('uid', '==', uid).order_by('timestamp', direction=firestore.Query.DESCENDING).limit(10)
-    journals = query.stream()
-    journal_entries = []
-    for journal in journals:
-        journal_data = journal.to_dict()
-        emotion = classify_emotion(journal_data['body'])
-        journal_entries.append({
-            "title": journal_data['title'],
-            "body": journal_data['body'],
-            "emotion": emotion,
-            "timestamp": journal_data['timestamp']
-        })
-    return journal_entries
-
 @app.route("/")
 def index():
     return render_template("index.html")
@@ -76,38 +56,32 @@ def chat():
     global response_count
 
     user_message = request.json["user_input"]
-    user_uid = request.json["uid"]
-
+    user_id = request.json["uid"]
     chat_history.append({"user": user_message})
 
+    # Retrieve last 10 journal entries
+    journals_ref = db.collection('journals')
+    query = journals_ref.where('uid', '==', user_id).order_by('timestamp', direction=firestore.Query.DESCENDING).limit(10)
+    journals = query.stream()
+    journal_entries = []
+    for journal in journals:
+        journal_data = journal.to_dict()
+        journal_entries.append(f"{journal_data['title']}: {journal_data['body']} (Emotion: {journal_data.get('emotion', 'Unknown')})")
+
+    # Include journal entries in the prompt
+    journal_context = "\n".join(journal_entries)
+    prompt = f"User's last 10 journal entries:\n{journal_context}\n\n{user_message}"
+    print(prompt)
     response_count += 1
 
-    user_journals = fetch_user_journals(user_uid)
-    context = "\n".join([f"Journal Title: {journal['title']}\nJournal Entry: {journal['body']}\nEmotion: {journal['emotion']}" for journal in user_journals])
-
-    chat_session.set_system_instruction(f"The user has the following journal entries:\n{context}\nPlease keep this in mind while responding.")
-
-    response = chat_session.send_message(user_message)
+    response = chat_session.send_message(prompt)
     chat_history.append({"bot": response.text})
-
+    
     youtube_videos = []
-
-    # if response_count == 2:
-    #     youtube_videos = search_disorder_videos(response.text)
-    # elif "search youtube" in user_message.lower():
-    #     youtube_videos = search_custom_youtube(user_message)
 
     formatted_response = response.text.replace('*', '')
 
     return jsonify({"response": formatted_response, "youtube_videos": youtube_videos})
-
-@app.route("/evaluate_summary", methods=["POST"])
-def evaluate_summary():
-    summary = request.json.get("summary")
-    response = chat_session.send_message(summary)
-    formatted_response = response.text.replace('*', '')
-
-    return jsonify({"response": formatted_response, "youtube_videos": []})
 
 @app.route("/search", methods=["GET"])
 def search_articles():
