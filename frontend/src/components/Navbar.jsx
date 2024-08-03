@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { signOut } from "firebase/auth";
 import { auth } from "../config/firebase-config";
-import { Home, MessageCircle, Users, Activity, User, BookOpen, SquareChevronRight, SquareChevronLeft, CalendarDays, NotebookPen } from "lucide-react";
+import { Home, MessageCircle, Users, Activity, User, BookOpen, ChevronRight, ChevronLeft, CalendarDays, NotebookPen } from "lucide-react";
 
 const Navbar = ({ user }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -35,7 +35,7 @@ const Navbar = ({ user }) => {
         {/* Toggle Button */}
         <div className={`flex items-center p-3 border-y-0`}>
           <button onClick={handleToggle} className="text-gray-700 hover:bg-gray-200 rounded transition-colors duration-200">
-            {isOpen ? <SquareChevronLeft size={28}/> : <SquareChevronRight size={28}/>}
+            {isOpen ? <ChevronLeft size={24}/> : <ChevronRight size={24}/>}
           </button>
         </div>
 
