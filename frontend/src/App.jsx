@@ -123,8 +123,8 @@ const App = () => {
   }, [user]);
 
   const fetchTaskData = async () => {
-    // const storedLastUpdateDate = localStorage.getItem("lastUpdateDate");
-    const storedLastUpdateDate = "30/07/2024";
+    const storedLastUpdateDate = localStorage.getItem("lastUpdateDate");
+    // const storedLastUpdateDate = "30/07/2024";
     const today = new Date().toLocaleDateString("en-GB");
     console.log(today);
     console.log(storedLastUpdateDate);
@@ -276,7 +276,7 @@ const App = () => {
               path="/journal"
               element={user ? <Journal user={user} /> : <Login />}
             />
-            <Route path="/scan" element={<ScanFace />} />
+            <Route path="/scan" element={<ScanFace userData={userData} />} />
           </Routes>
         </div>
       </div>
