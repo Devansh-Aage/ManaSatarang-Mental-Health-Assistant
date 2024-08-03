@@ -40,7 +40,6 @@ import "./App.css";
 import Journal from "./Journal/Journal";
 import ScanFace from "./ScanFace";
 
-
 const getRandomActivities = (list, count) => {
   const shuffled = [...list].sort(() => 0.5 - Math.random());
   return shuffled.slice(0, count);
@@ -122,8 +121,8 @@ const App = () => {
   }, [user]);
 
   const fetchTaskData = async () => {
-    const storedLastUpdateDate = localStorage.getItem("lastUpdateDate");
-    // const storedLastUpdateDate = "27/07/2024";
+    // const storedLastUpdateDate = localStorage.getItem("lastUpdateDate");
+    const storedLastUpdateDate = "30/07/2024";
     const today = new Date().toLocaleDateString("en-GB");
     if (storedLastUpdateDate === today) {
       await getTasksFromDB();
@@ -183,7 +182,10 @@ const App = () => {
               path="/"
               element={<Home activities={activities} userData={userData} />}
             />
-            <Route path="/profile" element={<Profile user={user} userData={userData} />} />
+            <Route
+              path="/profile"
+              element={<Profile user={user} userData={userData} />}
+            />
             <Route path="/profile/leaderboard" element={<Leaderboard />} />
             <Route path="/profile/coupon" element={<Coupons />} />
             <Route
