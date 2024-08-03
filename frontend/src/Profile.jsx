@@ -1,17 +1,27 @@
-import React, { useState, useEffect } from "react";
-import PointsSidebar from "./components/PointsSidebar";
+import React, { useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "./config/firebase-config";
 import { doc, setDoc } from "firebase/firestore";
 import { db } from "./config/firebase-config";
+import { Modal, Form, Input, Button } from "antd";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 function Profile({ user, userData }) {
-  const [toggle, settoggle] = useState(userData?.hasBiometric);
+  const [form] = Form.useForm();
+  const [toggle, setToggle] = useState(userData?.hasBiometric || false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [imageFile, setImageFile] = useState(null);
 
-  console.log(userData?.hasBiometric);
+  const handleOpenModal = () => setIsModalOpen(true);
+  const handleCloseModal = () => setIsModalOpen(false);
+
+  const handleFileChange = (e) => {
+    setImageFile(e.target.files[0]);
+  };
 
   const handleBiometricChange = async (isChecked) => {
-    settoggle(isChecked);
+    setToggle(isChecked);
     if (user) {
       try {
         const userDocRef = doc(db, "users", user.uid);
@@ -19,6 +29,41 @@ function Profile({ user, userData }) {
       } catch (err) {
         console.error("Error updating document:", err);
       }
+    }
+  };
+
+  const registerBiometric = async () => {
+    const formData = new FormData();
+    formData.append("image", imageFile);
+
+    try {
+      const response = await axios.post(
+        "https://akki3110.pythonanywhere.com/register",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      if (response.data.success) {
+        toast.success(`Biometric registered successfully!`);
+        const userDocRef = doc(db, "users", user.uid);
+        await setDoc(
+          userDocRef,
+          { isBiometricRegistered: true },
+          { merge: true }
+        );
+      } else {
+        toast.error("Failed to register biometric data.");
+      }
+    } catch (error) {
+      toast.error("Failed to register biometric data.");
+      console.error("Error registering biometric data:", error);
+    } finally {
+      handleCloseModal();
+      form.resetFields()
     }
   };
 
@@ -43,7 +88,7 @@ function Profile({ user, userData }) {
               Biometric Auth
             </h2>
             {!userData?.isBiometricRegistered ? (
-              <button>Upload</button>
+              <Button onClick={handleOpenModal}>Register</Button>
             ) : (
               <label className="inline-flex items-center me-5 cursor-pointer">
                 <input
@@ -70,9 +115,26 @@ function Profile({ user, userData }) {
                 </div>
               )}
             </div>
-            <PointsSidebar />
           </div>
         </div>
+        <Modal
+          title="Biometric Auth"
+          open={isModalOpen}
+          onOk={registerBiometric}
+          onCancel={handleCloseModal}
+        >
+          <p>Brief message about biometric registration.</p>
+          <Form form={form}>
+            <Form.Item>
+              <Input
+                type="file"
+                placeholder="Select photo"
+                onChange={handleFileChange}
+                required
+              />
+            </Form.Item>
+          </Form>
+        </Modal>
       </div>
     )
   );

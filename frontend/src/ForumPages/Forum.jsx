@@ -20,8 +20,11 @@ import {
   orderBy,
   onSnapshot,
 } from "firebase/firestore";
-import { auth, db } from "../config/firebase-config";
+import { auth, db, storage } from "../config/firebase-config";
 import { useAuthState } from "react-firebase-hooks/auth";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { UploadOutlined } from '@ant-design/icons';
+import { Button, message, Upload } from 'antd';
 
 function Forum() {
   const [user, loading, error] = useAuthState(auth);
@@ -29,18 +32,38 @@ function Forum() {
   const [posts, setPosts] = useState([]);
   const [newPost, setNewPost] = useState({ title: "", description: "" });
   const [dropdownOpen, setDropdownOpen] = useState(null);
+  const [uploadError, setUploadError] = useState(null);
+  const [downloadURL, setDownloadURL] = useState(null);
+  const [imgFile, setImgFile] = useState(null);
+
   const navigate = useNavigate();
 
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
 
-  const addForumPostToDB = async () => {
+  const handleUpload = async (file) => {
+    const storageRef = ref(storage, `images/${file.name}`);
+
+    try {
+      const snapshot = await uploadBytes(storageRef, file);
+      const url = await getDownloadURL(snapshot.ref);
+      setDownloadURL(url);
+      setUploadError(null);
+      return url;
+    } catch (error) {
+      setUploadError(error.message);
+      return null;
+    }
+  };
+
+  const addForumPostToDB = async (imageURL) => {
     try {
       await addDoc(collection(db, "forumPosts"), {
         uid: user.uid,
-        displayName: user.displayName || 'Anonymous', // Add user's display name
+        displayName: user.displayName || "Anonymous",
         title: newPost.title,
         desc: newPost.description,
+        imageURL: imageURL || "", // Add image URL to the post if it exists
         likes: 0,
         comments: [],
         timestamp: new Date(),
@@ -50,12 +73,27 @@ function Forum() {
     }
   };
 
-  const handleSavePost = () => {
-    if (newPost.title && newPost.description) {
-      addForumPostToDB();
-      handleCloseModal();
-      setNewPost({ title: "", description: "" });
+  const handleSavePost = async () => {
+    if (!newPost.title || !newPost.description) {
+      message.error("Title and Description are required!");
+      return;
     }
+
+    if (imgFile) {
+      const url = await handleUpload(imgFile);
+      if (!url) {
+        message.error("Image upload failed. Please try again.");
+        return;
+      }
+      await addForumPostToDB(url);
+    } else {
+      await addForumPostToDB();
+    }
+
+    handleCloseModal();
+    setNewPost({ title: "", description: "" });
+    setImgFile(null);
+    setDownloadURL(null);
   };
 
   useEffect(() => {
@@ -83,8 +121,20 @@ function Forum() {
     setDropdownOpen(dropdownOpen === postId ? null : postId);
   };
 
+  const uploadProps = {
+    beforeUpload: (file) => {
+     setImgFile(file);
+      return false; // Prevent automatic upload
+    },
+    onRemove: () => {
+      setDownloadURL(null);
+      setUploadError(null);
+      setImgFile(null)
+    },
+  };
+
   return (
-    <div className="relative my-10 pb-32 h-screen overflow-y-auto">
+    <div className="relative pt-10 pb-32 h-screen overflow-y-auto">
       <div className="flex flex-col items-center mb-10">
         <h2 className="font-extrabold text-3xl text-indigo-950 mb-3">
           Public Forum
@@ -98,7 +148,6 @@ function Forum() {
           isModalOpen ? "blur-sm" : ""
         }`}
       >
-        {/* Sidebar */}
         <div className="w-1/4 pr-6">
           <button
             className="w-full bg-indigo-950 text-white px-4 py-2 rounded mb-6 hover:bg-purple-400 transition-colors duration-300"
@@ -106,35 +155,15 @@ function Forum() {
           >
             Create a New Discussion
           </button>
-          {/* Sidebar options can be uncommented if needed */}
-          {/* <div className='space-y-4'>
-            <div className='flex items-center cursor-pointer hover:text-purple-400 transition-colors duration-300'>
-              <List className='w-5 h-5 mr-5 text-red-500' />
-              <h3 className='font-semibold'>All Discussions</h3>
-            </div>
-            <div className='flex items-center cursor-pointer hover:text-purple-400 transition-colors duration-300'>
-              <Backpack className='w-5 h-5 mr-5 text-yellow-600' />
-              <h3 className='font-semibold text-base'>Student Circle</h3>
-            </div>
-            <div className='flex items-center cursor-pointer hover:text-purple-400 transition-colors duration-300'>
-              <Heart className='w-5 h-5 mr-5 text-green-600' />
-              <h3 className='font-semibold text-base'>Chronic Illness Support Group</h3>
-            </div>
-            <div className='flex items-center cursor-pointer hover:text-purple-400 transition-colors duration-300'>
-              <Briefcase className='w-5 h-5 mr-5 text-purple-800' />
-              <h3 className='font-semibold text-base'>Workplace Wellness</h3>
-            </div>
-          </div> */}
         </div>
 
-        {/* Main Content */}
         <div className="w-3/4">
           <div className="space-y-8">
             {posts.length > 0 ? (
               posts.map((post) => (
                 <div
                   key={post.id}
-                  className="w-full bg-gray-100 p-6 rounded shadow-md relative cursor-pointer"
+                  className="w-full bg-white/10 backdrop-blur-md p-6 rounded-lg shadow-md relative cursor-pointer"
                   onClick={() => handlePostClick(post.id)}
                 >
                   <button
@@ -157,7 +186,10 @@ function Forum() {
                   <h2 className="font-bold text-xl text-indigo-950 mb-2">
                     {post.title}
                   </h2>
-                  <p className="text-gray-700 mb-4">{post.desc}</p>
+                  <div className="w-[400px]  ">
+                    <img src={post?.imageURL} className="w-full" alt="" />
+                  </div>
+                  <p className="text-gray-800 mb-4 font-semibold">{post.desc}</p>
                   <div className="text-gray-600 mb-4">
                     <p className="text-sm font-medium text-indigo-900">
                       Posted by: {post.displayName}
@@ -178,7 +210,6 @@ function Forum() {
         </div>
       </div>
 
-      {/* Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
           <div className="bg-white p-8 rounded shadow-lg w-full max-w-lg">
@@ -212,6 +243,23 @@ function Forum() {
                 onChange={handleChange}
                 required
               />
+            </div>
+            <div>
+              <label className="block text-gray-700 mb-2">Image <small className="text-red-700">(Optional)</small></label>
+              <Upload {...uploadProps}>
+                <Button icon={<UploadOutlined />}>Click to Upload</Button>
+              </Upload>
+              {uploadError && (
+                <p className="error text-red-800">{uploadError}</p>
+              )}
+              {/* {imgFile && (
+                <Button
+                  className="mt-2"
+                  onClick={() => handleUpload(imgFile)}
+                >
+                  Upload
+                </Button>
+              )} */}
             </div>
             <div className="flex justify-end space-x-4">
               <button
