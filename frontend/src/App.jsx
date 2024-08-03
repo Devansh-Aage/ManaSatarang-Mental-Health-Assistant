@@ -39,6 +39,7 @@ import Chat from "./Chat";
 import "./App.css";
 import Journal from "./Journal/Journal";
 import ScanFace from "./ScanFace";
+import Dashboard from "./Dashboard/Dashboard";
 
 const getRandomActivities = (list, count) => {
   const shuffled = [...list].sort(() => 0.5 - Math.random());
@@ -186,6 +187,10 @@ const App = () => {
             <Route
               path="/"
               element={<Home activities={activities} userData={userData} />}
+            />
+            <Route
+              path="/dashboard"
+              element={<Dashboard />}
             />
             <Route
               path="/profile"

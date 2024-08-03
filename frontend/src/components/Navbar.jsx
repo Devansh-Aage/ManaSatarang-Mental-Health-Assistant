@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { signOut } from "firebase/auth";
 import { auth } from "../config/firebase-config";
-import { Home, MessageCircle, Users, Activity, User, BookOpen, ChevronRight, ChevronLeft, CalendarDays, NotebookPen } from "lucide-react";
+import { Home, MessageCircle, Users, Activity, User, BookOpen, ChevronRight, ChevronLeft, CalendarDays, NotebookPen, LayoutDashboard } from "lucide-react";
 
 const Navbar = ({ user }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -57,6 +57,15 @@ const Navbar = ({ user }) => {
           className={`flex flex-col flex-1 p-4 ${isOpen ? "block" : "hidden"}`}
         >
           <nav className="flex flex-col space-y-10">
+          <Link
+              to="/dashboard"
+              className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left"
+            >
+              <LayoutDashboard size={20}/>
+              <span className={`${isOpen ? "block" : "hidden"}`}>
+                Dashboard
+              </span>
+            </Link>
             <Link
               to="/"
               className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left"
@@ -121,6 +130,7 @@ const Navbar = ({ user }) => {
                 Personal Journal
               </span>
             </Link>
+            
             {!user && (
               <Link
                 to="/login"
@@ -139,6 +149,12 @@ const Navbar = ({ user }) => {
           }`}
         >
           <div className="flex flex-col items-center space-y-10">
+          <Link
+              to="/dashboard"
+              className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left"
+            >
+              <LayoutDashboard size={20}/>  
+            </Link>
             <Link
               to="/"
               className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left"

@@ -9,7 +9,7 @@ import { doc, updateDoc, increment } from "firebase/firestore";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
-import { ReactMic } from "react-mic";
+// import { ReactMic } from "react-mic";
 
 const ActivityDetails = ({ activities, user }) => {
   const [input, setInput] = useState("");
