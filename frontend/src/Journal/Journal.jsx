@@ -1,15 +1,21 @@
 import React, { useEffect, useState } from "react";
 import { ClipboardList, Loader2, Save } from "lucide-react";
 import { auth, db } from "../config/firebase-config";
-import { addDoc, collection, onSnapshot, orderBy, query } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  onSnapshot,
+  orderBy,
+  query,
+  where,
+} from "firebase/firestore";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { toast } from "react-toastify";
 import Skeleton from "react-loading-skeleton";
-import { Collapse } from 'antd';
+import { Collapse } from "antd";
 const { Panel } = Collapse;
 
-function Journal() {
-  const [user, error] = useAuthState(auth);
+function Journal({user}) {
   const [formState, setformState] = useState({
     title: "",
     desc: "",
@@ -18,7 +24,7 @@ function Journal() {
   const [entries, setEntries] = useState([]);
 
   useEffect(() => {
-    const q = query(collection(db, "journals"), orderBy("timestamp", "asc"));
+    const q = query(collection(db, "journals"), where("uid", "==", user.uid));
     const unsubscribe = onSnapshot(q, (qSnapShot) => {
       const posts = [];
       qSnapShot.forEach((doc) => {
@@ -28,7 +34,7 @@ function Journal() {
       console.log(posts);
     });
     return () => unsubscribe();
-  }, []);
+  }, [user]);
 
   const clearForm = () => {
     setformState({
@@ -113,7 +119,11 @@ function Journal() {
         {entries.length > 0 ? (
           <Collapse>
             {entries.map((entry) => (
-              <Panel className="bg-white text-base font-bold" header={entry.title || "Untitled"} key={entry.id}>
+              <Panel
+                className="bg-white text-base font-bold"
+                header={entry.title || "Untitled"}
+                key={entry.id}
+              >
                 <p className="text-base">{entry.body}</p>
                 <small className="text-gray-700 text-sm">
                   {new Date(entry.timestamp.toDate()).toDateString()}
@@ -122,11 +132,7 @@ function Journal() {
             ))}
           </Collapse>
         ) : (
-          <div>
-            <Skeleton className="w-full h-9 mb-3"/>
-            <Skeleton className="w-full h-9 mb-3"/>
-            <Skeleton className="w-full h-9 mb-3"/>
-          </div>
+          <div>No Logs Present in Journal</div>
         )}
       </div>
     </div>

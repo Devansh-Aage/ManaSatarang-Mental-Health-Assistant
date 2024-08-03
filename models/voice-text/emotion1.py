@@ -9,7 +9,7 @@ load_dotenv()
 
 app = Flask(__name__)
 
-# Retrieve API key from environment variable
+# Fetch API key from environment variable
 api_key = os.getenv('GOOGLE_API_KEY')
 if not api_key:
     raise ValueError("API key not found. Please set your API key in the .env file.")

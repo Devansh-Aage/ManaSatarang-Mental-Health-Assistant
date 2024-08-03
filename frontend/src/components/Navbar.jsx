@@ -17,6 +17,10 @@ const Navbar = ({ user }) => {
     setDropdownOpen((prev) => !prev);
   };
 
+  const handleProfile = () => {
+    router('/profile')
+  };
+
   const handleLogout = async () => {
     await signOut(auth);
     router('/login');
@@ -109,7 +113,7 @@ const Navbar = ({ user }) => {
           {user && (
             <Link to='/profile'><div className="flex justify-center">
               <button
-                onClick={handleProfileClick}
+                onClick={handleProfile}
                 className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left"
               >
                 <img
@@ -124,7 +128,7 @@ const Navbar = ({ user }) => {
 
         {/* Profile Section */}
         {user && (
-          <div className={`p-4 bg-white shadow-md rounded-t-lg border-t border-gray-300 ${isOpen ? "block" : "hidden"}`}>
+          <div className={`p-4 bg-white shadow-md  border-t border-gray-300 ${isOpen ? "block" : "hidden"}`}>
             <div className="flex items-center space-x-3">
               <img
                 src={user.photoURL || "/default-profile.png"}

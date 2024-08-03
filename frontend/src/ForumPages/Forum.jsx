@@ -38,6 +38,7 @@ function Forum() {
     try {
       await addDoc(collection(db, "forumPosts"), {
         uid: user.uid,
+        displayName: user.displayName || 'Anonymous', // Add user's display name
         title: newPost.title,
         desc: newPost.description,
         likes: 0,
@@ -83,7 +84,7 @@ function Forum() {
   };
 
   return (
-    <div className="relative mx-14 my-10 pb-10">
+    <div className="relative my-10 pb-32 h-screen overflow-y-auto">
       <div className="flex flex-col items-center mb-10">
         <h2 className="font-extrabold text-3xl text-indigo-950 mb-3">
           Public Forum
@@ -157,6 +158,11 @@ function Forum() {
                     {post.title}
                   </h2>
                   <p className="text-gray-700 mb-4">{post.desc}</p>
+                  <div className="text-gray-600 mb-4">
+                    <p className="text-sm font-medium text-indigo-900">
+                      Posted by: {post.displayName}
+                    </p>
+                  </div>
                   <div className="flex items-center text-gray-600">
                     <HeartIcon className="w-4 h-4 mr-2 text-red-500" />
                     <span>{post.likes || 0}</span>

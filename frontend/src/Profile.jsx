@@ -2,13 +2,13 @@ import React, { useState, useEffect } from "react";
 import PointsSidebar from "./components/PointsSidebar";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "./config/firebase-config";
-import { collection, doc, getDoc, setDoc } from "firebase/firestore";
+import { doc, setDoc } from "firebase/firestore";
 import { db } from "./config/firebase-config";
 
 function Profile({ user, userData }) {
   const [toggle, settoggle] = useState(userData?.hasBiometric);
 
-  console.log(userData?.email);
+  console.log(userData?.hasBiometric);
 
   const handleBiometricChange = async (isChecked) => {
     settoggle(isChecked);
@@ -42,15 +42,19 @@ function Profile({ user, userData }) {
             <h2 className="text-xl mt-10 font-bold text-indigo-950 mb-1">
               Biometric Auth
             </h2>
-            <label className="inline-flex items-center me-5 cursor-pointer">
-              <input
-                type="checkbox"
-                checked={toggle}
-                onChange={(e) => handleBiometricChange(e.target.checked)}
-                className="sr-only peer"
-              />
-              <div className="relative w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-focus:ring-4 peer-focus:ring-purple-300 dark:peer-focus:ring-purple-800 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-purple-600"></div>
-            </label>
+            {!userData?.isBiometricRegistered ? (
+              <button>Upload</button>
+            ) : (
+              <label className="inline-flex items-center me-5 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={toggle}
+                  onChange={(e) => handleBiometricChange(e.target.checked)}
+                  className="sr-only peer"
+                />
+                <div className="relative w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-focus:ring-4 peer-focus:ring-purple-300 dark:peer-focus:ring-purple-800 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-purple-600"></div>
+              </label>
+            )}
           </div>
           <div className="flex flex-col items-center mb-8 mr-40">
             <div className="relative w-[170px] h-[170px] mb-4">

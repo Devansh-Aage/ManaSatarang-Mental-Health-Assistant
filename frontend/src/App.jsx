@@ -86,6 +86,7 @@ const App = () => {
   const getTasksFromDB = async () => {
     if (user) {
       try {
+        console.log("inside");
         const today = new Date();
         today.setUTCHours(0, 0, 0, 0);
 
@@ -94,6 +95,7 @@ const App = () => {
         const endOfDayUTC530 = new Date(
           startOfDayUTC530.getTime() + 24 * 60 * 60 * 1000
         );
+
         const tasksRef = collection(db, "tasks");
         const q = query(
           tasksRef,
@@ -117,18 +119,20 @@ const App = () => {
   useEffect(() => {
     getUserFromDB();
     fetchTaskData();
-    redirectToHomeIfAuth();
+    // redirectToHomeIfAuth();
   }, [user]);
 
   const fetchTaskData = async () => {
     // const storedLastUpdateDate = localStorage.getItem("lastUpdateDate");
     const storedLastUpdateDate = "30/07/2024";
     const today = new Date().toLocaleDateString("en-GB");
+    console.log(today);
+    console.log(storedLastUpdateDate);
     if (storedLastUpdateDate === today) {
       await getTasksFromDB();
       setLastUpdateDate(storedLastUpdateDate);
     } else {
-      const todayActivities = getRandomActivities(activityList, 5);
+      const todayActivities = getRandomActivities(activityList, 3);
       localStorage.setItem("lastUpdateDate", today);
 
       if (user) {
@@ -149,6 +153,7 @@ const App = () => {
       }
     }
   };
+  console.log(activities);
 
   const handleDropdownToggle = () => {
     setIsDropdownOpen(!isDropdownOpen);
@@ -172,10 +177,10 @@ const App = () => {
         }
       />
       <div
-        className={`flex-1 h-screen overflow-hidden ml-[${navbarWidth}] transition-all duration-300`}
+        className={`flex-1 h-screen overflow-auto ml-[${navbarWidth}] transition-all duration-300`}
       >
         <ToastContainer />
-        <div className="overflow-hidden py-10">
+        <div className="overflow-hidden ">
           <Routes>
             <Route path="/login" element={<Login user={user} />} />
             <Route
@@ -190,18 +195,28 @@ const App = () => {
             <Route path="/profile/coupon" element={<Coupons />} />
             <Route
               path="/activity"
-              element={<Activity activities={activities} user={userData} />}
+              element={
+                user ? (
+                  <Activity activities={activities} user={userData} />
+                ) : (
+                  <Login />
+                )
+              }
             />
             <Route
               path="/activitydetails"
               element={
-                <ActivityDetails activities={activities} user={userData} />
+                user ? (
+                  <ActivityDetails activities={activities} user={userData} />
+                ) : (
+                  <Login />
+                )
               }
             />
-            <Route path="/forum" element={<Forum />} />
+            <Route path="/forum" element={user ? <Forum /> : <Login />} />
             <Route
               path="/appointments"
-              element={<Appointments user={user} />}
+              element={user ? <Appointments user={user} /> : <Login />}
             />
             <Route path="/forum/post/:postId" element={<PostPage />} />
             <Route path="/chatbot" element={<Chatbot />} />
@@ -247,14 +262,20 @@ const App = () => {
                 )
               }
             />
-            <Route path="/therapists" element={<Therapists />} />
+            <Route
+              path="/therapists"
+              element={user ? <Therapists /> : <Login />}
+            />
             <Route path="/success" element={<Success />} />
             <Route
               path="/therapists/therapistDetails"
               element={<TherapistDetails />}
             />
             <Route path="/chat/:chatId" element={<Chat user={user} />} />
-            <Route path="/journal" element={<Journal />} />
+            <Route
+              path="/journal"
+              element={user ? <Journal user={user} /> : <Login />}
+            />
             <Route path="/scan" element={<ScanFace />} />
           </Routes>
         </div>

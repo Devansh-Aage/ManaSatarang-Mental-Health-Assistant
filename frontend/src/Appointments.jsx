@@ -41,12 +41,17 @@ const Appointments = ({ user }) => {
   }, [user]);
 
   return (
-    <div className="mx-10 my-2">
+    <div className="mx-10 my-2 mt-10">
       <h1>Appointments</h1>
       <div className="flex items-center gap-5 mx-2 mt-5 w-full ">
-        {appointments.map((a, index) => (
+        {
+          appointments.length>0 ?
+        appointments.map((a, index) => (
           <AppointmentItem key={index} appointment={a} router={router} />
-        ))}
+        ))
+
+        :
+        <div>You have no appointments</div>}
       </div>
     </div>
   );

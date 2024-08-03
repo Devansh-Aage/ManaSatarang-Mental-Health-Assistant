@@ -331,6 +331,7 @@ const ActivityDetails = ({ activities, user }) => {
     const formData = new FormData();
     formData.append("image", imageFile);
     formData.append("activity", selectedActivity.title);
+    // formData.append("activity", "ride_a_bicycle");
 
     try {
       const response = await axios.post(
