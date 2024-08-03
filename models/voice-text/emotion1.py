@@ -1,4 +1,5 @@
-from flask import Flask, render_template, request
+from flask import Flask, request, jsonify
+from flask_cors import CORS
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain.prompts import PromptTemplate
 from langchain.chains.llm import LLMChain
@@ -8,6 +9,7 @@ import os
 load_dotenv()
 
 app = Flask(__name__)
+CORS(app)  # Enable CORS
 
 # Fetch API key from environment variable
 api_key = os.getenv('GOOGLE_API_KEY')
@@ -28,6 +30,17 @@ def classify_emotion(text):
     response = llm_chain.run({"text": text})
     return response.strip()
 
+@app.route('/classify-emotion', methods=['POST'])
+def classify_emotion_route():
+    data = request.json
+    if 'text' not in data:
+        return jsonify({"error": "No text provided"}), 400
+    try:
+        emotion = classify_emotion(data['text'])
+        return jsonify({"emotion": emotion}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
 @app.route('/', methods=['GET', 'POST'])
 def index():
     emotion = None
@@ -44,4 +57,4 @@ def index():
     return render_template('index.html', emotion=emotion, error_message=error_message)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True,port=8070)
