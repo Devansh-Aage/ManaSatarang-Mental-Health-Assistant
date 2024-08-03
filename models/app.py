@@ -16,7 +16,6 @@ CORS(app)
 # Load the trained VGG16 model
 classifier_model = tf.keras.models.load_model('multi_activity_classifier_vgg16.h5')
 
-# Load YOLOv5 model
 yolo_model = YOLO('../YoLo-Weights/yolov8l.pt')
 
 class_names = yolo_model.module.names if hasattr(yolo_model, 'module') else yolo_model.names
