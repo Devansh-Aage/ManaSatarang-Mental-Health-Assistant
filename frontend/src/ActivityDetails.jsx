@@ -9,6 +9,7 @@ import { doc, updateDoc, increment } from "firebase/firestore";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
+import { ReactMic } from "react-mic";
 
 const ActivityDetails = ({ activities, user }) => {
   const [input, setInput] = useState("");
@@ -18,7 +19,54 @@ const ActivityDetails = ({ activities, user }) => {
   const [selectedActivity, setSelectedActivity] = useState(null);
   const [isDoneState, setIsDoneState] = useState(selectedActivity?.isDone);
   const [imageFile, setImageFile] = useState(null);
-  console.log(activities);
+  const [record, setRecord] = useState(false);
+  const [emotion, setEmotion] = useState("");
+
+  // const startRecording = () => {
+  //   setRecord(true);
+  // };
+
+  // const stopRecording = () => {
+  //   setRecord(false);
+  // };
+
+  // const onData = (recordedBlob) => {
+  //   console.log("Recording:", recordedBlob);
+  // };
+
+  // const onStop = async (recordedBlob) => {
+  //   console.log("Recorded Blob:", recordedBlob);
+  //   const formData = new FormData();
+  //   formData.append(
+  //     "audio",
+  //     recordedBlob.blob,
+  //     recordedBlob.startTime + ".webm"
+  //   );
+
+  //   try {
+  //     const response = await axios.post(
+  //       "http://localhost:3036/predict",
+  //       formData,
+  //       {
+  //         headers: {
+  //           "Content-Type": "multipart/form-data",
+  //         },
+  //       }
+  //     );
+
+  //     if (response.status === 200) {
+  //       console.log(response.data);
+  //       const { emotion } = response.data;
+  //       setEmotion(emotion);
+  //       toast.success(`Detected Emotion: ${emotion}`);
+  //     } else {
+  //       toast.error("Failed to detect emotion.");
+  //     }
+  //   } catch (error) {
+  //     console.error("Error detecting emotion:", error);
+  //     toast.error("Error detecting emotion.");
+  //   }
+  // };
 
   const sendMessage = async () => {
     if (selectedActivity) {
@@ -40,14 +88,13 @@ const ActivityDetails = ({ activities, user }) => {
           toast.error("Failed to update task.");
         }
       }
-      // fetchGeminiResponse(); // Fetch Gemini response after submitting the message
     }
   };
 
   const fetchGeminiResponse = async () => {
     if (selectedActivity && input) {
       const combinedInput = `Activity: ${selectedActivity.title}\nSummary: ${input}`;
-      console.log("Fetching Gemini Response for:", combinedInput); // Log the input to the console
+      console.log("Fetching Gemini Response for:", combinedInput);
       try {
         const response = await axios.post(
           "http://localhost:5000/evaluate_summary",
@@ -55,7 +102,7 @@ const ActivityDetails = ({ activities, user }) => {
             summary: combinedInput,
           }
         );
-        console.log("Response received:", response); // Log the response
+        console.log("Response received:", response);
         if (response.status === 200) {
           const data = response.data;
           setBotResponse(data.response);
@@ -80,15 +127,14 @@ const ActivityDetails = ({ activities, user }) => {
   };
 
   const verifyActivity = async () => {
-    // if (!selectedActivity || !imageFile) {
-    //   toast.error("Please select an activity and upload an image.");
-    //   return;
-    // }
+    if (!selectedActivity || !imageFile) {
+      toast.error("Please select an activity and upload an image.");
+      return;
+    }
 
     const formData = new FormData();
     formData.append("image", imageFile);
     formData.append("activity", selectedActivity.title);
-    // formData.append("activity", "ride_a_bicycle");
 
     try {
       const response = await axios.post(
@@ -142,7 +188,6 @@ const ActivityDetails = ({ activities, user }) => {
         onSubmit={(e) => {
           e.preventDefault();
           sendMessage();
-          // fetchGeminiResponse();
         }}
         className="lg:w-[60%] justify-self-end px-4 py-3"
       >
@@ -181,6 +226,30 @@ const ActivityDetails = ({ activities, user }) => {
             onChange={handleFileChange}
           />
         </div>
+        {/* <div className="mb-3">
+          <ReactMic
+            record={record}
+            className="sound-wave"
+            onStop={onStop}
+            onData={onData}
+            strokeColor="#000000"
+            backgroundColor="#FF4081"
+          />
+          <button
+            type="button"
+            onClick={startRecording}
+            className="w-full inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 mt-2"
+          >
+            Start Recording
+          </button>
+          <button
+            type="button"
+            onClick={stopRecording}
+            className="w-full inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 mt-2"
+          >
+            Stop Recording
+          </button>
+        </div> */}
         <button
           type="submit"
           className="w-full inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
@@ -194,6 +263,11 @@ const ActivityDetails = ({ activities, user }) => {
         >
           Verify Activity
         </button>
+        {/* {emotion && (
+          <div className="mt-4 text-center">
+            <p className="text-lg font-semibold">Detected Emotion: {emotion}</p>
+          </div>
+        )} */}
       </form>
     </div>
   );

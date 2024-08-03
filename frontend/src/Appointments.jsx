@@ -43,7 +43,7 @@ const Appointments = ({ user }) => {
   return (
     <div className="mx-10 my-2 mt-10">
       <h1>Appointments</h1>
-      <div className="flex items-center gap-5 mx-2 mt-5 w-full ">
+      <div className="flex items-center flex-wrap gap-5 mx-2 mt-5 w-full ">
         {
           appointments.length>0 ?
         appointments.map((a, index) => (

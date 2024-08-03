@@ -1,13 +1,19 @@
-from flask import Flask, request, jsonify, render_template
+import datetime
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
-import re
-import google.generativeai as genai
-from flask_cors import CORS
 from sklearn.feature_extraction.text import TfidfVectorizer
+from flask import Flask, request, jsonify, render_template
+from flask_cors import CORS
+from firebase_admin import credentials, firestore, initialize_app
+import google.generativeai as genai
 
+# Initialize Flask App and Firestore
 app = Flask(__name__)
 CORS(app)
+
+cred = credentials.Certificate("./config/firebase-config.json")
+initialize_app(cred)
+db = firestore.client()
 
 # Configuration
 DEVELOPER_KEY = "AIzaSyAtlZQExJ-QTrRh-3BZ0NYfPnnBjPQjLdc"
@@ -31,7 +37,8 @@ model = genai.GenerativeModel(
         "Once categorized, inform the user and provide friendly, cheerful responses. Suggest activities to improve mood.\n"
         "Analyze the user's feelings based on the activity they performed and the summary they provided.\n"
         "Offer insights into their emotions and suggest additional activities they can try to improve their mood.\n"
-        "Whenever the user asks for some exercises provide him the needful minimum 5 and in a structured way."
+        "Whenever the user asks for some exercises provide him the needful minimum 5 and in a structured way.\n"
+        "Don't Answer to any question which is not related to mental health"
     ),
 )
 
@@ -49,31 +56,32 @@ def chat():
     global response_count
 
     user_message = request.json["user_input"]
+    user_id = request.json["uid"]
     chat_history.append({"user": user_message})
 
+    # Retrieve last 10 journal entries
+    journals_ref = db.collection('journals')
+    query = journals_ref.where('uid', '==', user_id).order_by('timestamp', direction=firestore.Query.DESCENDING).limit(10)
+    journals = query.stream()
+    journal_entries = []
+    for journal in journals:
+        journal_data = journal.to_dict()
+        journal_entries.append(f"{journal_data['title']}: {journal_data['body']} (Emotion: {journal_data.get('emotion', 'Unknown')})")
+
+    # Include journal entries in the prompt
+    journal_context = "\n".join(journal_entries)
+    prompt = f"User's last 10 journal entries:\n{journal_context}\n\n{user_message}"
+    print(prompt)
     response_count += 1
 
-    response = chat_session.send_message(user_message)
+    response = chat_session.send_message(prompt)
     chat_history.append({"bot": response.text})
-
+    
     youtube_videos = []
-
-    # if response_count == 2:
-    #     youtube_videos = search_disorder_videos(response.text)
-    # elif "search youtube" in user_message.lower():
-    #     youtube_videos = search_custom_youtube(user_message)
 
     formatted_response = response.text.replace('*', '')
 
     return jsonify({"response": formatted_response, "youtube_videos": youtube_videos})
-
-@app.route("/evaluate_summary", methods=["POST"])
-def evaluate_summary():
-    summary = request.json.get("summary")
-    response = chat_session.send_message(summary)
-    formatted_response = response.text.replace('*', '')
-
-    return jsonify({"response": formatted_response, "youtube_videos": []})
 
 @app.route("/search", methods=["GET"])
 def search_articles():

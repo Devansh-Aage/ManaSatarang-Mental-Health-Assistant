@@ -1,0 +1,1086 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>
+      google.api_core.exceptions.FailedPrecondition: 400 The query requires an
+      index. You can create it here:
+      https://console.firebase.google.com/v1/r/project/hackathon-8127b/firestore/indexes?create_composite=ClBwcm9qZWN0cy9oYWNrYXRob24tODEyN2IvZGF0YWJhc2VzLyhkZWZhdWx0KS9jb2xsZWN0aW9uR3JvdXBzL2pvdXJuYWxzL2luZGV4ZXMvXxABGgcKA3VpZBABGg0KCXRpbWVzdGFtcBACGgwKCF9fbmFtZV9fEAI
+      // Werkzeug Debugger
+    </title>
+    <link
+      rel="stylesheet"
+      href="?__debugger__=yes&amp;cmd=resource&amp;f=style.css"
+    />
+    <link
+      rel="shortcut icon"
+      href="?__debugger__=yes&amp;cmd=resource&amp;f=console.png"
+    />
+    <script src="?__debugger__=yes&amp;cmd=resource&amp;f=debugger.js"></script>
+    <script>
+      var CONSOLE_MODE = false,
+        EVALEX = true,
+        EVALEX_TRUSTED = false,
+        SECRET = "3aG58sTWfqJWtwM7To3N";
+    </script>
+  </head>
+
+  <body style="background-color: #fff">
+    <div class="debugger">
+      <h1>FailedPrecondition</h1>
+      <div class="detail">
+        <p class="errormsg">
+          google.api_core.exceptions.FailedPrecondition: 400 The query requires
+          an index. You can create it here:
+          https://console.firebase.google.com/v1/r/project/hackathon-8127b/firestore/indexes?create_composite=ClBwcm9qZWN0cy9oYWNrYXRob24tODEyN2IvZGF0YWJhc2VzLyhkZWZhdWx0KS9jb2xsZWN0aW9uR3JvdXBzL2pvdXJuYWxzL2luZGV4ZXMvXxABGgcKA3VpZBABGg0KCXRpbWVzdGFtcBACGgwKCF9fbmFtZV9fEAI
+        </p>
+      </div>
+      <h2 class="traceback">Traceback <em>(most recent call last)</em></h2>
+      <div class="traceback">
+        <h3></h3>
+        <ul>
+          <li>
+            <div class="frame" id="frame-1699201504816">
+              <h4>
+                File
+                <cite class="filename"
+                  >"C:\Users\pande\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py"</cite
+                >, line <em class="line">1488</em>, in
+                <code class="function">__call__</code>
+              </h4>
+              <div class="source library">
+                <pre
+                  class="line before"
+                ><span class="ws">    </span>) -&gt; cabc.Iterable[bytes]:</pre>
+                <pre
+                  class="line before"
+                ><span class="ws">        </span>&#34;&#34;&#34;The WSGI server calls the Flask application object as the</pre>
+                <pre
+                  class="line before"
+                ><span class="ws">        </span>WSGI application. This calls :meth:`wsgi_app`, which can be</pre>
+                <pre
+                  class="line before"
+                ><span class="ws">        </span>wrapped to apply middleware.</pre>
+                <pre
+                  class="line before"
+                ><span class="ws">        </span>&#34;&#34;&#34;</pre>
+                <pre
+                  class="line current"
+                ><span class="ws">        </span>return self.wsgi_app(environ, start_response)
+<span class="ws">        </span>       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^</pre>
+              </div>
+            </div>
+          </li>
+
+          <li>
+            <div class="frame" id="frame-1699201506112">
+              <h4>
+                File
+                <cite class="filename"
+                  >"C:\Users\pande\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py"</cite
+                >, line <em class="line">1466</em>, in
+                <code class="function">wsgi_app</code>
+              </h4>
+              <div class="source library">
+                <pre
+                  class="line before"
+                ><span class="ws">            </span>try:</pre>
+                <pre
+                  class="line before"
+                ><span class="ws">                </span>ctx.push()</pre>
+                <pre
+                  class="line before"
+                ><span class="ws">                </span>response = self.full_dispatch_request()</pre>
+                <pre
+                  class="line before"
+                ><span class="ws">            </span>except Exception as e:</pre>
+                <pre
+                  class="line before"
+                ><span class="ws">                </span>error = e</pre>
+                <pre
+                  class="line current"
+                ><span class="ws">                </span>response = self.handle_exception(e)
+<span class="ws">                </span>           ^^^^^^^^^^^^^^^^^^^^^^^^</pre>
+                <pre
+                  class="line after"
+                ><span class="ws">            </span>except:  # noqa: B001</pre>
+                <pre
+                  class="line after"
+                ><span class="ws">                </span>error = sys.exc_info()[1]</pre>
+                <pre
+                  class="line after"
+                ><span class="ws">                </span>raise</pre>
+                <pre
+                  class="line after"
+                ><span class="ws">            </span>return response(environ, start_response)</pre>
+                <pre
+                  class="line after"
+                ><span class="ws">        </span>finally:</pre>
+              </div>
+            </div>
+          </li>
+
+          <li>
+            <div class="frame" id="frame-1699201506256">
+              <h4>
+                File
+                <cite class="filename"
+                  >"C:\Users\pande\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask_cors\extension.py"</cite
+                >, line <em class="line">176</em>, in
+                <code class="function">wrapped_function</code>
+              </h4>
+              <div class="source library">
+                <pre
+                  class="line before"
+                ><span class="ws">        </span># Wrap exception handlers with cross_origin</pre>
+                <pre
+                  class="line before"
+                ><span class="ws">        </span># These error handlers will still respect the behavior of the route</pre>
+                <pre
+                  class="line before"
+                ><span class="ws">        </span>if options.get(&#39;intercept_exceptions&#39;, True):</pre>
+                <pre
+                  class="line before"
+                ><span class="ws">            </span>def _after_request_decorator(f):</pre>
+                <pre
+                  class="line before"
+                ><span class="ws">                </span>def wrapped_function(*args, **kwargs):</pre>
+                <pre
+                  class="line current"
+                ><span class="ws">                    </span>return cors_after_request(app.make_response(f(*args, **kwargs)))
+<span class="ws">                    </span>                                            ^^^^^^^^^^^^^^^^^^</pre>
+                <pre
+                  class="line after"
+                ><span class="ws">                </span>return wrapped_function</pre>
+                <pre class="line after"><span class="ws"></span> </pre>
+                <pre
+                  class="line after"
+                ><span class="ws">            </span>if hasattr(app, &#39;handle_exception&#39;):</pre>
+                <pre
+                  class="line after"
+                ><span class="ws">                </span>app.handle_exception = _after_request_decorator(</pre>
+                <pre
+                  class="line after"
+                ><span class="ws">                    </span>app.handle_exception)</pre>
+              </div>
+            </div>
+          </li>
+
+          <li>
+            <div class="frame" id="frame-1699201506832">
+              <h4>
+                File
+                <cite class="filename"
+                  >"C:\Users\pande\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py"</cite
+                >, line <em class="line">1463</em>, in
+                <code class="function">wsgi_app</code>
+              </h4>
+              <div class="source library">
+                <pre
+                  class="line before"
+                ><span class="ws">        </span>ctx = self.request_context(environ)</pre>
+                <pre
+                  class="line before"
+                ><span class="ws">        </span>error: BaseException | None = None</pre>
+                <pre
+                  class="line before"
+                ><span class="ws">        </span>try:</pre>
+                <pre
+                  class="line before"
+                ><span class="ws">            </span>try:</pre>
+                <pre
+                  class="line before"
+                ><span class="ws">                </span>ctx.push()</pre>
+                <pre
+                  class="line current"
+                ><span class="ws">                </span>response = self.full_dispatch_request()
+<span class="ws">                </span>           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^</pre>
+                <pre
+                  class="line after"
+                ><span class="ws">            </span>except Exception as e:</pre>
+                <pre
+                  class="line after"
+                ><span class="ws">                </span>error = e</pre>
+                <pre
+                  class="line after"
+                ><span class="ws">                </span>response = self.handle_exception(e)</pre>
+                <pre
+                  class="line after"
+                ><span class="ws">            </span>except:  # noqa: B001</pre>
+                <pre
+                  class="line after"
+                ><span class="ws">                </span>error = sys.exc_info()[1]</pre>
+              </div>
+            </div>
+          </li>
+
+          <li>
+            <div class="frame" id="frame-1699201506976">
+              <h4>
+                File
+                <cite class="filename"
+                  >"C:\Users\pande\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py"</cite
+                >, line <em class="line">872</em>, in
+                <code class="function">full_dispatch_request</code>
+              </h4>
+              <div class="source library">
+                <pre
+                  class="line before"
+                ><span class="ws">            </span>request_started.send(self, _async_wrapper=self.ensure_sync)</pre>
+                <pre
+                  class="line before"
+                ><span class="ws">            </span>rv = self.preprocess_request()</pre>
+                <pre
+                  class="line before"
+                ><span class="ws">            </span>if rv is None:</pre>
+                <pre
+                  class="line before"
+                ><span class="ws">                </span>rv = self.dispatch_request()</pre>
+                <pre
+                  class="line before"
+                ><span class="ws">        </span>except Exception as e:</pre>
+                <pre
+                  class="line current"
+                ><span class="ws">            </span>rv = self.handle_user_exception(e)
+<span class="ws">            </span>     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^</pre>
+                <pre
+                  class="line after"
+                ><span class="ws">        </span>return self.finalize_request(rv)</pre>
+                <pre class="line after"><span class="ws"></span> </pre>
+                <pre
+                  class="line after"
+                ><span class="ws">    </span>def finalize_request(</pre>
+                <pre
+                  class="line after"
+                ><span class="ws">        </span>self,</pre>
+                <pre
+                  class="line after"
+                ><span class="ws">        </span>rv: ft.ResponseReturnValue | HTTPException,</pre>
+              </div>
+            </div>
+          </li>
+
+          <li>
+            <div class="frame" id="frame-1699201507120">
+              <h4>
+                File
+                <cite class="filename"
+                  >"C:\Users\pande\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask_cors\extension.py"</cite
+                >, line <em class="line">176</em>, in
+                <code class="function">wrapped_function</code>
+              </h4>
+              <div class="source library">
+                <pre
+                  class="line before"
+                ><span class="ws">        </span># Wrap exception handlers with cross_origin</pre>
+                <pre
+                  class="line before"
+                ><span class="ws">        </span># These error handlers will still respect the behavior of the route</pre>
+                <pre
+                  class="line before"
+                ><span class="ws">        </span>if options.get(&#39;intercept_exceptions&#39;, True):</pre>
+                <pre
+                  class="line before"
+                ><span class="ws">            </span>def _after_request_decorator(f):</pre>
+                <pre
+                  class="line before"
+                ><span class="ws">                </span>def wrapped_function(*args, **kwargs):</pre>
+                <pre
+                  class="line current"
+                ><span class="ws">                    </span>return cors_after_request(app.make_response(f(*args, **kwargs)))
+<span class="ws">                    </span>                                            ^^^^^^^^^^^^^^^^^^</pre>
+                <pre
+                  class="line after"
+                ><span class="ws">                </span>return wrapped_function</pre>
+                <pre class="line after"><span class="ws"></span> </pre>
+                <pre
+                  class="line after"
+                ><span class="ws">            </span>if hasattr(app, &#39;handle_exception&#39;):</pre>
+                <pre
+                  class="line after"
+                ><span class="ws">                </span>app.handle_exception = _after_request_decorator(</pre>
+                <pre
+                  class="line after"
+                ><span class="ws">                    </span>app.handle_exception)</pre>
+              </div>
+            </div>
+          </li>
+
+          <li>
+            <div class="frame" id="frame-1699201507264">
+              <h4>
+                File
+                <cite class="filename"
+                  >"C:\Users\pande\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py"</cite
+                >, line <em class="line">870</em>, in
+                <code class="function">full_dispatch_request</code>
+              </h4>
+              <div class="source library">
+                <pre class="line before"><span class="ws"></span> </pre>
+                <pre
+                  class="line before"
+                ><span class="ws">        </span>try:</pre>
+                <pre
+                  class="line before"
+                ><span class="ws">            </span>request_started.send(self, _async_wrapper=self.ensure_sync)</pre>
+                <pre
+                  class="line before"
+                ><span class="ws">            </span>rv = self.preprocess_request()</pre>
+                <pre
+                  class="line before"
+                ><span class="ws">            </span>if rv is None:</pre>
+                <pre
+                  class="line current"
+                ><span class="ws">                </span>rv = self.dispatch_request()
+<span class="ws">                </span>     ^^^^^^^^^^^^^^^^^^^^^^^</pre>
+                <pre
+                  class="line after"
+                ><span class="ws">        </span>except Exception as e:</pre>
+                <pre
+                  class="line after"
+                ><span class="ws">            </span>rv = self.handle_user_exception(e)</pre>
+                <pre
+                  class="line after"
+                ><span class="ws">        </span>return self.finalize_request(rv)</pre>
+                <pre class="line after"><span class="ws"></span> </pre>
+                <pre
+                  class="line after"
+                ><span class="ws">    </span>def finalize_request(</pre>
+              </div>
+            </div>
+          </li>
+
+          <li>
+            <div class="frame" id="frame-1699201507408">
+              <h4>
+                File
+                <cite class="filename"
+                  >"C:\Users\pande\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py"</cite
+                >, line <em class="line">855</em>, in
+                <code class="function">dispatch_request</code>
+              </h4>
+              <div class="source library">
+                <pre
+                  class="line before"
+                ><span class="ws">            </span>and req.method == &#34;OPTIONS&#34;</pre>
+                <pre
+                  class="line before"
+                ><span class="ws">        </span>):</pre>
+                <pre
+                  class="line before"
+                ><span class="ws">            </span>return self.make_default_options_response()</pre>
+                <pre
+                  class="line before"
+                ><span class="ws">        </span># otherwise dispatch to the handler for that endpoint</pre>
+                <pre
+                  class="line before"
+                ><span class="ws">        </span>view_args: dict[str, t.Any] = req.view_args  # type: ignore[assignment]</pre>
+                <pre
+                  class="line current"
+                ><span class="ws">        </span>return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+<span class="ws">        </span>       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^</pre>
+                <pre class="line after"><span class="ws"></span> </pre>
+                <pre
+                  class="line after"
+                ><span class="ws">    </span>def full_dispatch_request(self) -&gt; Response:</pre>
+                <pre
+                  class="line after"
+                ><span class="ws">        </span>&#34;&#34;&#34;Dispatches the request and on top of that performs request</pre>
+                <pre
+                  class="line after"
+                ><span class="ws">        </span>pre and postprocessing as well as HTTP exception catching and</pre>
+                <pre
+                  class="line after"
+                ><span class="ws">        </span>error handling.</pre>
+              </div>
+            </div>
+          </li>
+
+          <li>
+            <div class="frame" id="frame-1699201507552">
+              <h4>
+                File
+                <cite class="filename"
+                  >"C:\Aakash\Web
+                  Devlopment\Webathon-Hackathon\models\chat.py"</cite
+                >, line <em class="line">85</em>, in
+                <code class="function">chat</code>
+              </h4>
+              <div class="source">
+                <pre class="line before"><span class="ws"></span> </pre>
+                <pre
+                  class="line before"
+                ><span class="ws">    </span>chat_history.append({&#34;user&#34;: user_message})</pre>
+                <pre class="line before"><span class="ws"></span> </pre>
+                <pre
+                  class="line before"
+                ><span class="ws">    </span>response_count += 1</pre>
+                <pre class="line before"><span class="ws"></span> </pre>
+                <pre
+                  class="line current"
+                ><span class="ws">    </span>user_journals = fetch_user_journals(user_uid)
+<span class="ws">    </span>                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^</pre>
+                <pre
+                  class="line after"
+                ><span class="ws">    </span>context = &#34;\n&#34;.join([f&#34;Journal Title: {journal[&#39;title&#39;]}\nJournal Entry: {journal[&#39;body&#39;]}\nEmotion: {journal[&#39;emotion&#39;]}&#34; for journal in user_journals])</pre>
+                <pre class="line after"><span class="ws"></span> </pre>
+                <pre
+                  class="line after"
+                ><span class="ws">    </span>chat_session.set_system_instruction(f&#34;The user has the following journal entries:\n{context}\nPlease keep this in mind while responding.&#34;)</pre>
+                <pre class="line after"><span class="ws"></span> </pre>
+                <pre
+                  class="line after"
+                ><span class="ws">    </span>response = chat_session.send_message(user_message)</pre>
+              </div>
+            </div>
+          </li>
+
+          <li>
+            <div class="frame" id="frame-1699201508416">
+              <h4>
+                File
+                <cite class="filename"
+                  >"C:\Aakash\Web
+                  Devlopment\Webathon-Hackathon\models\chat.py"</cite
+                >, line <em class="line">59</em>, in
+                <code class="function">fetch_user_journals</code>
+              </h4>
+              <div class="source">
+                <pre
+                  class="line before"
+                ><span class="ws"></span>def fetch_user_journals(uid):</pre>
+                <pre
+                  class="line before"
+                ><span class="ws">    </span>journals_ref = db.collection(&#39;journals&#39;)</pre>
+                <pre
+                  class="line before"
+                ><span class="ws">    </span>query = journals_ref.where(&#39;uid&#39;, &#39;==&#39;, uid).order_by(&#39;timestamp&#39;, direction=firestore.Query.DESCENDING).limit(10)</pre>
+                <pre
+                  class="line before"
+                ><span class="ws">    </span>journals = query.stream()</pre>
+                <pre
+                  class="line before"
+                ><span class="ws">    </span>journal_entries = []</pre>
+                <pre
+                  class="line current"
+                ><span class="ws">    </span>for journal in journals:
+<span class="ws">    </span>^^^^^^</pre>
+                <pre
+                  class="line after"
+                ><span class="ws">        </span>journal_data = journal.to_dict()</pre>
+                <pre
+                  class="line after"
+                ><span class="ws">        </span>emotion = classify_emotion(journal_data[&#39;body&#39;])</pre>
+                <pre
+                  class="line after"
+                ><span class="ws">        </span>journal_entries.append({</pre>
+                <pre
+                  class="line after"
+                ><span class="ws">            </span>&#34;title&#34;: journal_data[&#39;title&#39;],</pre>
+                <pre
+                  class="line after"
+                ><span class="ws">            </span>&#34;body&#34;: journal_data[&#39;body&#39;],</pre>
+              </div>
+            </div>
+          </li>
+
+          <li>
+            <div class="frame" id="frame-1699201508560">
+              <h4>
+                File
+                <cite class="filename"
+                  >"C:\Users\pande\AppData\Local\Programs\Python\Python312\Lib\site-packages\google\cloud\firestore_v1\query.py"</cite
+                >, line <em class="line">357</em>, in
+                <code class="function">_make_stream</code>
+              </h4>
+              <div class="source library">
+                <pre class="line before"><span class="ws"></span> </pre>
+                <pre
+                  class="line before"
+                ><span class="ws">        </span>Yields:</pre>
+                <pre
+                  class="line before"
+                ><span class="ws">            </span>:class:`~google.cloud.firestore_v1.document.DocumentSnapshot`:</pre>
+                <pre
+                  class="line before"
+                ><span class="ws">            </span>The next document that fulfills the query.</pre>
+                <pre
+                  class="line before"
+                ><span class="ws">        </span>&#34;&#34;&#34;</pre>
+                <pre
+                  class="line current"
+                ><span class="ws">        </span>response_iterator, expected_prefix = self._get_stream_iterator(
+<span class="ws">        </span>                                     </pre>
+                <pre
+                  class="line after"
+                ><span class="ws">            </span>transaction,</pre>
+                <pre
+                  class="line after"
+                ><span class="ws">            </span>retry,</pre>
+                <pre
+                  class="line after"
+                ><span class="ws">            </span>timeout,</pre>
+                <pre class="line after"><span class="ws">        </span>)</pre>
+                <pre class="line after"><span class="ws"></span> </pre>
+              </div>
+            </div>
+          </li>
+
+          <li>
+            <div class="frame" id="frame-1699201509712">
+              <h4>
+                File
+                <cite class="filename"
+                  >"C:\Users\pande\AppData\Local\Programs\Python\Python312\Lib\site-packages\google\cloud\firestore_v1\query.py"</cite
+                >, line <em class="line">229</em>, in
+                <code class="function">_get_stream_iterator</code>
+              </h4>
+              <div class="source library">
+                <pre
+                  class="line before"
+                ><span class="ws">            </span>transaction,</pre>
+                <pre
+                  class="line before"
+                ><span class="ws">            </span>retry,</pre>
+                <pre
+                  class="line before"
+                ><span class="ws">            </span>timeout,</pre>
+                <pre class="line before"><span class="ws">        </span>)</pre>
+                <pre class="line before"><span class="ws"></span> </pre>
+                <pre
+                  class="line current"
+                ><span class="ws">        </span>response_iterator = self._client._firestore_api.run_query(
+<span class="ws">        </span>                    </pre>
+                <pre
+                  class="line after"
+                ><span class="ws">            </span>request=request,</pre>
+                <pre
+                  class="line after"
+                ><span class="ws">            </span>metadata=self._client._rpc_metadata,</pre>
+                <pre
+                  class="line after"
+                ><span class="ws">            </span>**kwargs,</pre>
+                <pre class="line after"><span class="ws">        </span>)</pre>
+                <pre class="line after"><span class="ws"></span> </pre>
+              </div>
+            </div>
+          </li>
+
+          <li>
+            <div class="frame" id="frame-1699201509856">
+              <h4>
+                File
+                <cite class="filename"
+                  >"C:\Users\pande\AppData\Local\Programs\Python\Python312\Lib\site-packages\google\cloud\firestore_v1\services\firestore\client.py"</cite
+                >, line <em class="line">1562</em>, in
+                <code class="function">run_query</code>
+              </h4>
+              <div class="source library">
+                <pre class="line before"><span class="ws"></span> </pre>
+                <pre
+                  class="line before"
+                ><span class="ws">        </span># Validate the universe domain.</pre>
+                <pre
+                  class="line before"
+                ><span class="ws">        </span>self._validate_universe_domain()</pre>
+                <pre class="line before"><span class="ws"></span> </pre>
+                <pre
+                  class="line before"
+                ><span class="ws">        </span># Send the request.</pre>
+                <pre
+                  class="line current"
+                ><span class="ws">        </span>response = rpc(
+<span class="ws">        </span>           </pre>
+                <pre
+                  class="line after"
+                ><span class="ws">            </span>request,</pre>
+                <pre
+                  class="line after"
+                ><span class="ws">            </span>retry=retry,</pre>
+                <pre
+                  class="line after"
+                ><span class="ws">            </span>timeout=timeout,</pre>
+                <pre
+                  class="line after"
+                ><span class="ws">            </span>metadata=metadata,</pre>
+                <pre class="line after"><span class="ws">        </span>)</pre>
+              </div>
+            </div>
+          </li>
+
+          <li>
+            <div class="frame" id="frame-1699204029680">
+              <h4>
+                File
+                <cite class="filename"
+                  >"C:\Users\pande\AppData\Local\Programs\Python\Python312\Lib\site-packages\google\api_core\gapic_v1\method.py"</cite
+                >, line <em class="line">131</em>, in
+                <code class="function">__call__</code>
+              </h4>
+              <div class="source library">
+                <pre
+                  class="line before"
+                ><span class="ws">            </span>metadata.extend(self._metadata)</pre>
+                <pre
+                  class="line before"
+                ><span class="ws">            </span>kwargs[&#34;metadata&#34;] = metadata</pre>
+                <pre
+                  class="line before"
+                ><span class="ws">        </span>if self._compression is not None:</pre>
+                <pre
+                  class="line before"
+                ><span class="ws">            </span>kwargs[&#34;compression&#34;] = compression</pre>
+                <pre class="line before"><span class="ws"></span> </pre>
+                <pre
+                  class="line current"
+                ><span class="ws">        </span>return wrapped_func(*args, **kwargs)
+<span class="ws">        </span>       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^</pre>
+                <pre class="line after"><span class="ws"></span> </pre>
+                <pre class="line after"><span class="ws"></span> </pre>
+                <pre
+                  class="line after"
+                ><span class="ws"></span>def wrap_method(</pre>
+                <pre class="line after"><span class="ws">    </span>func,</pre>
+                <pre
+                  class="line after"
+                ><span class="ws">    </span>default_retry=None,</pre>
+              </div>
+            </div>
+          </li>
+
+          <li>
+            <div class="frame" id="frame-1699204030400">
+              <h4>
+                File
+                <cite class="filename"
+                  >"C:\Users\pande\AppData\Local\Programs\Python\Python312\Lib\site-packages\google\api_core\retry\retry_unary.py"</cite
+                >, line <em class="line">293</em>, in
+                <code class="function">retry_wrapped_func</code>
+              </h4>
+              <div class="source library">
+                <pre
+                  class="line before"
+                ><span class="ws">            </span>&#34;&#34;&#34;A wrapper that calls target function with retry.&#34;&#34;&#34;</pre>
+                <pre
+                  class="line before"
+                ><span class="ws">            </span>target = functools.partial(func, *args, **kwargs)</pre>
+                <pre
+                  class="line before"
+                ><span class="ws">            </span>sleep_generator = exponential_sleep_generator(</pre>
+                <pre
+                  class="line before"
+                ><span class="ws">                </span>self._initial, self._maximum, multiplier=self._multiplier</pre>
+                <pre
+                  class="line before"
+                ><span class="ws">            </span>)</pre>
+                <pre
+                  class="line current"
+                ><span class="ws">            </span>return retry_target(
+<span class="ws">            </span>       </pre>
+                <pre
+                  class="line after"
+                ><span class="ws">                </span>target,</pre>
+                <pre
+                  class="line after"
+                ><span class="ws">                </span>self._predicate,</pre>
+                <pre
+                  class="line after"
+                ><span class="ws">                </span>sleep_generator,</pre>
+                <pre
+                  class="line after"
+                ><span class="ws">                </span>timeout=self._timeout,</pre>
+                <pre
+                  class="line after"
+                ><span class="ws">                </span>on_error=on_error,</pre>
+              </div>
+            </div>
+          </li>
+
+          <li>
+            <div class="frame" id="frame-1699204031120">
+              <h4>
+                File
+                <cite class="filename"
+                  >"C:\Users\pande\AppData\Local\Programs\Python\Python312\Lib\site-packages\google\api_core\retry\retry_unary.py"</cite
+                >, line <em class="line">153</em>, in
+                <code class="function">retry_target</code>
+              </h4>
+              <div class="source library">
+                <pre class="line before"><span class="ws"></span> </pre>
+                <pre
+                  class="line before"
+                ><span class="ws">        </span># pylint: disable=broad-except</pre>
+                <pre
+                  class="line before"
+                ><span class="ws">        </span># This function explicitly must deal with broad exceptions.</pre>
+                <pre
+                  class="line before"
+                ><span class="ws">        </span>except Exception as exc:</pre>
+                <pre
+                  class="line before"
+                ><span class="ws">            </span># defer to shared logic for handling errors</pre>
+                <pre
+                  class="line current"
+                ><span class="ws">            </span>_retry_error_helper(
+<span class="ws">            </span>^</pre>
+                <pre
+                  class="line after"
+                ><span class="ws">                </span>exc,</pre>
+                <pre
+                  class="line after"
+                ><span class="ws">                </span>deadline,</pre>
+                <pre
+                  class="line after"
+                ><span class="ws">                </span>sleep,</pre>
+                <pre
+                  class="line after"
+                ><span class="ws">                </span>error_list,</pre>
+                <pre
+                  class="line after"
+                ><span class="ws">                </span>predicate,</pre>
+              </div>
+            </div>
+          </li>
+
+          <li>
+            <div class="frame" id="frame-1699204031264">
+              <h4>
+                File
+                <cite class="filename"
+                  >"C:\Users\pande\AppData\Local\Programs\Python\Python312\Lib\site-packages\google\api_core\retry\retry_base.py"</cite
+                >, line <em class="line">212</em>, in
+                <code class="function">_retry_error_helper</code>
+              </h4>
+              <div class="source library">
+                <pre
+                  class="line before"
+                ><span class="ws">        </span>final_exc, source_exc = exc_factory_fn(</pre>
+                <pre
+                  class="line before"
+                ><span class="ws">            </span>error_list,</pre>
+                <pre
+                  class="line before"
+                ><span class="ws">            </span>RetryFailureReason.NON_RETRYABLE_ERROR,</pre>
+                <pre
+                  class="line before"
+                ><span class="ws">            </span>original_timeout,</pre>
+                <pre class="line before"><span class="ws">        </span>)</pre>
+                <pre
+                  class="line current"
+                ><span class="ws">        </span>raise final_exc from source_exc
+<span class="ws">        </span>^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^</pre>
+                <pre
+                  class="line after"
+                ><span class="ws">    </span>if on_error_fn is not None:</pre>
+                <pre
+                  class="line after"
+                ><span class="ws">        </span>on_error_fn(exc)</pre>
+                <pre
+                  class="line after"
+                ><span class="ws">    </span>if deadline is not None and time.monotonic() + next_sleep &gt; deadline:</pre>
+                <pre
+                  class="line after"
+                ><span class="ws">        </span>final_exc, source_exc = exc_factory_fn(</pre>
+                <pre
+                  class="line after"
+                ><span class="ws">            </span>error_list,</pre>
+              </div>
+            </div>
+          </li>
+
+          <li>
+            <div class="frame" id="frame-1699204032560">
+              <h4>
+                File
+                <cite class="filename"
+                  >"C:\Users\pande\AppData\Local\Programs\Python\Python312\Lib\site-packages\google\api_core\retry\retry_unary.py"</cite
+                >, line <em class="line">144</em>, in
+                <code class="function">retry_target</code>
+              </h4>
+              <div class="source library">
+                <pre
+                  class="line before"
+                ><span class="ws">    </span>deadline = time.monotonic() + timeout if timeout is not None else None</pre>
+                <pre
+                  class="line before"
+                ><span class="ws">    </span>error_list: list[Exception] = []</pre>
+                <pre class="line before"><span class="ws"></span> </pre>
+                <pre
+                  class="line before"
+                ><span class="ws">    </span>for sleep in sleep_generator:</pre>
+                <pre
+                  class="line before"
+                ><span class="ws">        </span>try:</pre>
+                <pre
+                  class="line current"
+                ><span class="ws">            </span>result = target()
+<span class="ws">            </span>         ^^^^^^^^</pre>
+                <pre
+                  class="line after"
+                ><span class="ws">            </span>if inspect.isawaitable(result):</pre>
+                <pre
+                  class="line after"
+                ><span class="ws">                </span>warnings.warn(_ASYNC_RETRY_WARNING)</pre>
+                <pre
+                  class="line after"
+                ><span class="ws">            </span>return result</pre>
+                <pre class="line after"><span class="ws"></span> </pre>
+                <pre
+                  class="line after"
+                ><span class="ws">        </span># pylint: disable=broad-except</pre>
+              </div>
+            </div>
+          </li>
+
+          <li>
+            <div class="frame" id="frame-1699204032704">
+              <h4>
+                File
+                <cite class="filename"
+                  >"C:\Users\pande\AppData\Local\Programs\Python\Python312\Lib\site-packages\google\api_core\timeout.py"</cite
+                >, line <em class="line">120</em>, in
+                <code class="function">func_with_timeout</code>
+              </h4>
+              <div class="source library">
+                <pre class="line before"><span class="ws"></span> </pre>
+                <pre
+                  class="line before"
+                ><span class="ws">                </span>time_since_first_attempt = now_timestamp - first_attempt_timestamp</pre>
+                <pre
+                  class="line before"
+                ><span class="ws">                </span># Avoid setting negative timeout</pre>
+                <pre
+                  class="line before"
+                ><span class="ws">                </span>kwargs[&#34;timeout&#34;] = max(0, self._timeout - time_since_first_attempt)</pre>
+                <pre class="line before"><span class="ws"></span> </pre>
+                <pre
+                  class="line current"
+                ><span class="ws">            </span>return func(*args, **kwargs)
+<span class="ws">            </span>       ^^^^^^^^^^^^^^^^^^^^^</pre>
+                <pre class="line after"><span class="ws"></span> </pre>
+                <pre
+                  class="line after"
+                ><span class="ws">        </span>return func_with_timeout</pre>
+                <pre class="line after"><span class="ws"></span> </pre>
+                <pre
+                  class="line after"
+                ><span class="ws">    </span>def __str__(self):</pre>
+                <pre
+                  class="line after"
+                ><span class="ws">        </span>return &#34;&lt;TimeToDeadlineTimeout timeout={:.1f}&gt;&#34;.format(self._timeout)</pre>
+              </div>
+            </div>
+          </li>
+
+          <li>
+            <div class="frame" id="frame-1699204032848">
+              <h4>
+                File
+                <cite class="filename"
+                  >"C:\Users\pande\AppData\Local\Programs\Python\Python312\Lib\site-packages\google\api_core\grpc_helpers.py"</cite
+                >, line <em class="line">174</em>, in
+                <code class="function">error_remapped_callable</code>
+              </h4>
+              <div class="source library">
+                <pre
+                  class="line before"
+                ><span class="ws">            </span>prefetch_first = getattr(callable_, &#34;_prefetch_first_result_&#34;, True)</pre>
+                <pre
+                  class="line before"
+                ><span class="ws">            </span>return _StreamingResponseIterator(</pre>
+                <pre
+                  class="line before"
+                ><span class="ws">                </span>result, prefetch_first_result=prefetch_first</pre>
+                <pre
+                  class="line before"
+                ><span class="ws">            </span>)</pre>
+                <pre
+                  class="line before"
+                ><span class="ws">        </span>except grpc.RpcError as exc:</pre>
+                <pre
+                  class="line current"
+                ><span class="ws">            </span>raise exceptions.from_grpc_error(exc) from exc
+<span class="ws">            </span>^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^</pre>
+                <pre class="line after"><span class="ws"></span> </pre>
+                <pre
+                  class="line after"
+                ><span class="ws">    </span>return error_remapped_callable</pre>
+                <pre class="line after"><span class="ws"></span> </pre>
+                <pre class="line after"><span class="ws"></span> </pre>
+                <pre
+                  class="line after"
+                ><span class="ws"></span>def wrap_errors(callable_):</pre>
+              </div>
+            </div>
+          </li>
+        </ul>
+
+        <blockquote>
+          google.api_core.exceptions.FailedPrecondition: 400 The query requires
+          an index. You can create it here:
+          https://console.firebase.google.com/v1/r/project/hackathon-8127b/firestore/indexes?create_composite=ClBwcm9qZWN0cy9oYWNrYXRob24tODEyN2IvZGF0YWJhc2VzLyhkZWZhdWx0KS9jb2xsZWN0aW9uR3JvdXBzL2pvdXJuYWxzL2luZGV4ZXMvXxABGgcKA3VpZBABGg0KCXRpbWVzdGFtcBACGgwKCF9fbmFtZV9fEAI
+        </blockquote>
+      </div>
+
+      <div class="plain">
+        <p>This is the Copy/Paste friendly version of the traceback.</p>
+        <textarea cols="50" rows="10" name="code" readonly>
+Traceback (most recent call last):
+  File &#34;C:\Users\pande\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py&#34;, line 1488, in __call__
+    return self.wsgi_app(environ, start_response)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File &#34;C:\Users\pande\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py&#34;, line 1466, in wsgi_app
+    response = self.handle_exception(e)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File &#34;C:\Users\pande\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask_cors\extension.py&#34;, line 176, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^^^
+  File &#34;C:\Users\pande\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py&#34;, line 1463, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File &#34;C:\Users\pande\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py&#34;, line 872, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File &#34;C:\Users\pande\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask_cors\extension.py&#34;, line 176, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^^^
+  File &#34;C:\Users\pande\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py&#34;, line 870, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File &#34;C:\Users\pande\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py&#34;, line 855, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File &#34;C:\Aakash\Web Devlopment\Webathon-Hackathon\models\chat.py&#34;, line 85, in chat
+    user_journals = fetch_user_journals(user_uid)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File &#34;C:\Aakash\Web Devlopment\Webathon-Hackathon\models\chat.py&#34;, line 59, in fetch_user_journals
+    for journal in journals:
+  File &#34;C:\Users\pande\AppData\Local\Programs\Python\Python312\Lib\site-packages\google\cloud\firestore_v1\query.py&#34;, line 357, in _make_stream
+    response_iterator, expected_prefix = self._get_stream_iterator(
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File &#34;C:\Users\pande\AppData\Local\Programs\Python\Python312\Lib\site-packages\google\cloud\firestore_v1\query.py&#34;, line 229, in _get_stream_iterator
+    response_iterator = self._client._firestore_api.run_query(
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File &#34;C:\Users\pande\AppData\Local\Programs\Python\Python312\Lib\site-packages\google\cloud\firestore_v1\services\firestore\client.py&#34;, line 1562, in run_query
+    response = rpc(
+               ^^^^
+  File &#34;C:\Users\pande\AppData\Local\Programs\Python\Python312\Lib\site-packages\google\api_core\gapic_v1\method.py&#34;, line 131, in __call__
+    return wrapped_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File &#34;C:\Users\pande\AppData\Local\Programs\Python\Python312\Lib\site-packages\google\api_core\retry\retry_unary.py&#34;, line 293, in retry_wrapped_func
+    return retry_target(
+           ^^^^^^^^^^^^^
+  File &#34;C:\Users\pande\AppData\Local\Programs\Python\Python312\Lib\site-packages\google\api_core\retry\retry_unary.py&#34;, line 153, in retry_target
+    _retry_error_helper(
+  File &#34;C:\Users\pande\AppData\Local\Programs\Python\Python312\Lib\site-packages\google\api_core\retry\retry_base.py&#34;, line 212, in _retry_error_helper
+    raise final_exc from source_exc
+  File &#34;C:\Users\pande\AppData\Local\Programs\Python\Python312\Lib\site-packages\google\api_core\retry\retry_unary.py&#34;, line 144, in retry_target
+    result = target()
+             ^^^^^^^^
+  File &#34;C:\Users\pande\AppData\Local\Programs\Python\Python312\Lib\site-packages\google\api_core\timeout.py&#34;, line 120, in func_with_timeout
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File &#34;C:\Users\pande\AppData\Local\Programs\Python\Python312\Lib\site-packages\google\api_core\grpc_helpers.py&#34;, line 174, in error_remapped_callable
+    raise exceptions.from_grpc_error(exc) from exc
+google.api_core.exceptions.FailedPrecondition: 400 The query requires an index. You can create it here: https://console.firebase.google.com/v1/r/project/hackathon-8127b/firestore/indexes?create_composite=ClBwcm9qZWN0cy9oYWNrYXRob24tODEyN2IvZGF0YWJhc2VzLyhkZWZhdWx0KS9jb2xsZWN0aW9uR3JvdXBzL2pvdXJuYWxzL2luZGV4ZXMvXxABGgcKA3VpZBABGg0KCXRpbWVzdGFtcBACGgwKCF9fbmFtZV9fEAI
+</textarea
+        >
+      </div>
+      <div class="explanation">
+        The debugger caught an exception in your WSGI application. You can now
+        look at the traceback which led to the error.
+        <span class="nojavascript">
+          If you enable JavaScript you can also use additional features such as
+          code execution (if the evalex feature is enabled), automatic pasting
+          of the exceptions and much more.</span
+        >
+      </div>
+      <div class="footer">
+        Brought to you by <strong class="arthur">DON'T PANIC</strong>, your
+        friendly Werkzeug powered traceback interpreter.
+      </div>
+    </div>
+
+    <div class="pin-prompt">
+      <div class="inner">
+        <h3>Console Locked</h3>
+        <p>
+          The console is locked and needs to be unlocked by entering the PIN.
+          You can find the PIN printed out on the standard output of your shell
+          that runs the server.
+        </p>
+
+        <form>
+          <p>
+            PIN:
+            <input type="text" name="pin" size="14" />
+            <input type="submit" name="btn" value="Confirm Pin" />
+          </p>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>
+
+<!--
+
+Traceback (most recent call last):
+  File "C:\Users\pande\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py", line 1488, in __call__
+    return self.wsgi_app(environ, start_response)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\pande\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py", line 1466, in wsgi_app
+    response = self.handle_exception(e)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\pande\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask_cors\extension.py", line 176, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\pande\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py", line 1463, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\pande\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py", line 872, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\pande\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask_cors\extension.py", line 176, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\pande\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py", line 870, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\pande\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py", line 855, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Aakash\Web Devlopment\Webathon-Hackathon\models\chat.py", line 85, in chat
+    user_journals = fetch_user_journals(user_uid)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Aakash\Web Devlopment\Webathon-Hackathon\models\chat.py", line 59, in fetch_user_journals
+    for journal in journals:
+  File "C:\Users\pande\AppData\Local\Programs\Python\Python312\Lib\site-packages\google\cloud\firestore_v1\query.py", line 357, in _make_stream
+    response_iterator, expected_prefix = self._get_stream_iterator(
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\pande\AppData\Local\Programs\Python\Python312\Lib\site-packages\google\cloud\firestore_v1\query.py", line 229, in _get_stream_iterator
+    response_iterator = self._client._firestore_api.run_query(
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\pande\AppData\Local\Programs\Python\Python312\Lib\site-packages\google\cloud\firestore_v1\services\firestore\client.py", line 1562, in run_query
+    response = rpc(
+               ^^^^
+  File "C:\Users\pande\AppData\Local\Programs\Python\Python312\Lib\site-packages\google\api_core\gapic_v1\method.py", line 131, in __call__
+    return wrapped_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\pande\AppData\Local\Programs\Python\Python312\Lib\site-packages\google\api_core\retry\retry_unary.py", line 293, in retry_wrapped_func
+    return retry_target(
+           ^^^^^^^^^^^^^
+  File "C:\Users\pande\AppData\Local\Programs\Python\Python312\Lib\site-packages\google\api_core\retry\retry_unary.py", line 153, in retry_target
+    _retry_error_helper(
+  File "C:\Users\pande\AppData\Local\Programs\Python\Python312\Lib\site-packages\google\api_core\retry\retry_base.py", line 212, in _retry_error_helper
+    raise final_exc from source_exc
+  File "C:\Users\pande\AppData\Local\Programs\Python\Python312\Lib\site-packages\google\api_core\retry\retry_unary.py", line 144, in retry_target
+    result = target()
+             ^^^^^^^^
+  File "C:\Users\pande\AppData\Local\Programs\Python\Python312\Lib\site-packages\google\api_core\timeout.py", line 120, in func_with_timeout
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\pande\AppData\Local\Programs\Python\Python312\Lib\site-packages\google\api_core\grpc_helpers.py", line 174, in error_remapped_callable
+    raise exceptions.from_grpc_error(exc) from exc
+google.api_core.exceptions.FailedPrecondition: 400 The query requires an index. You can create it here: https://console.firebase.google.com/v1/r/project/hackathon-8127b/firestore/indexes?create_composite=ClBwcm9qZWN0cy9oYWNrYXRob24tODEyN2IvZGF0YWJhc2VzLyhkZWZhdWx0KS9jb2xsZWN0aW9uR3JvdXBzL2pvdXJuYWxzL2luZGV4ZXMvXxABGgcKA3VpZBABGg0KCXRpbWVzdGFtcBACGgwKCF9fbmFtZV9fEAI
+
+
+-->

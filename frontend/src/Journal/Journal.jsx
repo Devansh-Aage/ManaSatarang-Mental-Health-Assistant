@@ -13,9 +13,10 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { toast } from "react-toastify";
 import Skeleton from "react-loading-skeleton";
 import { Collapse } from "antd";
+import axios from "axios"; // Import axios for API calls
 const { Panel } = Collapse;
 
-function Journal({user}) {
+function Journal({ user }) {
   const [formState, setformState] = useState({
     title: "",
     desc: "",
@@ -48,12 +49,23 @@ function Journal({user}) {
     setLoading(true);
 
     try {
+      const { data } = await axios.post(
+        "http://localhost:5000/classify-emotion",
+        {
+          text: formState.desc,
+        }
+      );
+
+      const emotion = data.emotion;
+
       await addDoc(collection(db, "journals"), {
         uid: user.uid,
         title: formState.title,
         body: formState.desc,
+        emotion: emotion,
         timestamp: new Date(),
       });
+
       toast.success("Journal entry saved!");
     } catch (error) {
       console.error("Error adding document: ", error);
@@ -66,6 +78,14 @@ function Journal({user}) {
 
   const onChange = (e) => {
     setformState((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
+  const emotionColors = {
+    Happy: "bg-green-200 text-green-800",
+    Sad: "bg-blue-200 text-blue-800",
+    Angry: "bg-red-200 text-red-800",
+    Fearful: "bg-yellow-200 text-yellow-800",
+    // Add more emotions and corresponding colors here
   };
 
   return (
@@ -123,6 +143,18 @@ function Journal({user}) {
                 className="bg-white text-base font-bold"
                 header={entry.title || "Untitled"}
                 key={entry.id}
+                extra={
+                  entry.emotion && (
+                    <span
+                      className={`px-2 py-1 rounded-lg ${
+                        emotionColors[entry.emotion] ||
+                        "bg-gray-200 text-gray-800"
+                      }`}
+                    >
+                      {entry.emotion}
+                    </span>
+                  )
+                }
               >
                 <p className="text-base">{entry.body}</p>
                 <small className="text-gray-700 text-sm">
