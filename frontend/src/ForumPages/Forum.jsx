@@ -191,7 +191,7 @@ function Forum() {
                   </div>
                   <p className="text-gray-800 mb-4 font-semibold">{post.desc}</p>
                   <div className="text-gray-600 mb-4">
-                    <p className="text-sm font-medium text-indigo-900">
+                    <p className="text-sm font-medium text-slate-900">
                       Posted by: {post.displayName}
                     </p>
                   </div>

@@ -6,18 +6,18 @@ import { db } from "./config/firebase-config";
 import { Modal, Form, Input, Button } from "antd";
 import axios from "axios";
 import { toast } from "react-toastify";
+import CameraCapture from "./components/CameraCapture";
 
 function Profile({ user, userData }) {
   const [form] = Form.useForm();
   const [toggle, setToggle] = useState(userData?.hasBiometric || false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [imageFile, setImageFile] = useState(null);
+  const [imageBase64, setImageBase64] = useState(null);
 
   const handleOpenModal = () => setIsModalOpen(true);
-  const handleCloseModal = () => setIsModalOpen(false);
-
-  const handleFileChange = (e) => {
-    setImageFile(e.target.files[0]);
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    form.resetFields();
   };
 
   const handleBiometricChange = async (isChecked) => {
@@ -32,44 +32,9 @@ function Profile({ user, userData }) {
     }
   };
 
-  const registerBiometric = async () => {
-    const formData = new FormData();
-    formData.append("image", imageFile);
-
-    try {
-      const response = await axios.post(
-        "https://akki3110.pythonanywhere.com/register",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-
-      if (response.data.success) {
-        toast.success(`Biometric registered successfully!`);
-        const userDocRef = doc(db, "users", user.uid);
-        await setDoc(
-          userDocRef,
-          { isBiometricRegistered: true },
-          { merge: true }
-        );
-      } else {
-        toast.error("Failed to register biometric data.");
-      }
-    } catch (error) {
-      toast.error("Failed to register biometric data.");
-      console.error("Error registering biometric data:", error);
-    } finally {
-      handleCloseModal();
-      form.resetFields()
-    }
-  };
-
   return (
     user && (
-      <div className="flex flex-col items-center w-[1120px] h-[513px] mx-auto px-3 py-2 backdrop-blur-sm bg-white/30 rounded-xl">
+      <div className="flex flex-col items-center w-[1120px] h-[513px] mx-auto my-20 px-3 py-2  ">
         <div className="flex flex-row items-center justify-between gap-4 bg-slate-200/30 border rounded-lg p-4 border-purple-400 w-full h-full">
           <div className="flex flex-col ml-40">
             <h1 className="text-xl font-bold text-indigo-950 mb-1">Name</h1>
@@ -120,20 +85,19 @@ function Profile({ user, userData }) {
         <Modal
           title="Biometric Auth"
           open={isModalOpen}
-          onOk={registerBiometric}
+          footer={null}
           onCancel={handleCloseModal}
         >
-          <p>Brief message about biometric registration.</p>
-          <Form form={form}>
-            <Form.Item>
-              <Input
-                type="file"
-                placeholder="Select photo"
-                onChange={handleFileChange}
-                required
-              />
-            </Form.Item>
-          </Form>
+          <p>
+            At ManaSatarang, safeguarding your privacy is our utmost priority.
+            We employ facial authentication to ensure that only authorized
+            individuals can access their personal data. This advanced security
+            measure helps maintain the confidentiality of your sensitive
+            information, offering you a secure and trustworthy environment to
+            support your mental health journey.
+          </p>
+
+          <CameraCapture userData={userData} />
         </Modal>
       </div>
     )

@@ -92,7 +92,7 @@ const TherapistDetails = () => {
   };
 
   return (
-    <div className="mx-20 p-6 bg-white ">
+    <div className="mx-20 mt-10 p-6 bg-white/20 backdrop-blur-md rounded-lg shadow-lg">
       {user ? (
         <>
           <div className="text-center mb-6">
