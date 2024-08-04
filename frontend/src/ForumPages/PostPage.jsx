@@ -8,7 +8,9 @@ import {
   arrayUnion,
   increment,
 } from "firebase/firestore";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
+import axios from "axios";
+import { translateText } from "../utils";
 
 function PostPage() {
   const { postId } = useParams();
@@ -17,11 +19,44 @@ function PostPage() {
     description: "",
     likes: 0,
     likedByUser: false,
-    comments: [], // Ensure comments is always initialized as an array
-    author: "", // New field for author's username
+    comments: [],
+    author: "",
   });
   const [newComment, setNewComment] = useState("");
+  const [translatedPost, setTranslatedPost] = useState({
+    title: "",
+    description: "",
+    comments: [],
+  });
+  const location = useLocation();
+  const [language, setLanguage] = useState(location.state.lang);
   const commentsEndRef = useRef(null);
+
+
+
+  const translatePost = async (postData) => {
+    try {
+      const translatedTitle = await translateText(postData.title, language);
+      const translatedDescription = await translateText(
+        postData.desc,
+        language
+      );
+      const translatedComments = await Promise.all(
+        postData.comments.map(async (comment) => {
+          const translatedText = await translateText(comment.text, language);
+          return { ...comment, text: translatedText };
+        })
+      );
+
+      setTranslatedPost({
+        title: translatedTitle,
+        description: translatedDescription,
+        comments: translatedComments,
+      });
+    } catch (error) {
+      console.error("Error translating post: ", error);
+    }
+  };
 
   useEffect(() => {
     const fetchPost = async () => {
@@ -36,16 +71,17 @@ function PostPage() {
           likes: postData.likes || 0,
           likedByUser: postData.likedByUser || false,
           comments: postData.comments || [],
-          displayName: postData.displayName || "Unknown Author", // Set author information
+          displayName: postData.displayName || "Unknown Author",
           imageURL: postData?.imageURL,
         });
+        translatePost(postData);
       } else {
         console.log("No such document!");
       }
     };
 
     fetchPost();
-  }, [postId]);
+  }, [postId, language]);
 
   const handleLike = async () => {
     const postRef = doc(db, "forumPosts", postId);
@@ -73,12 +109,12 @@ function PostPage() {
   const handlePostComment = async () => {
     if (newComment.trim()) {
       const postRef = doc(db, "forumPosts", postId);
-      const user = auth.currentUser; // Get the currently logged-in user
+      const user = auth.currentUser;
 
       if (user) {
         const newCommentObj = {
           id: Date.now(),
-          username: user.displayName || "Anonymous", // Use the display name of the logged-in user
+          username: user.displayName || "Anonymous",
           text: newComment,
         };
 
@@ -93,6 +129,10 @@ function PostPage() {
               ? [...prev.comments, newCommentObj]
               : [newCommentObj],
           }));
+          translatePost({
+            ...post,
+            comments: [...post.comments, newCommentObj],
+          });
           setNewComment("");
         } catch (error) {
           console.error("Error updating document: ", error);
@@ -105,19 +145,16 @@ function PostPage() {
 
   return (
     <div className="w-full px-5 h-screen overflow-y-auto py-10">
-      <div className="w-full bg-white/10 backdrop-blur-md  p-6 rounded-lg shadow-md">
+      <div className="w-full bg-white/10 backdrop-blur-md p-6 rounded-lg shadow-md">
         <h1 className="font-bold text-3xl text-indigo-950 mb-2">
-          {post.title}
+          {translatedPost.title}
         </h1>
 
-        {/* Posted by section */}
-
-        {/* White container for post description */}
         <div className="bg-transparent p-6 rounded mb-6">
           <div className="w-[400px]">
             <img src={post?.imageURL} className="w-full" alt="" />
           </div>
-          <p className="text-gray-700 mt-5">{post.description}</p>
+          <p className="text-gray-700 mt-5">{translatedPost.description}</p>
         </div>
         <p className="text-gray-600 mb-4">
           Posted by: <span className="font-semibold">{post.displayName}</span>
@@ -142,21 +179,20 @@ function PostPage() {
       <div className="mt-8">
         <div className="bg-white/10 backdrop-blur-md p-6 rounded shadow-md">
           <h2 className="font-semibold text-xl text-indigo-950 mb-4">
-            Comments ({post.comments ? post.comments.length : 0})
+            Comments ({translatedPost.comments.length})
           </h2>
-          <div className="max-h-[200px] overflow-y-auto space-y-4 mb-4  py-3 px-4">
-            {post.comments &&
-              post.comments.map((comment) => (
-                <div
-                  key={comment.id}
-                  className="bg-white p-4 rounded  shadow-sm"
-                >
-                  <p className="font-semibold text-gray-800">
-                    {comment.username}:
-                  </p>
-                  <p className="text-gray-700">{comment.text}</p>
-                </div>
-              ))}
+          <div className="max-h-[200px] overflow-y-auto space-y-4 mb-4 py-3 px-4">
+            {translatedPost.comments.map((comment) => (
+              <div
+                key={comment.id}
+                className="bg-white p-4 rounded shadow-sm"
+              >
+                <p className="font-semibold text-gray-800">
+                  {comment.username}:
+                </p>
+                <p className="text-gray-700">{comment.text}</p>
+              </div>
+            ))}
           </div>
           <div className="flex flex-col">
             <textarea

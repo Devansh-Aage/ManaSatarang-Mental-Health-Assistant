@@ -5,7 +5,7 @@ import { Mic, MicOff, Send } from "lucide-react";
 import { useSpeechSynthesis } from "react-speech-kit";
 import "react-loading-skeleton/dist/skeleton.css";
 
-const Chatbot = () => {
+const Chatbot = ({ user }) => {
   const [messages, setMessages] = useState([]);
   const [userInput, setUserInput] = useState("");
   const [loading, setLoading] = useState(false);
@@ -85,7 +85,7 @@ const Chatbot = () => {
     try {
       const response = await axios.post(
         "http://127.0.0.1:5000/chat",
-        { user_input: userInput },
+        { user_input: userInput, uid: user.uid },
         {
           headers: {
             "Content-Type": "application/json",

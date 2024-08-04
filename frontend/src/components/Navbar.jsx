@@ -1,25 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { signOut, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { auth } from "../config/firebase-config";
-import {
-  Home,
-  MessageCircle,
-  Users,
-  Activity,
-  User,
-  BookOpen,
-  ChevronRight,
-  ChevronLeft,
-  TextSearch,
-  LayoutDashboard,
-  LogOut,
-  LogIn,
-} from "lucide-react";
+import { Home, MessageCircle, Users, Activity, User, BookOpen, ChevronRight, ChevronLeft, CalendarDays, NotebookPen, LayoutDashboard } from "lucide-react";
 
-const Navbar = ({ user }) => {
+const Navbar = ({ user, setAppLanguage }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [language, setLanguage] = useState("en");
+  const [Links, setLinks] = useState(navlinks);
+  const [translatedLinks, setTranslatedLinks] = useState(navlinks);
+  const [loadingTranslations, setLoadingTranslations] = useState(false);
   const router = useNavigate();
   const location = useLocation();
 
@@ -41,6 +32,50 @@ const Navbar = ({ user }) => {
     setIsOpen(false);
     setDropdownOpen(false);
   };
+  useEffect(() => {
+    translateLinks(navlinks, language);
+  }, [language]);
+  
+  const handleLanguageChange = (value) => {
+    setLanguage(value);
+    setAppLanguage(value);
+  };
+  
+  const translateText = async (text, targetLanguage) => {
+    try {
+      const response = await axios.post(
+        `https://translation.googleapis.com/language/translate/v2`,
+        {},
+        {
+          params: {
+            q: text,
+            target: targetLanguage,
+            key: import.meta.env.VITE_TRANSLATE_KEY,
+          },
+        }
+      );
+      return response.data.data.translations[0].translatedText;
+    } catch (error) {
+      console.error("Error translating text: ", error);
+      return text;
+    }
+  };
+  
+  const translateLinks = async (navlinks, targetLanguage) => {
+    try {
+      setLoadingTranslations(true);
+      const translatedLinksArray = await Promise.all(
+        navlinks.map((link) => translateText(link, targetLanguage))
+      );
+      setTranslatedLinks(translatedLinksArray);
+    } catch (error) {
+      console.error("Error translating links: ", error);
+    } finally {
+      setLoadingTranslations(false);
+    }
+  };
+  
+
 
   const handleLogin = async () => {
     const provider = new GoogleAuthProvider();
@@ -71,16 +106,135 @@ const Navbar = ({ user }) => {
         }`}
       >
         {/* Toggle Button */}
-        <div className={`flex items-center p-3 border-y-0`}>
+        <div className={`flex items-center justify-between p-3 border-y-0`}>
           <button
+           
             onClick={handleToggle}
+           
             className="text-gray-700 hover:bg-gray-200 rounded transition-colors duration-200"
+          
           >
-            {isOpen ? <ChevronLeft size={24} /> : <ChevronRight size={24} />}
+            {isOpen ? <ChevronLeft size={24}  /> : <ChevronRight size={24}  />}
           </button>
+          <Select
+            value={language}
+            onChange={handleLanguageChange}
+            style={{ width: 120 }}
+            className={`${isOpen ? "flex" : "hidden"}`}
+          >
+            <Option value="en">English</Option>
+            <Option value="es">Spanish</Option>
+            <Option value="fr">French</Option>
+            <Option value="de">German</Option>
+            <Option value="hi">Hindi</Option>
+            <Option value="mr">Marathi</Option>
+            {/* Add more languages as needed */}
+          </Select>
         </div>
 
         {/* Navigation Links */}
+        <div
+          className={`flex flex-col flex-1 p-4 ${isOpen ? "block" : "hidden"}`}
+        >
+          {loadingTranslations ? (
+            <div className="flex justify-center items-center">
+              <Spin />
+            </div>
+          ) : (
+            translatedLinks.length > 0 && (
+              <nav className="flex flex-col gap-8">
+                <Link
+                  to="/dashboard"
+                  className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left"
+                >
+                  <LayoutDashboard size={20} />
+                  <span className={`${isOpen ? "block" : "hidden"}`}>
+                  {translatedLinks[0]}
+                  </span>
+                </Link>
+                <Link
+                  to="/"
+                  className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left"
+                >
+                  <Home size={20} />
+                  <span className={`${isOpen ? "block" : "hidden"}`}>
+                  {translatedLinks[1]}
+                  </span>
+                </Link>
+                <Link
+                  to="/chatbot"
+                  className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left"
+                >
+                  <MessageCircle size={20} />
+                  <span className={`${isOpen ? "block" : "hidden"}`}>
+                    {translatedLinks[2]}
+                  </span>
+                </Link>
+                <Link
+                  to="/community/student"
+                  className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left"
+                >
+                  <Users size={20} />
+                  <span className={`${isOpen ? "block" : "hidden"}`}>
+                    {translatedLinks[3]}
+                  </span>
+                </Link>
+                <Link
+                  to="/forum"
+                  className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left"
+                >
+                  <BookOpen size={20} />
+                  <span className={`${isOpen ? "block" : "hidden"}`}>
+                    {translatedLinks[4]}
+                  </span>
+                </Link>
+                <Link
+                  to="/activitydetails"
+                  className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left"
+                >
+                  <Activity size={20} />
+                  <span className={`${isOpen ? "block" : "hidden"}`}>
+                    {translatedLinks[5]}
+                  </span>
+                </Link>
+                <Link
+                  to="/therapists"
+                  className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left"
+                >
+                  <User size={20} />
+                  <span className={`${isOpen ? "block" : "hidden"}`}>
+                    {translatedLinks[6]}
+                  </span>
+                </Link>
+                <Link
+                  to="/appointments"
+                  className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left"
+                >
+                  <CalendarDays size={20} />
+                  <span className={`${isOpen ? "block" : "hidden"}`}>
+                    {translatedLinks[7]}
+                  </span>
+                </Link>
+                <Link
+                  to="/journal"
+                  className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left"
+                >
+                  <NotebookPen size={20} />
+                  <span className={`${isOpen ? "block" : "hidden"}`}>
+                    {translatedLinks[8]}
+                  </span>
+                </Link>
+                {!user && (
+                  <Link
+                    to="/login"
+                    className="text-center bg-purple-900 text-white text-base px-3 py-2 rounded-lg"
+                  >
+                    Login
+                  </Link>
+                )}
+              </nav>
+            )
+          )}
         <div className={`flex flex-col flex-1 p-4 ${isOpen ? "block" : "hidden"}`}>
           <nav className="flex flex-col space-y-10">
             {user && (
@@ -146,14 +300,12 @@ const Navbar = ({ user }) => {
           className={`flex flex-col justify-between flex-1 p-4 ${isOpen ? "hidden" : "block"}`}
         >
           <div className="flex flex-col items-center space-y-10">
-          {user && (
-              <Link
-                to="/"
-                className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left"
-              >
-                <LayoutDashboard size={20} />
-              </Link>
-            )}
+          <Link
+              to="/dashboard"
+              className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left"
+            >
+              <LayoutDashboard size={20}/>  
+            </Link>
             <Link
               to="/search"
               className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left"

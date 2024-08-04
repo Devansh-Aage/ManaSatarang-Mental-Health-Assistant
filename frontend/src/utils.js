@@ -1,3 +1,5 @@
+import axios from "axios";
+
 export const formatTime = (timestamp) => {
   const date = new Date(timestamp);
 
@@ -54,3 +56,24 @@ export function chatHrefConstructor(id1, id2) {
   const sortedIds = [id1, id2].sort();
   return `${sortedIds[0]}--${sortedIds[1]}`;
 }
+
+
+export const translateText = async (text, targetLanguage) => {
+  try {
+    const response = await axios.post(
+      `https://translation.googleapis.com/language/translate/v2`,
+      {},
+      {
+        params: {
+          q: text,
+          target: targetLanguage,
+          key: import.meta.env.VITE_TRANSLATE_KEY,
+        },
+      }
+    );
+    return response.data.data.translations[0].translatedText;
+  } catch (error) {
+    console.error("Error translating text: ", error);
+    return text;
+  }
+};
