@@ -39,6 +39,10 @@ import Chat from "./Chat";
 import "./App.css";
 import Journal from "./Journal/Journal";
 import ScanFace from "./ScanFace";
+import { Select } from "antd";
+
+const { Option } = Select;
+import Dashboard from "./Dashboard/Dashboard";
 
 const getRandomActivities = (list, count) => {
   const shuffled = [...list].sort(() => 0.5 - Math.random());
@@ -53,6 +57,7 @@ const App = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
   const [navbarWidth, setNavbarWidth] = useState("w-[250px]"); // default width for open
+  const [appLanguage, setAppLanguage] = useState("en");
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -120,7 +125,8 @@ const App = () => {
     getUserFromDB();
     fetchTaskData();
     // redirectToHomeIfAuth();
-  }, [user]);
+    console.log(appLanguage);
+  }, [user, appLanguage]);
 
   const fetchTaskData = async () => {
     const storedLastUpdateDate = localStorage.getItem("lastUpdateDate");
@@ -168,6 +174,10 @@ const App = () => {
     toast.info("Logged out successfully.");
   };
 
+  const handleLangChange = (lang) => {
+    setAppLanguage(lang);
+  };
+
   return (
     <div className="flex  absolute inset-0 h-full w-full bg-white [background:radial-gradient(125%_125%_at_50%_10%,#fff_40%,#63e_100%)]">
       <Navbar
@@ -175,6 +185,7 @@ const App = () => {
         onNavbarToggle={(isOpen) =>
           setNavbarWidth(isOpen ? "w-[250px]" : "w-[60px]")
         }
+        setAppLanguage={handleLangChange}
       />
       <div
         className={`flex-1 h-screen overflow-auto ml-[${navbarWidth}] transition-all duration-300`}
@@ -182,24 +193,40 @@ const App = () => {
         <ToastContainer />
         <div className="overflow-hidden ">
           <Routes>
-            <Route path="/login" element={<Login user={user} />} />
+            <Route
+              path="/login"
+              element={<Login user={user} lang={appLanguage} />}
+            />
             <Route
               path="/"
               element={<Home activities={activities} userData={userData} />}
             />
+            <Route path="/dashboard" element={<Dashboard />} />
             <Route
               path="/profile"
-              element={<Profile user={user} userData={userData} />}
+              element={
+                <Profile lang={appLanguage} user={user} userData={userData} />
+              }
             />
-            <Route path="/profile/leaderboard" element={<Leaderboard />} />
-            <Route path="/profile/coupon" element={<Coupons />} />
+            <Route
+              path="/profile/leaderboard"
+              element={<Leaderboard lang={appLanguage} />}
+            />
+            <Route
+              path="/profile/coupon"
+              element={<Coupons lang={appLanguage} />}
+            />
             <Route
               path="/activity"
               element={
                 user ? (
-                  <Activity activities={activities} user={userData} />
+                  <Activity
+                    activities={activities}
+                    lang={appLanguage}
+                    user={userData}
+                  />
                 ) : (
-                  <Login />
+                  <Login lang={appLanguage} />
                 )
               }
             />
@@ -207,19 +234,41 @@ const App = () => {
               path="/activitydetails"
               element={
                 user ? (
-                  <ActivityDetails activities={activities} user={userData} />
+                  <ActivityDetails
+                    activities={activities}
+                    lang={appLanguage}
+                    user={userData}
+                  />
+                ) : (
+                  <Login lang={appLanguage} />
+                )
+              }
+            />
+            <Route
+              path="/forum"
+              element={
+                user ? (
+                  <Forum lang={appLanguage} />
+                ) : (
+                  <Login lang={appLanguage} />
+                )
+              }
+            />
+            <Route
+              path="/appointments"
+              element={
+                user ? (
+                  <Appointments user={user} lang={appLanguage} />
                 ) : (
                   <Login />
                 )
               }
             />
-            <Route path="/forum" element={user ? <Forum /> : <Login />} />
             <Route
-              path="/appointments"
-              element={user ? <Appointments user={user} /> : <Login />}
+              path="/forum/post/:postId"
+              element={<PostPage lang={appLanguage} />}
             />
-            <Route path="/forum/post/:postId" element={<PostPage />} />
-            <Route path="/chatbot" element={<Chatbot user={user} />} />
+            <Route path="/chatbot" element={<Chatbot lang={appLanguage} />} />
             <Route
               path="/community/student"
               element={
@@ -227,10 +276,10 @@ const App = () => {
                   <Community
                     user={user}
                     userData={userData}
-                    activities={activities}
+                    lang={appLanguage}
                   />
                 ) : (
-                  <Login />
+                  <Login lang={appLanguage} />
                 )
               }
             />
@@ -241,10 +290,10 @@ const App = () => {
                   <Workspace
                     user={user}
                     userData={userData}
-                    activities={activities}
+                    lang={appLanguage}
                   />
                 ) : (
-                  <Login />
+                  <Login lang={appLanguage} />
                 )
               }
             />
@@ -252,31 +301,44 @@ const App = () => {
               path="/community/chronic"
               element={
                 user ? (
-                  <Chronic
-                    user={user}
-                    userData={userData}
-                    activities={activities}
-                  />
+                  <Chronic user={user} userData={userData} lang={appLanguage} />
                 ) : (
-                  <Login />
+                  <Login lang={appLanguage} />
                 )
               }
             />
             <Route
               path="/therapists"
-              element={user ? <Therapists /> : <Login />}
+              element={
+                user ? (
+                  <Therapists lang={appLanguage} />
+                ) : (
+                  <Login lang={appLanguage} />
+                )
+              }
             />
-            <Route path="/success" element={<Success />} />
             <Route
               path="/therapists/therapistDetails"
-              element={<TherapistDetails />}
+              element={<TherapistDetails lang={appLanguage} />}
             />
-            <Route path="/chat/:chatId" element={<Chat user={user} />} />
+            <Route
+              path="/chat/:chatId"
+              element={<Chat user={user} lang={appLanguage} />}
+            />
             <Route
               path="/journal"
-              element={user ? <Journal user={user} /> : <Login />}
+              element={
+                user ? (
+                  <Journal user={user} lang={appLanguage} />
+                ) : (
+                  <Login lang={appLanguage} />
+                )
+              }
             />
-            <Route path="/scan" element={<ScanFace userData={userData} />} />
+            <Route
+              path="/scan"
+              element={<ScanFace userData={userData} lang={appLanguage} />}
+            />
           </Routes>
         </div>
       </div>

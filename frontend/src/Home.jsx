@@ -52,7 +52,7 @@ const Home = ({ activities, userData }) => {
   };
 
   return (
-    <div className="home-container flex flex-col mx-40">
+    <div className="home-container flex flex-col mx-40 my-7">
       <div className="flex flex-col items-center mb-10">
         <h2 className="font-extrabold text-3xl text-indigo-950 mb-3">Lift Your Spirit!</h2>
         <h2 className="font-semibold text-lg text-purple-400">Explore Fun Ways to Brighten Your Mind.</h2>
