@@ -31,8 +31,8 @@ function ProfileCard() {
           <p className='text-gray-500 text-sm mb-4'>{user.email}</p>
         </>
       ) : (
-        <p className='text-gray-500 text-sm mb-4'>Loading...</p>
-      )}
+          <p className='text-gray-500 text-sm mb-4'>Loading...</p>
+        )}
       <div className='mt-auto'>
         <p className='text-gray-500 text-sm'>Wellness Points: 1797</p>
       </div>

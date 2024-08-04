@@ -1,8 +1,21 @@
 import React, { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { signOut } from "firebase/auth";
+import { signOut, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { auth } from "../config/firebase-config";
-import { Home, MessageCircle, Users, Activity, User, BookOpen, ChevronRight, ChevronLeft, CalendarDays, NotebookPen, LayoutDashboard } from "lucide-react";
+import {
+  Home,
+  MessageCircle,
+  Users,
+  Activity,
+  User,
+  BookOpen,
+  ChevronRight,
+  ChevronLeft,
+  TextSearch,
+  LayoutDashboard,
+  LogOut,
+  LogIn,
+} from "lucide-react";
 
 const Navbar = ({ user }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -28,14 +41,26 @@ const Navbar = ({ user }) => {
     setIsOpen(false);
     setDropdownOpen(false);
   };
+
+  const handleLogin = async () => {
+    const provider = new GoogleAuthProvider();
+    try {
+      await signInWithPopup(auth, provider);
+      router("/");
+    } catch (error) {
+      console.error("Error signing in: ", error);
+    }
+  };
+
   if (location.pathname === "/scan") {
     return null;
   }
+
   return (
     <div
       className={`relative z-50 lg:flex lg:flex-col lg:top-0 lg:left-0 lg:h-screen lg:bg-white transition-all duration-300 ${
         isOpen ? "lg:w-[250px]" : "lg:w-[60px]"
-      }  z-50`}
+      } z-50`}
     >
       {/* Sidebar */}
       <div
@@ -47,31 +72,34 @@ const Navbar = ({ user }) => {
       >
         {/* Toggle Button */}
         <div className={`flex items-center p-3 border-y-0`}>
-          <button onClick={handleToggle} className="text-gray-700 hover:bg-gray-200 rounded transition-colors duration-200">
-            {isOpen ? <ChevronLeft size={24}/> : <ChevronRight size={24}/>}
+          <button
+            onClick={handleToggle}
+            className="text-gray-700 hover:bg-gray-200 rounded transition-colors duration-200"
+          >
+            {isOpen ? <ChevronLeft size={24} /> : <ChevronRight size={24} />}
           </button>
         </div>
 
         {/* Navigation Links */}
-        <div
-          className={`flex flex-col flex-1 p-4 ${isOpen ? "block" : "hidden"}`}
-        >
+        <div className={`flex flex-col flex-1 p-4 ${isOpen ? "block" : "hidden"}`}>
           <nav className="flex flex-col space-y-10">
-          <Link
-              to="/dashboard"
-              className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left"
-            >
-              <LayoutDashboard size={20}/>
-              <span className={`${isOpen ? "block" : "hidden"}`}>
-                Dashboard
-              </span>
-            </Link>
+            {user && (
+              <Link
+                to="/"
+                className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left"
+              >
+                <LayoutDashboard size={20} />
+                <span className={`${isOpen ? "block" : "hidden"}`}>
+                  Dashboard
+                </span>
+              </Link>
+            )}
             <Link
-              to="/"
+              to="/search"
               className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left"
             >
-              <Home size={20} />
-              <span className={`${isOpen ? "block" : "hidden"}`}>Home</span>
+              <TextSearch size={20} />
+              <span className={`${isOpen ? "block" : "hidden"}`}>Wellness Library</span>
             </Link>
             <Link
               to="/chatbot"
@@ -85,9 +113,7 @@ const Navbar = ({ user }) => {
               className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left"
             >
               <Users size={20} />
-              <span className={`${isOpen ? "block" : "hidden"}`}>
-                Community
-              </span>
+              <span className={`${isOpen ? "block" : "hidden"}`}>Community</span>
             </Link>
             <Link
               to="/forum"
@@ -97,40 +123,13 @@ const Navbar = ({ user }) => {
               <span className={`${isOpen ? "block" : "hidden"}`}>Forum</span>
             </Link>
             <Link
-              to="/activitydetails"
-              className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left"
-            >
-              <Activity size={20} />
-              <span className={`${isOpen ? "block" : "hidden"}`}>Activity</span>
-            </Link>
-            <Link
               to="/therapists"
               className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left"
             >
               <User size={20} />
-              <span className={`${isOpen ? "block" : "hidden"}`}>
-                Our Therapists
-              </span>
+              <span className={`${isOpen ? "block" : "hidden"}`}>Our Therapists</span>
             </Link>
-            <Link
-              to="/appointments"
-              className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left"
-            >
-              <CalendarDays size={20} />
-              <span className={`${isOpen ? "block" : "hidden"}`}>
-                Appointments
-              </span>
-            </Link>
-            <Link
-              to="/journal"
-              className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left"
-            >
-              <NotebookPen size={20} />
-              <span className={`${isOpen ? "block" : "hidden"}`}>
-                Personal Journal
-              </span>
-            </Link>
-            
+
             {!user && (
               <Link
                 to="/login"
@@ -144,22 +143,22 @@ const Navbar = ({ user }) => {
 
         {/* Icon Container in Closed View */}
         <div
-          className={`flex flex-col justify-between flex-1 p-4 ${
-            isOpen ? "hidden" : "block"
-          }`}
+          className={`flex flex-col justify-between flex-1 p-4 ${isOpen ? "hidden" : "block"}`}
         >
           <div className="flex flex-col items-center space-y-10">
-          <Link
-              to="/dashboard"
-              className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left"
-            >
-              <LayoutDashboard size={20}/>  
-            </Link>
+          {user && (
+              <Link
+                to="/"
+                className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left"
+              >
+                <LayoutDashboard size={20} />
+              </Link>
+            )}
             <Link
-              to="/"
+              to="/search"
               className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left"
             >
-              <Home size={20} />
+              <TextSearch size={20} />
             </Link>
             <Link
               to="/chatbot"
@@ -180,54 +179,33 @@ const Navbar = ({ user }) => {
               <BookOpen size={20} />
             </Link>
             <Link
-              to="/activitydetails"
-              className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left"
-            >
-              <Activity size={20} />
-            </Link>
-            <Link
               to="/therapists"
               className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left"
             >
               <User size={20} />
             </Link>
-            <Link
-              to="/appointments"
-              className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left"
-            >
-              <CalendarDays size={20} />
-            </Link>
-            <Link
-              to="/journal"
-              className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left"
-            >
-              <NotebookPen size={20} />
-            </Link>
           </div>
-          {user && (
-            <Link to="/profile">
-              <div className="flex justify-center">
-                <button
-                  onClick={handleProfile}
-                  className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left"
-                >
-                  <img
-                    src={user.photoURL || "/default-profile.png"}
-                    alt="Profile"
-                    className="w-7 h-7 rounded-full border border-gray-300 cursor-pointer"
-                  />
-                </button>
-              </div>
-            </Link>
+          {user ? (
+            <button
+              onClick={handleLogout}
+              className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left"
+            >
+              <LogOut size={20} />
+            </button>
+          ) : (
+            <button
+              onClick={handleLogin}
+              className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left"
+            >
+              <LogIn size={20} />
+            </button>
           )}
         </div>
 
         {/* Profile Section */}
         {user && (
           <div
-            className={`p-4 bg-white shadow-md  border-t border-gray-300 ${
-              isOpen ? "block" : "hidden"
-            }`}
+            className={`p-4 bg-white shadow-md border-t border-gray-300 ${isOpen ? "block" : "hidden"}`}
           >
             <div className="flex items-center space-x-3">
               <img
