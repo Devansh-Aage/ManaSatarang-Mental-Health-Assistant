@@ -4,6 +4,8 @@ import Skeleton from "react-loading-skeleton";
 import { Mic, MicOff, Send } from "lucide-react";
 import { useSpeechSynthesis } from "react-speech-kit";
 import "react-loading-skeleton/dist/skeleton.css";
+import Filter from "bad-words";
+import { toast } from "react-toastify";
 
 const Chatbot = ({ user }) => {
   const [messages, setMessages] = useState([]);
@@ -18,6 +20,7 @@ const Chatbot = ({ user }) => {
   const [selectedVoice, setSelectedVoice] = useState(null);
   const [videoMessages, setVideoMessages] = useState([]);
   const { speak, speaking, cancel, supported, voices } = useSpeechSynthesis();
+  const filter = new Filter();
 
   const recognition = useRef(null);
   const [readingEnabled, setReadingEnabled] = useState(true);
@@ -76,7 +79,13 @@ const Chatbot = ({ user }) => {
 
   const handleSendMessage = async () => {
     if (userInput.trim() === "") return;
-
+    if (filter.isProfane(userInput)) {
+      toast.error(
+        "Your message contains inappropriate language and cannot be submitted."
+      );
+      setUserInput("");
+      return;
+    }
     const newMessage = { sender: "user", text: userInput };
     setMessages((prevMessages) => [...prevMessages, newMessage]);
     setLoading(true);

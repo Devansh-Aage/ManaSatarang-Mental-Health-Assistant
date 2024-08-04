@@ -1,21 +1,13 @@
 import React, { useState, useEffect } from "react";
 import {
-  List,
-  Backpack,
-  Heart,
-  Briefcase,
   MoreHorizontal,
   Heart as HeartIcon,
   MessageCircle as CommentIcon,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import {
-  getFirestore,
   collection,
   addDoc,
-  updateDoc,
-  arrayUnion,
-  doc,
   query,
   orderBy,
   onSnapshot,
@@ -26,6 +18,8 @@ import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { UploadOutlined } from "@ant-design/icons";
 import { Button, message, Upload } from "antd";
 import { translateText } from "../utils";
+import Filter from "bad-words";
+import { toast } from "react-toastify";
 
 function Forum({ lang }) {
   const [user, loading, error] = useAuthState(auth);
@@ -44,6 +38,7 @@ function Forum({ lang }) {
   const [loadingTranslation, setLoadingTranslation] = useState(false);
 
   const navigate = useNavigate();
+  const filter = new Filter();
 
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
@@ -84,7 +79,10 @@ function Forum({ lang }) {
     try {
       const translatedPosts = await Promise.all(
         posts.map(async (post) => {
-          const translatedTitle = await translateText(post.title, targetLanguage);
+          const translatedTitle = await translateText(
+            post.title,
+            targetLanguage
+          );
           const translatedDesc = await translateText(post.desc, targetLanguage);
           return { ...post, title: translatedTitle, desc: translatedDesc };
         })
@@ -125,6 +123,17 @@ function Forum({ lang }) {
       message.error("Title and Description are required!");
       return;
     }
+    if (
+      filter.isProfane(newPost.title) ||
+      filter.isProfane(newPost.description)
+    ) {
+      toast.error(
+        "Title or Description contains inappropriate language and cannot be submitted."
+      );
+      handleCloseModal();
+      setNewPost({ title: "", description: "" });
+      return;
+    }
 
     if (imgFile) {
       const url = await handleUpload(imgFile);
@@ -151,7 +160,6 @@ function Forum({ lang }) {
         posts.push({ id: doc.id, ...doc.data() });
       });
 
-      // Translate the fetched posts based on the selected language
       const translatedPosts = await translatePosts(posts, lang);
       setPosts(translatedPosts);
     });
@@ -160,13 +168,16 @@ function Forum({ lang }) {
 
   const handleChange = (e) => {
     const { id, value } = e.target;
+
     setNewPost((prev) => ({ ...prev, [id]: value }));
   };
 
   const handlePostClick = (postId) => {
-    navigate(`/forum/post/${postId}`,{state:{
-      lang:lang
-    }});
+    navigate(`/forum/post/${postId}`, {
+      state: {
+        lang: lang,
+      },
+    });
   };
 
   const handleDropdownToggle = (postId) => {

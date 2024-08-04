@@ -13,6 +13,8 @@ import { BadgeCheck, Users } from "lucide-react";
 import { Link } from "react-router-dom";
 import CommunitySidebar from "./components/CommunitySidebar";
 import { translateText } from "./utils";
+import Filter from "bad-words";
+import { toast } from "react-toastify";
 
 const groupNames = [
   "Student Circle",
@@ -32,6 +34,7 @@ const Workspace = ({ user, lang }) => {
     "Corporate Group",
   ]);
   const [loadingTranslation, setLoadingTranslation] = useState(false);
+  const filter = new Filter();
 
   useEffect(() => {
     const q = query(collection(db, "workspace"), orderBy("timestamp", "asc"));
@@ -82,6 +85,13 @@ const Workspace = ({ user, lang }) => {
   const handleSendMessage = async () => {
     if (newMessage.trim()) {
       try {
+        if (filter.isProfane(newMessage)) {
+          toast.error(
+            "Your message contains inappropriate language and cannot be submitted."
+          );
+          setNewMessage('');
+         return;
+        }
         await addDoc(collection(db, "workspace"), {
           userId: user.uid,
           text: newMessage,

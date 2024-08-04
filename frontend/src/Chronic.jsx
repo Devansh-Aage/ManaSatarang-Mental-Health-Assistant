@@ -11,6 +11,8 @@ import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import CommunitySidebar from "./components/CommunitySidebar";
 import { translateText } from "./utils";
+import Filter from "bad-words";
+import { toast } from "react-toastify";
 
 const Chronic = ({ user, userData, lang }) => {
   const [messages, setMessages] = useState([]);
@@ -24,6 +26,7 @@ const Chronic = ({ user, userData, lang }) => {
   ]);
   const [loadingTranslation, setLoadingTranslation] = useState(false);
   const messagesEndRef = useRef(null);
+  const filter = new Filter();
 
   useEffect(() => {
     const q = query(collection(db, "chronic"), orderBy("timestamp", "asc"));
@@ -74,6 +77,13 @@ const Chronic = ({ user, userData, lang }) => {
   const handleSendMessage = async () => {
     if (newMessage.trim()) {
       try {
+        if (filter.isProfane(newMessage)) {
+          toast.error(
+            "Your message contains inappropriate language and cannot be submitted."
+          );
+          setNewMessage('');
+          return;
+        }
         await addDoc(collection(db, "chronic"), {
           userId: user.uid,
           text: newMessage,
@@ -110,9 +120,7 @@ const Chronic = ({ user, userData, lang }) => {
                   <div
                     key={index}
                     className={`flex py-2 ${
-                      msg.userId === user.uid
-                        ? "justify-end"
-                        : "justify-start"
+                      msg.userId === user.uid ? "justify-end" : "justify-start"
                     }`}
                   >
                     {msg.userId !== user.uid && (

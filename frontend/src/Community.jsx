@@ -13,6 +13,8 @@ import CommunitySidebar from "./components/CommunitySidebar";
 import { db } from "./config/firebase-config";
 import axios from "axios";
 import { translateText } from "./utils";
+import Filter from "bad-words";
+import { toast } from "react-toastify";
 
 const Community = ({ user, userData, lang }) => {
   const [messages, setMessages] = useState([]);
@@ -26,6 +28,7 @@ const Community = ({ user, userData, lang }) => {
     "Corporate Group",
   ]);
   const messagesEndRef = useRef(null);
+  const filter =new Filter();
 
   useEffect(() => {
     const q = query(collection(db, "messages"), orderBy("timestamp", "asc"));
@@ -78,6 +81,13 @@ const Community = ({ user, userData, lang }) => {
   const handleSendMessage = async () => {
     if (newMessage.trim()) {
       try {
+        if (filter.isProfane(newMessage)) {
+          toast.error(
+            "Your message contains inappropriate language and cannot be submitted."
+          );
+          setNewMessage('');
+          return;
+        }
         await addDoc(collection(db, "messages"), {
           userId: user.uid,
           text: newMessage,
