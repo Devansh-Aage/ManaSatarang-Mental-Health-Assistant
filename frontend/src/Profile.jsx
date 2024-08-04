@@ -50,7 +50,7 @@ function Profile({ user, userData }) {
             <h2 className="text-xl font-bold text-indigo-950 mb-1">Points</h2>
             <p className="text-lg text-gray-600">{userData?.points || "0"}</p>
             <h2 className="text-xl mt-10 font-bold text-indigo-950 mb-1">
-              Biometric Auth
+              Biometric Authorization
             </h2>
             {!userData?.isBiometricRegistered ? (
               <Button onClick={handleOpenModal}>Register</Button>

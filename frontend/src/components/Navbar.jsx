@@ -9,15 +9,17 @@ import {
   Activity,
   User,
   BookOpen,
-  SquareChevronRight,
-  SquareChevronLeft,
+  ChevronRight,
+  ChevronLeft,
   CalendarDays,
   NotebookPen,
+  LayoutDashboard,
 } from "lucide-react";
 import { Select, Spin } from "antd";
 import axios from "axios";
-
 const { Option } = Select;
+
+
 const navlinks = [
   "Home",
   "SerenaAI",
@@ -123,16 +125,12 @@ const Navbar = ({ user, setAppLanguage }) => {
         }`}
       >
         {/* Toggle Button */}
-        <div className={`flex items-center justify-between p-3 border-y-0`}>
+        <div className={`flex items-center p-3 border-y-0`}>
           <button
             onClick={handleToggle}
             className="text-gray-700 hover:bg-gray-200 rounded transition-colors duration-200"
           >
-            {isOpen ? (
-              <SquareChevronLeft size={28} />
-            ) : (
-              <SquareChevronRight size={28} />
-            )}
+            {isOpen ? <ChevronLeft size={24} /> : <ChevronRight size={24} />}
           </button>
           <Select
             value={language}
@@ -161,6 +159,15 @@ const Navbar = ({ user, setAppLanguage }) => {
           ) : (
             translatedLinks.length > 0 && (
               <nav className="flex flex-col space-y-10">
+                <Link
+                  to="/dashboard"
+                  className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left"
+                >
+                  <LayoutDashboard size={20} />
+                  <span className={`${isOpen ? "block" : "hidden"}`}>
+                    Dashboard
+                  </span>
+                </Link>
                 <Link
                   to="/"
                   className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left"
@@ -253,6 +260,12 @@ const Navbar = ({ user, setAppLanguage }) => {
           }`}
         >
           <div className="flex flex-col items-center space-y-10">
+            <Link
+              to="/dashboard"
+              className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left"
+            >
+              <LayoutDashboard size={20} />
+            </Link>
             <Link
               to="/"
               className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left"
