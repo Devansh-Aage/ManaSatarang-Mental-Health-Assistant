@@ -13,11 +13,14 @@ import CommunitySidebar from "./components/CommunitySidebar";
 import { translateText } from "./utils";
 import Filter from "bad-words";
 import { toast } from "react-toastify";
+import EmojiPicker from "emoji-picker-react";
+import {Smile } from "lucide-react";
 
 const Chronic = ({ user, userData, lang }) => {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [loading, setLoading] = useState(true);
+  const [isEmojiPickerVisible, setIsEmojiPickerVisible] = useState(false);
   const [staticText, setStaticText] = useState([
     "Community",
     "Student Circle",
@@ -98,6 +101,11 @@ const Chronic = ({ user, userData, lang }) => {
     }
   };
 
+  const handleEmojiClick = (emojiObject) => {
+    setNewMessage((prevInput) => prevInput + emojiObject.emoji);
+  };
+
+
   return (
     <div className="flex h-[90vh] overflow-hidden items-end justify-end mx-10 mt-10">
       <div className="hidden  lg:block  min-h-[85vh] justify-self-center self-center lg:w-[25vw] flex-shrink-0">
@@ -162,7 +170,18 @@ const Chronic = ({ user, userData, lang }) => {
             <div ref={messagesEndRef} />
           </div>
         </div>
-        <div className="flex items-center rounded-b-lg justify-end p-3 bg-purple-100 border-t border-gray-300 mt-auto">
+        <div className="flex items-center rounded-b-lg justify-end p-3 bg-purple-100 border-t border-gray-300 mt-auto relative">
+        <button
+            onClick={() => setIsEmojiPickerVisible(!isEmojiPickerVisible)}
+            className="mr-2 p-2 bg-gray-300 font-semibold text-black rounded-lg hover:bg-gray-400"
+          >
+            <Smile />
+          </button>
+          {isEmojiPickerVisible && (
+            <div className="absolute bottom-12 left-0 z-10">
+              <EmojiPicker onEmojiClick={handleEmojiClick} />
+            </div>
+          )}
           <input
             type="text"
             value={newMessage}

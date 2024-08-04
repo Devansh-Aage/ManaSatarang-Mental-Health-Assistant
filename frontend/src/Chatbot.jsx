@@ -1,16 +1,18 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import Skeleton from "react-loading-skeleton";
-import { Mic, MicOff, Send } from "lucide-react";
+import { Mic, MicOff, Send, Smile } from "lucide-react";
 import { useSpeechSynthesis } from "react-speech-kit";
 import "react-loading-skeleton/dist/skeleton.css";
 import Filter from "bad-words";
+import EmojiPicker from "emoji-picker-react";
 import { toast } from "react-toastify";
 
 const Chatbot = ({ user }) => {
   const [messages, setMessages] = useState([]);
   const [userInput, setUserInput] = useState("");
   const [loading, setLoading] = useState(false);
+  const [isEmojiPickerVisible, setIsEmojiPickerVisible] = useState(false);
   const messagesEndRef = useRef(null);
   const [isListening, setIsListening] = useState(false);
   const [voiceIndex, setVoiceIndex] = useState(0);
@@ -155,6 +157,10 @@ const Chatbot = ({ user }) => {
     setReadingEnabled((prev) => !prev);
   };
 
+  const handleEmojiClick = (emojiObject) => {
+    setUserInput((prevInput) => prevInput + emojiObject.emoji);
+  };
+
   return (
     <div className="pt-10">
       <div className="flex flex-col items-center mb-10">
@@ -200,6 +206,19 @@ const Chatbot = ({ user }) => {
           >
             {isListening ? <Mic /> : <MicOff />}
           </button>
+
+          <button
+            onClick={() => setIsEmojiPickerVisible(!isEmojiPickerVisible)}
+            className="mr-2 p-2 bg-gray-300 font-semibold text-black rounded-lg hover:bg-gray-400"
+          >
+            <Smile />
+          </button>
+
+          {isEmojiPickerVisible && (
+            <div className="absolute bottom-12 left-0 z-10">
+              <EmojiPicker onEmojiClick={handleEmojiClick} height={310} />
+            </div>
+          )}
 
           <input
             type="text"
