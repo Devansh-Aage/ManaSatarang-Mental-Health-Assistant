@@ -21,7 +21,7 @@ llm = ChatGoogleGenerativeAI(model="gemini-pro", api_key=api_key)
 # Define the Emotion Detection Chain
 template = """Predict the single, most dominant emotion conveyed by the following sentence without any description or additional information.
     Sentence: "{text}"
-    EMOTION:"""
+    """
 
 prompt = PromptTemplate.from_template(template)
 llm_chain = LLMChain(llm=llm, prompt=prompt)
@@ -58,3 +58,7 @@ def index():
 
 if __name__ == '__main__':
     app.run(debug=True,port=8070)
+
+
+
+

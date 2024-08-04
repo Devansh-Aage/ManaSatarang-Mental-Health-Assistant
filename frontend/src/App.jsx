@@ -39,7 +39,7 @@ import Chat from "./Chat";
 import "./App.css";
 import Journal from "./Journal/Journal";
 import ScanFace from "./ScanFace";
-import {Select} from "antd";
+import { Select } from "antd";
 
 const { Option } = Select;
 import Dashboard from "./Dashboard/Dashboard";
@@ -126,8 +126,7 @@ const App = () => {
     fetchTaskData();
     // redirectToHomeIfAuth();
     console.log(appLanguage);
-    
-  }, [user,appLanguage]);
+  }, [user, appLanguage]);
 
   const fetchTaskData = async () => {
     const storedLastUpdateDate = localStorage.getItem("lastUpdateDate");
@@ -174,10 +173,10 @@ const App = () => {
     await signOut(auth);
     toast.info("Logged out successfully.");
   };
-  
-  const handleLangChange=(lang)=>{
+
+  const handleLangChange = (lang) => {
     setAppLanguage(lang);
-  }
+  };
 
   return (
     <div className="flex  absolute inset-0 h-full w-full bg-white [background:radial-gradient(125%_125%_at_50%_10%,#fff_40%,#63e_100%)]">
@@ -194,26 +193,38 @@ const App = () => {
         <ToastContainer />
         <div className="overflow-hidden ">
           <Routes>
-            <Route path="/login" element={<Login user={user} lang={appLanguage} />} />
+            <Route
+              path="/login"
+              element={<Login user={user} lang={appLanguage} />}
+            />
             <Route
               path="/"
               element={<Home activities={activities} userData={userData} />}
             />
-            <Route
-              path="/dashboard"
-              element={<Dashboard />}
-            />
+            <Route path="/dashboard" element={<Dashboard />} />
             <Route
               path="/profile"
-              element={<Profile lang={appLanguage} user={user} userData={userData} />}
+              element={
+                <Profile lang={appLanguage} user={user} userData={userData} />
+              }
             />
-            <Route path="/profile/leaderboard" element={<Leaderboard  lang={appLanguage} />} />
-            <Route path="/profile/coupon" element={<Coupons lang={appLanguage} />} />
+            <Route
+              path="/profile/leaderboard"
+              element={<Leaderboard lang={appLanguage} />}
+            />
+            <Route
+              path="/profile/coupon"
+              element={<Coupons lang={appLanguage} />}
+            />
             <Route
               path="/activity"
               element={
                 user ? (
-                  <Activity activities={activities} lang={appLanguage} user={userData} />
+                  <Activity
+                    activities={activities}
+                    lang={appLanguage}
+                    user={userData}
+                  />
                 ) : (
                   <Login lang={appLanguage} />
                 )
@@ -223,18 +234,40 @@ const App = () => {
               path="/activitydetails"
               element={
                 user ? (
-                  <ActivityDetails activities={activities} lang={appLanguage} user={userData} />
+                  <ActivityDetails
+                    activities={activities}
+                    lang={appLanguage}
+                    user={userData}
+                  />
                 ) : (
                   <Login lang={appLanguage} />
                 )
               }
             />
-            <Route path="/forum" element={user ? <Forum lang={appLanguage} /> : <Login lang={appLanguage} />} />
+            <Route
+              path="/forum"
+              element={
+                user ? (
+                  <Forum lang={appLanguage} />
+                ) : (
+                  <Login lang={appLanguage} />
+                )
+              }
+            />
             <Route
               path="/appointments"
-              element={user ? <Appointments user={user} lang={appLanguage} /> : <Login />}
+              element={
+                user ? (
+                  <Appointments user={user} lang={appLanguage} />
+                ) : (
+                  <Login />
+                )
+              }
             />
-            <Route path="/forum/post/:postId" element={<PostPage lang={appLanguage} />} />
+            <Route
+              path="/forum/post/:postId"
+              element={<PostPage lang={appLanguage} />}
+            />
             <Route path="/chatbot" element={<Chatbot lang={appLanguage} />} />
             <Route
               path="/community/student"
@@ -268,11 +301,7 @@ const App = () => {
               path="/community/chronic"
               element={
                 user ? (
-                  <Chronic
-                    user={user}
-                    userData={userData}
-                    lang={appLanguage}
-                  />
+                  <Chronic user={user} userData={userData} lang={appLanguage} />
                 ) : (
                   <Login lang={appLanguage} />
                 )
@@ -280,18 +309,36 @@ const App = () => {
             />
             <Route
               path="/therapists"
-              element={user ? <Therapists lang={appLanguage} /> : <Login lang={appLanguage} />}
+              element={
+                user ? (
+                  <Therapists lang={appLanguage} />
+                ) : (
+                  <Login lang={appLanguage} />
+                )
+              }
             />
             <Route
               path="/therapists/therapistDetails"
               element={<TherapistDetails lang={appLanguage} />}
             />
-            <Route path="/chat/:chatId" element={<Chat user={user} lang={appLanguage} />} />
+            <Route
+              path="/chat/:chatId"
+              element={<Chat user={user} lang={appLanguage} />}
+            />
             <Route
               path="/journal"
-              element={user ? <Journal user={user} lang={appLanguage} /> : <Login lang={appLanguage} />}
+              element={
+                user ? (
+                  <Journal user={user} lang={appLanguage} />
+                ) : (
+                  <Login lang={appLanguage} />
+                )
+              }
             />
-            <Route path="/scan" element={<ScanFace userData={userData} lang={appLanguage} />} />
+            <Route
+              path="/scan"
+              element={<ScanFace userData={userData} lang={appLanguage} />}
+            />
           </Routes>
         </div>
       </div>
