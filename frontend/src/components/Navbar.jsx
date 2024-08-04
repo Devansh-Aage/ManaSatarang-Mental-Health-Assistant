@@ -2,9 +2,37 @@ import React, { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { signOut, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { auth } from "../config/firebase-config";
-import { Home, MessageCircle, Users, Activity, User, BookOpen, ChevronRight, ChevronLeft, CalendarDays, NotebookPen, LayoutDashboard } from "lucide-react";
+import {
+  Home,
+  MessageCircle,
+  Users,
+  Activity,
+  User,
+  BookOpen,
+  ChevronRight,
+  ChevronLeft,
+  TextSearch,
+  LayoutDashboard,
+  LogOut,
+  LogIn,
+} from "lucide-react";
+import { Select, Spin } from "antd";
+import axios from "axios";
+const { Option } = Select;
 
 const Navbar = ({ user, setAppLanguage }) => {
+  const navlinks = [
+    "Dashboard",
+    "Home",
+    "SerenaAI",
+    "Community",
+    "Forum",
+    "Activity",
+    "Our Therapists",
+    "Appointments",
+    "Personal Journal",
+  ];
+
   const [isOpen, setIsOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [language, setLanguage] = useState("en");
@@ -25,6 +53,8 @@ const Navbar = ({ user, setAppLanguage }) => {
   const handleProfile = () => {
     router("/profile");
   };
+
+  
 
   const handleLogout = async () => {
     await signOut(auth);
@@ -133,25 +163,26 @@ const Navbar = ({ user, setAppLanguage }) => {
         </div>
 
         {/* Navigation Links */}
-        <div
-          className={`flex flex-col flex-1 p-4 ${isOpen ? "block" : "hidden"}`}
-        >
+        {/* Navigation Links */}
+        <div className={`flex flex-col flex-1 p-4 ${isOpen ? "block" : "hidden"}`}>
           <nav className="flex flex-col space-y-10">
-          <Link
-              to="/dashboard"
-              className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left"
-            >
-              <LayoutDashboard size={20}/>
-              <span className={`${isOpen ? "block" : "hidden"}`}>
-                Dashboard
-              </span>
-            </Link>
+            {user && (
+              <Link
+                to="/"
+                className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left"
+              >
+                <LayoutDashboard size={20} />
+                <span className={`${isOpen ? "block" : "hidden"}`}>
+                  Dashboard
+                </span>
+              </Link>
+            )}
             <Link
-              to="/"
+              to="/search"
               className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left"
             >
-              <Home size={20} />
-              <span className={`${isOpen ? "block" : "hidden"}`}>Home</span>
+              <TextSearch size={20} />
+              <span className={`${isOpen ? "block" : "hidden"}`}>Wellness Library</span>
             </Link>
             <Link
               to="/chatbot"
@@ -165,9 +196,7 @@ const Navbar = ({ user, setAppLanguage }) => {
               className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left"
             >
               <Users size={20} />
-              <span className={`${isOpen ? "block" : "hidden"}`}>
-                Community
-              </span>
+              <span className={`${isOpen ? "block" : "hidden"}`}>Community</span>
             </Link>
             <Link
               to="/forum"
@@ -177,40 +206,13 @@ const Navbar = ({ user, setAppLanguage }) => {
               <span className={`${isOpen ? "block" : "hidden"}`}>Forum</span>
             </Link>
             <Link
-              to="/activitydetails"
-              className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left"
-            >
-              <Activity size={20} />
-              <span className={`${isOpen ? "block" : "hidden"}`}>Activity</span>
-            </Link>
-            <Link
               to="/therapists"
               className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left"
             >
               <User size={20} />
-              <span className={`${isOpen ? "block" : "hidden"}`}>
-                Our Therapists
-              </span>
+              <span className={`${isOpen ? "block" : "hidden"}`}>Our Therapists</span>
             </Link>
-            <Link
-              to="/appointments"
-              className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left"
-            >
-              <CalendarDays size={20} />
-              <span className={`${isOpen ? "block" : "hidden"}`}>
-                Appointments
-              </span>
-            </Link>
-            <Link
-              to="/journal"
-              className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left"
-            >
-              <NotebookPen size={20} />
-              <span className={`${isOpen ? "block" : "hidden"}`}>
-                Personal Journal
-              </span>
-            </Link>
-            
+
             {!user && (
               <Link
                 to="/login"
@@ -227,12 +229,14 @@ const Navbar = ({ user, setAppLanguage }) => {
           className={`flex flex-col justify-between flex-1 p-4 ${isOpen ? "hidden" : "block"}`}
         >
           <div className="flex flex-col items-center space-y-10">
-          <Link
-              to="/dashboard"
-              className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left"
-            >
-              <LayoutDashboard size={20}/>  
-            </Link>
+          {user && (
+              <Link
+                to="/"
+                className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left"
+              >
+                <LayoutDashboard size={20} />
+              </Link>
+            )}
             <Link
               to="/search"
               className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left"

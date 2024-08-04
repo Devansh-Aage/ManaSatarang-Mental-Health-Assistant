@@ -201,7 +201,7 @@ const App = () => {
               path="/search"
               element={<Home activities={activities} userData={userData} />}
             />
-            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/" element={<Dashboard />} />
             <Route
               path="/profile"
               element={
