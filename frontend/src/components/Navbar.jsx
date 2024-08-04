@@ -125,7 +125,7 @@ const Navbar = ({ user, setAppLanguage }) => {
         }`}
       >
         {/* Toggle Button */}
-        <div className={`flex items-center p-3 border-y-0`}>
+        <div className={`flex items-center justify-between p-3 border-y-0`}>
           <button
             onClick={handleToggle}
             className="text-gray-700 hover:bg-gray-200 rounded transition-colors duration-200"
@@ -158,7 +158,7 @@ const Navbar = ({ user, setAppLanguage }) => {
             </div>
           ) : (
             translatedLinks.length > 0 && (
-              <nav className="flex flex-col space-y-10">
+              <nav className="flex flex-col gap-8">
                 <Link
                   to="/dashboard"
                   className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left"

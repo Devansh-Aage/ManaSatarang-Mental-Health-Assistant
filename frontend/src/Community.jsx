@@ -12,13 +12,14 @@ import { BadgeCheck, Users } from "lucide-react";
 import CommunitySidebar from "./components/CommunitySidebar";
 import { db } from "./config/firebase-config";
 
-const groupNames = [
+const staticText = [
+  'Communities',
   "Student Circle",
   "Chronic Illness Support Group",
   "Workplace Wellness",
 ];
 
-const Community = ({ user, userData, activities, userTasks }) => {
+const Community = ({ user, userData,lang }) => {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [loading, setLoading] = useState(true);
