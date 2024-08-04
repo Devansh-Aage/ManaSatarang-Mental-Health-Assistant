@@ -11,6 +11,7 @@ const CameraCapture = ({ userData, userId, username }) => {
   const canvasRef = useRef(null);
   const [photo, setPhoto] = useState(null);
   const [stream, setStream] = useState(null);
+  const [loading, setloading] = useState(false)
   const { pathname } = useLocation();
   console.log(pathname);
 
@@ -38,6 +39,7 @@ const CameraCapture = ({ userData, userId, username }) => {
   };
 
   const takePhoto = async () => {
+    setloading(true)
     const width = videoRef.current.videoWidth;
     const height = videoRef.current.videoHeight;
     const context = canvasRef.current.getContext("2d");
@@ -90,6 +92,7 @@ const CameraCapture = ({ userData, userId, username }) => {
         }
       );
       closeCamera();
+      setloading(false);
       if (res.data.success) {
         navigate("/");
         toast.success(`Welcome back, ${username}!`);
@@ -124,19 +127,22 @@ const CameraCapture = ({ userData, userId, username }) => {
         <video ref={videoRef} autoPlay style={{ width: "50%" }} />
         <div className="flex w-full  gap-6 items-center ">
           <button
-            className="bg-purple-900 text-white px-4 py-2 rounded-md mt-4"
+          disabled={loading}
+            className={`bg-purple-900 text-white px-4 py-2 rounded-md mt-4 ${loading&& 'bg-slate-500'}`}
             onClick={openCamera}
           >
             Open Camera
           </button>
           <button
-            className="bg-purple-900 text-white px-4 py-2 rounded-md mt-4"
+          disabled={loading}
+            className={`bg-purple-900 text-white px-4 py-2 rounded-md mt-4  ${loading&& 'bg-slate-500'}`}
             onClick={takePhoto}
           >
             Take Photo
           </button>
           <button
-            className="bg-purple-900 text-white px-4 py-2 rounded-md mt-4"
+          disabled={loading}
+            className={`bg-purple-900 text-white px-4 py-2 rounded-md mt-4  ${loading&& 'bg-slate-500'}`}
             onClick={closeCamera}
           >
             Close Camera

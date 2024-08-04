@@ -13,6 +13,10 @@ import { BadgeCheck, Users } from "lucide-react";
 import { Link } from "react-router-dom";
 import CommunitySidebar from "./components/CommunitySidebar";
 import { translateText } from "./utils";
+import Filter from "bad-words";
+import { toast } from "react-toastify";
+import EmojiPicker from "emoji-picker-react";
+import {Smile } from "lucide-react";
 
 const groupNames = [
   "Student Circle",
@@ -25,6 +29,7 @@ const Workspace = ({ user, lang }) => {
   const [newMessage, setNewMessage] = useState("");
   const [loading, setLoading] = useState(true);
   const messagesEndRef = useRef(null);
+  const [isEmojiPickerVisible, setIsEmojiPickerVisible] = useState(false);
   const [staticText, setStaticText] = useState([
     "Community",
     "Student Circle",
@@ -32,6 +37,7 @@ const Workspace = ({ user, lang }) => {
     "Corporate Group",
   ]);
   const [loadingTranslation, setLoadingTranslation] = useState(false);
+  const filter = new Filter();
 
   useEffect(() => {
     const q = query(collection(db, "workspace"), orderBy("timestamp", "asc"));
@@ -82,6 +88,13 @@ const Workspace = ({ user, lang }) => {
   const handleSendMessage = async () => {
     if (newMessage.trim()) {
       try {
+        if (filter.isProfane(newMessage)) {
+          toast.error(
+            "Your message contains inappropriate language and cannot be submitted."
+          );
+          setNewMessage("");
+          return;
+        }
         await addDoc(collection(db, "workspace"), {
           userId: user.uid,
           text: newMessage,
@@ -94,6 +107,10 @@ const Workspace = ({ user, lang }) => {
         console.error("Error adding document: ", e);
       }
     }
+  };
+
+  const handleEmojiClick = (emojiObject) => {
+    setNewMessage((prevInput) => prevInput + emojiObject.emoji);
   };
 
   return (
@@ -160,7 +177,18 @@ const Workspace = ({ user, lang }) => {
             <div ref={messagesEndRef} />
           </div>
         </div>
-        <div className="flex items-center rounded-b-lg justify-end p-3 bg-purple-100 border-t border-gray-300 mt-auto">
+        <div className="flex items-center rounded-b-lg justify-end p-3 bg-purple-100 border-t border-gray-300 mt-auto relative">
+          <button
+            onClick={() => setIsEmojiPickerVisible(!isEmojiPickerVisible)}
+            className="mr-2 p-2 bg-gray-300 font-semibold text-black rounded-lg hover:bg-gray-400"
+          >
+            <Smile />
+          </button>
+          {isEmojiPickerVisible && (
+            <div className="absolute bottom-12 left-0 z-10">
+              <EmojiPicker onEmojiClick={handleEmojiClick} />
+            </div>
+          )}
           <input
             type="text"
             value={newMessage}

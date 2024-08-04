@@ -8,11 +8,14 @@ import {
 } from "firebase/firestore";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-import { BadgeCheck, Users } from "lucide-react";
+import {Smile } from "lucide-react";
 import CommunitySidebar from "./components/CommunitySidebar";
 import { db } from "./config/firebase-config";
 import axios from "axios";
 import { translateText } from "./utils";
+import Filter from "bad-words";
+import { toast } from "react-toastify";
+import EmojiPicker from "emoji-picker-react";
 
 const Community = ({ user, userData, lang }) => {
   const [messages, setMessages] = useState([]);
@@ -25,7 +28,9 @@ const Community = ({ user, userData, lang }) => {
     "Chronic Illness Support Group",
     "Corporate Group",
   ]);
+  const [isEmojiPickerVisible, setIsEmojiPickerVisible] = useState(false);
   const messagesEndRef = useRef(null);
+  const filter = new Filter();
 
   useEffect(() => {
     const q = query(collection(db, "messages"), orderBy("timestamp", "asc"));
@@ -45,8 +50,6 @@ const Community = ({ user, userData, lang }) => {
     });
     return () => unsubscribe();
   }, [lang]);
-
-
 
   const translatePage = async (text, targetLanguage) => {
     try {
@@ -78,6 +81,13 @@ const Community = ({ user, userData, lang }) => {
   const handleSendMessage = async () => {
     if (newMessage.trim()) {
       try {
+        if (filter.isProfane(newMessage)) {
+          toast.error(
+            "Your message contains inappropriate language and cannot be submitted."
+          );
+          setNewMessage("");
+          return;
+        }
         await addDoc(collection(db, "messages"), {
           userId: user.uid,
           text: newMessage,
@@ -92,25 +102,25 @@ const Community = ({ user, userData, lang }) => {
     }
   };
 
+  const handleEmojiClick = (emojiObject) => {
+    setNewMessage((prevInput) => prevInput + emojiObject.emoji);
+  };
+
   return (
     <div className="flex h-[90vh] overflow-hidden items-end justify-end mx-10 mt-10">
-      <div className="hidden  lg:block  min-h-[85vh] justify-self-center self-center lg:w-[25vw] flex-shrink-0">
+      <div className="hidden lg:block min-h-[85vh] justify-self-center self-center lg:w-[25vw] flex-shrink-0">
         <div className="mt-14"></div>
         <div className="ml-4">
           <CommunitySidebar staticText={staticText} />
         </div>
       </div>
       <div className="flex flex-col justify-end h-[90vh] mt-[6rem] flex-grow px-2">
-        <div className="flex-1 overflow-y-auto rounded-t-lg  backdrop-blur-sm bg-slate-200/30 border border-gray-300  p-3">
+        <div className="flex-1 overflow-y-auto rounded-t-lg backdrop-blur-sm bg-slate-200/30 border border-gray-300 p-3">
           <div className="mb-12"></div>
           <div className="flex flex-col gap-2">
             {loading
               ? Array.from({ length: 10 }).map((_, index) => (
-                  <Skeleton
-                    key={index}
-                    height={50}
-                    className="message-skeleton"
-                  />
+                  <Skeleton key={index} height={50} className="message-skeleton" />
                 ))
               : messages.map((msg, index) => (
                   <div
@@ -138,9 +148,9 @@ const Community = ({ user, userData, lang }) => {
                           msg.userId === user.uid
                             ? "justify-end"
                             : "justify-start"
-                        }  items-center mb-1`}
+                        } items-center mb-1`}
                       >
-                        <span className="font-bold text-slate-600  mr-1">
+                        <span className="font-bold text-slate-600 mr-1">
                           {msg.name}
                         </span>
                       </div>
@@ -158,7 +168,18 @@ const Community = ({ user, userData, lang }) => {
             <div ref={messagesEndRef} />
           </div>
         </div>
-        <div className="flex items-center rounded-b-lg justify-end p-3 bg-purple-100 border-t border-gray-300 mt-auto">
+        <div className="flex items-center rounded-b-lg justify-end p-3 bg-purple-100 border-t border-gray-300 mt-auto relative">
+          <button
+            onClick={() => setIsEmojiPickerVisible(!isEmojiPickerVisible)}
+            className="mr-2 p-2 bg-gray-300 font-semibold text-black rounded-lg hover:bg-gray-400"
+          >
+            <Smile />
+          </button>
+          {isEmojiPickerVisible && (
+            <div className="absolute bottom-12 left-0 z-10">
+              <EmojiPicker emojiStyle="google" onEmojiClick={handleEmojiClick} />
+            </div>
+          )}
           <input
             type="text"
             value={newMessage}
@@ -170,7 +191,7 @@ const Community = ({ user, userData, lang }) => {
               }
             }}
             placeholder="Type a message..."
-            className="flex-1 p-2 border focus:ring-4  focus:ring-violet-400 border-gray-300 rounded-md text-sm mr-2"
+            className="flex-1 p-2 border focus:ring-4 focus:ring-violet-400 border-gray-300 rounded-md text-sm mr-2"
           />
           <button
             onClick={handleSendMessage}
