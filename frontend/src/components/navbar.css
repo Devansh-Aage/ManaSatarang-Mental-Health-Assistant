@@ -1,0 +1,21 @@
+/* Mobile view adjustments
+@media (max-width: 1024px) {
+    .lg\\:hidden {
+      display: none;
+    }
+    .lg\\:block {
+      display: block;
+    }
+  }
+  
+  /* Transition effects */
+  /* .transition-transform {
+    transition: transform 0.3s ease;
+  }
+  .transform {
+    transform: translateX(0);
+  }
+  .-translate-x-full {
+    transform: translateX(-100%);
+  } */ 
+  

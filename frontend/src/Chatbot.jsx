@@ -149,14 +149,14 @@ const Chatbot = ({ user }) => {
   return (
     <div className="pt-10">
       <div className="flex flex-col items-center mb-10">
-        <h2 className="font-extrabold text-3xl text-indigo-950 mb-3">
+        <h2 className="font-extrabold text-xl lg:text-3xl text-indigo-950 lg:mb-3">
           Meet Serena!
         </h2>
-        <h2 className="font-semibold text-lg text-purple-400">
+        <h2 className="font-semibold text-base lg:text-lg text-purple-400">
           Your Supportive Friend for a Happier You!
         </h2>
       </div>
-      <div className="flex flex-col lg:w-[65vw] max-h-[80vh] overflow-hidden mx-auto px-3 py-2 backdrop-blur-sm bg-white/30 rounded-lg">
+      <div className="flex flex-col lg:w-[65vw] max-h-[80vh] overflow-hidden lg:mx-auto px-3 py-2 backdrop-blur-sm bg-white/30 rounded-lg">
         <div className="flex-1 min-h-[40vh] overflow-y-auto backdrop-blur-sm bg-slate-200/30 border rounded-lg p-3 border-purple-400">
           <div className="flex flex-col gap-2">
             {messages.map((msg, index) => (
@@ -230,7 +230,7 @@ const Chatbot = ({ user }) => {
           {!readingEnabled && (
             <button
               onClick={toggleReading}
-              className="p-3 bg-purple-800 font-semibold text-white rounded-lg hover:bg-purple-600"
+              className="p-3 sm:text-sm bg-purple-800 font-semibold text-white rounded-lg hover:bg-purple-600"
             >
               Enable Reading
             </button>

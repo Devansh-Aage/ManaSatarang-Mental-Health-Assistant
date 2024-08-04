@@ -52,98 +52,106 @@ const Home = ({ activities, userData }) => {
   };
 
   return (
-    <div className="home-container flex flex-col mx-40 my-7">
-      <div className="flex flex-col items-center mb-10">
-        <h2 className="font-extrabold text-3xl text-indigo-950 mb-3">Lift Your Spirit!</h2>
-        <h2 className="font-semibold text-lg text-purple-400">Explore Fun Ways to Brighten Your Mind.</h2>
+    <div className="flex flex-col mx-4 my-6 md:mx-10 md:my-8 lg:mx-40 lg:my-10">
+      <div className="flex flex-col items-center mb-6 md:mb-8 lg:mb-10">
+        <h2 className="text-2xl md:text-3xl lg:text-4xl font-extrabold text-indigo-950 mb-2 md:mb-3">
+          Lift Your Spirit!
+        </h2>
+        <h2 className="text-sm md:text-lg lg:text-xl font-semibold text-purple-400">
+          Explore Fun Ways to Brighten Your Mind.
+        </h2>
       </div>
-      <div className="search-column">
-        <div className="search-bar relative">
-          <input
-            type="text"
-            placeholder="Search Google for articles..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-          <Search
-            className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-gray-500"
-            onClick={handleSearch}
-          />
-        </div>
-        {searchQuery && (
-          <div className="search-results overflow-y-auto mt-4">
-            {loadingSearch ? (
-              <Skeleton height={50} />
-            ) : searchResults.length > 0 ? (
-              <ul>
-                {searchResults.map((article, index) => (
-                  <li key={index}>
-                    <a
-                      href={article.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      {article.title}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p>No search results</p>
-            )}
+      <div className="flex flex-col md:flex-row gap-4">
+        <div className="flex-1 md:w-2/3">
+          <div className="relative flex items-center mb-4">
+            <input
+              type="text"
+              placeholder="Search Google for articles..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="flex-1 p-2 border border-gray-300 rounded-md text-sm"
+            />
+            <Search
+              className="absolute right-2 top-1/2 transform -translate-y-1/2 cursor-pointer text-gray-500"
+              onClick={handleSearch}
+            />
           </div>
-        )}
-        <div className="recommendations mt-4">
-          <Tabs defaultActiveKey="1"
-          >
-            <TabPane className="text-purple-400" tab="Recommended Videos" key="1">
-              {loadingRecommendations ? (
-                <div className="flex">
-                  {Array.from({ length: 3 }).map((_, index) => (
-                    <Skeleton key={index} className="mr-3 mb-3" height={200} width={200} />
-                  ))}
-                </div>
-              ) : (
-                <div className="video-grid">
-                  {recommendations.youtube_videos.map((video, index) => (
-                    <div className="video-item" key={index}>
-                      <a
-                        href={video.link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        <img src={video.thumbnail} alt={video.title} />
-                        <p>{video.title}</p>
-                      </a>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </TabPane>
-            <TabPane tab="Recommended Articles" key="2">
-              {loadingRecommendations ? (
-                <div className="flex">
-                  {Array.from({ length: 3 }).map((_, index) => (
-                    <Skeleton key={index} className="mr-3 mb-3" height={150} width={200} />
-                  ))}
-                </div>
-              ) : (
-                <ul className="article-list">
-                  {recommendations.articles.map((article, index) => (
-                    <li key={index}>
+          {searchQuery && (
+            <div className="mt-4 bg-gray-100 p-4 border border-gray-300 rounded-md overflow-y-auto">
+              {loadingSearch ? (
+                <Skeleton height={50} />
+              ) : searchResults.length > 0 ? (
+                <ul>
+                  {searchResults.map((article, index) => (
+                    <li key={index} className="mb-2">
                       <a
                         href={article.link}
                         target="_blank"
                         rel="noopener noreferrer"
+                        className="text-blue-500 hover:underline"
                       >
                         {article.title}
                       </a>
                     </li>
                   ))}
                 </ul>
+              ) : (
+                <p className="text-gray-500">No search results</p>
               )}
-            </TabPane>
-          </Tabs>
+            </div>
+          )}
+          <div className="mt-4">
+            <Tabs defaultActiveKey="1" className="w-full">
+              <TabPane tab="Recommended Videos" key="1">
+                {loadingRecommendations ? (
+                  <div className="flex gap-4">
+                    {Array.from({ length: 3 }).map((_, index) => (
+                      <Skeleton key={index} height={200} width={200} />
+                    ))}
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {recommendations.youtube_videos.map((video, index) => (
+                      <div className="border border-gray-300 rounded-md overflow-hidden bg-white shadow-md" key={index}>
+                        <a
+                          href={video.link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <img src={video.thumbnail} alt={video.title} className="w-full h-auto" />
+                          <p className="p-2 text-sm font-bold text-gray-800 text-center">{video.title}</p>
+                        </a>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </TabPane>
+              <TabPane tab="Recommended Articles" key="2">
+                {loadingRecommendations ? (
+                  <div className="flex gap-4">
+                    {Array.from({ length: 3 }).map((_, index) => (
+                      <Skeleton key={index} height={150} width={200} />
+                    ))}
+                  </div>
+                ) : (
+                  <ul className="list-none p-0">
+                    {recommendations.articles.map((article, index) => (
+                      <li key={index} className="mb-2">
+                        <a
+                          href={article.link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-blue-500 hover:underline"
+                        >
+                          {article.title}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </TabPane>
+            </Tabs>
+          </div>
         </div>
       </div>
     </div>

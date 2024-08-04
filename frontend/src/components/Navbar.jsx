@@ -123,16 +123,16 @@ const Navbar = ({ user, setAppLanguage }) => {
 
   return (
     <div
-      className={`relative z-50 lg:flex lg:flex-col lg:top-0 lg:left-0 lg:h-screen lg:bg-white transition-all duration-300 ${
+      className={`relative z-50 lg:flex lg:flex-col lg:top-0 lg:left-0 lg:h-screen transition-all duration-300 ${
         isOpen ? "lg:w-[250px]" : "lg:w-[60px]"
       } z-50`}
     >
       {/* Sidebar */}
       <div
-        className={`fixed flex flex-col h-screen bg-white transition-transform transform border border-t-0 ${
+        className={`fixed flex flex-col h-screen transition-transform transform ${
           isOpen
-            ? "translate-x-0 w-[250px] shadow-lg rounded-2xl"
-            : "-translate-x-0 w-[60px] border-r items-center border-gray-200"
+            ? "translate-x-0 lg:w-[250px] w-full shadow-lg lg:rounded-r-3xl lg:bg-transparent bg-white"
+            : "-translate-x-0 w-[60px] items-center border-gray-200 lg:bg-transparent"
         }`}
       >
         {/* Toggle Button */}
@@ -228,7 +228,7 @@ const Navbar = ({ user, setAppLanguage }) => {
         <div
           className={`flex flex-col justify-between flex-1 p-4 ${isOpen ? "hidden" : "block"}`}
         >
-          <div className="flex flex-col items-center space-y-10">
+          <div className="lg:flex hidden flex-col items-center space-y-10">
           {user && (
               <Link
                 to="/"
@@ -271,14 +271,14 @@ const Navbar = ({ user, setAppLanguage }) => {
           {user ? (
             <button
               onClick={handleLogout}
-              className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left"
+              className="lg:flex hidden items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left"
             >
               <LogOut size={20} />
             </button>
           ) : (
             <button
               onClick={handleLogin}
-              className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left"
+              className="lg:flex hidden items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left"
             >
               <LogIn size={20} />
             </button>
@@ -288,7 +288,7 @@ const Navbar = ({ user, setAppLanguage }) => {
         {/* Profile Section */}
         {user && (
           <div
-            className={`p-4 bg-white shadow-md border-t border-gray-300 ${isOpen ? "block" : "hidden"}`}
+            className={`p-4 bg-white shadow-md border-t border-gray-300 ${isOpen ? "block " : "hidden"}`}
           >
             <div className="flex items-center space-x-3">
               <img

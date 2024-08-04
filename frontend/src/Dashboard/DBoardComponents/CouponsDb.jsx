@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import { ChevronRight } from 'lucide-react';
 
 function CouponsDb() {
-  // Sample data for the coupons
   const coupons = [
     {
       id: 1,
@@ -23,17 +22,17 @@ function CouponsDb() {
   ];
 
   return (
-    <div className='bg-white border-2 rounded-xl p-5 flex flex-col col-span-4 row-span-2'>
+    <div className='bg-white border rounded-xl p-5 flex flex-col  1 md: 4 row-span-1 md:row-span-2'>
       <div className='flex flex-row justify-center items-center mx-16 hover:underline'>
-      <Link className='text-gray-600 mb-4' to="/profile/coupon">
-      <h2 className='text-xl text-gray-600'>Available Coupons</h2>
-      </Link>
+        <Link className='text-gray-600 mb-4' to="/profile/coupon">
+          <h2 className='text-lg text-gray-600'>Available Coupons</h2>
+        </Link>
       </div>
       <div className='flex flex-row gap-4 justify-center'>
         {coupons.map((coupon) => (
           <div 
             key={coupon.id} 
-            className='bg-gray-100 border-2 rounded-xl p-4 flex flex-col items-center justify-between w-1/4'
+            className='bg-gray-100 border-2 rounded p-4 flex flex-col items-center justify-between w-1/4'
           >
             <img 
               src={coupon.image} 
@@ -42,7 +41,7 @@ function CouponsDb() {
               height={120} 
               className='mb-2'
             />
-            <p className='text-gray-600'>{coupon.points}</p>
+            <p className='text-gray-600 text-xs'>{coupon.points}</p>
           </div>
         ))}
       </div>

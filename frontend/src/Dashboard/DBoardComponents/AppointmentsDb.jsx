@@ -4,7 +4,6 @@ import { db } from "../../config/firebase-config";
 import { useNavigate } from "react-router-dom";
 import { chatHrefConstructor } from "../../utils";
 import { Card } from "antd";
-// import moment from "moment"; // Import moment for date formatting
 
 const AppointmentsDb = ({ user }) => {
   const [appointments, setAppointments] = useState([]);
@@ -15,7 +14,6 @@ const AppointmentsDb = ({ user }) => {
       if (user) {
         const appointmentRef = collection(db, "appointments");
 
-        // Query for appointments where either therapistId or userId matches user.uid
         const q1 = query(appointmentRef, where("therapistId", "==", user.uid));
         const q2 = query(appointmentRef, where("userId", "==", user.uid));
 
@@ -42,9 +40,8 @@ const AppointmentsDb = ({ user }) => {
   }, [user]);
 
   return (
-    <div className="bg-white border-2 rounded-xl p-4 flex flex-col items-center justify-center col-span-2 row-span-2">
-      {/* <h2 className="text-xl text-gray-500 mb-4">Pending Appointments</h2> */}
-      <div className="flex items-center flex-wrap gap-5 mx-2 mt-5 w-full">
+    <div className="bg-white border rounded-xl p-4 flex flex-col items-center justify-center  1 md: 2 row-span-1 md:row-span-2">
+      <div className="flex items-center justify-center flex-wrap gap-5 mx-2 mt-5 w-full">
         {appointments.length > 0 ? (
           appointments.map((appointment, index) => (
             <AppointmentItem key={index} appointment={appointment} router={router} />
@@ -87,7 +84,7 @@ const AppointmentItem = ({ appointment, router }) => {
     router(`/chat/${chatHref}`);
   };
 
-  const formattedDate = moment(appointment.date).format("ddd, Do MMM");
+  // const formattedDate = moment(appointment.date).format("ddd, Do MMM");
 
   return (
     <div className="mb-4">
