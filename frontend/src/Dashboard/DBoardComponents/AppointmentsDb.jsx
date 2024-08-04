@@ -40,7 +40,7 @@ const AppointmentsDb = ({ user }) => {
   }, [user]);
 
   return (
-    <div className="bg-white border rounded-xl p-4 flex flex-col items-center justify-center  1 md: 2 row-span-1 md:row-span-2">
+    <div className="bg-white border rounded-xl p-4 flex flex-col items-center justify-center row-span-2 md:row-span-2">
       <div className="flex items-center justify-center flex-wrap gap-5 mx-2 mt-5 w-full">
         {appointments.length > 0 ? (
           appointments.map((appointment, index) => (

@@ -9,7 +9,7 @@ import AppointmentsDb from './DBoardComponents/AppointmentsDb';
 function Dashboard() {
     return (
        <div>
-            <div className='grid lg:grid-cols-3 auto-rows-[120px] gap-2 mx-6 my-3'>
+            <div className='grid lg:grid-cols-3 auto-rows-[120px] gap-2 lg:mx-6 lg:my-3 my-6 mx-14'>
                 <ProfileCard  />
                 <JournalDb />
                 <AppointmentsDb  />

@@ -101,7 +101,7 @@ const Home = ({ activities, userData }) => {
             </div>
           )}
           <div className="mt-4">
-            <Tabs defaultActiveKey="1" className="w-full">
+            <Tabs defaultActiveKey="1" className="w-full justify-center items-center">
               <TabPane tab="Recommended Videos" key="1">
                 {loadingRecommendations ? (
                   <div className="flex gap-4">
