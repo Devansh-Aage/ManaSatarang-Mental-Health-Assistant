@@ -23,8 +23,13 @@ import {
 import { auth, db, storage } from "../config/firebase-config";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { UploadOutlined } from '@ant-design/icons';
-import { Button, message, Upload } from 'antd';
+import { UploadOutlined } from "@ant-design/icons";
+import { Button, message, Upload, Select, Spin } from "antd";
+import axios from "axios";
+
+const { Option } = Select;
+
+const API_KEY = "AIzaSyCTqBgxjbr0SP1ZI8HX8ikLHe-Wo7JszmM";
 
 function Forum() {
   const [user, loading, error] = useAuthState(auth);
@@ -35,6 +40,9 @@ function Forum() {
   const [uploadError, setUploadError] = useState(null);
   const [downloadURL, setDownloadURL] = useState(null);
   const [imgFile, setImgFile] = useState(null);
+  const [language, setLanguage] = useState("en");
+  const [translatedPosts, setTranslatedPosts] = useState([]);
+  const [loadingTranslations, setLoadingTranslations] = useState(false);
 
   const navigate = useNavigate();
 
@@ -123,15 +131,57 @@ function Forum() {
 
   const uploadProps = {
     beforeUpload: (file) => {
-     setImgFile(file);
+      setImgFile(file);
       return false; // Prevent automatic upload
     },
     onRemove: () => {
       setDownloadURL(null);
       setUploadError(null);
-      setImgFile(null)
+      setImgFile(null);
     },
   };
+
+  const translateText = async (text, targetLanguage) => {
+    try {
+      const response = await axios.post(
+        `https://translation.googleapis.com/language/translate/v2`,
+        {},
+        {
+          params: {
+            q: text,
+            target: targetLanguage,
+            key: API_KEY,
+          },
+        }
+      );
+      return response.data.data.translations[0].translatedText;
+    } catch (error) {
+      console.error("Error translating text: ", error);
+      return text;
+    }
+  };
+
+  const translatePosts = async (posts, targetLanguage) => {
+    setLoadingTranslations(true);
+    const translatedPosts = await Promise.all(
+      posts.map(async (post) => {
+        const translatedTitle = await translateText(post.title, targetLanguage);
+        const translatedDesc = await translateText(post.desc, targetLanguage);
+        return { ...post, title: translatedTitle, desc: translatedDesc };
+      })
+    );
+    setTranslatedPosts(translatedPosts);
+    setLoadingTranslations(false);
+  };
+
+  const handleLanguageChange = (value) => {
+    setLanguage(value);
+    translatePosts(posts, value);
+  };
+
+  useEffect(() => {
+    translatePosts(posts, language);
+  }, [posts, language]);
 
   return (
     <div className="relative pt-10 pb-32 h-screen overflow-y-auto">
@@ -142,6 +192,21 @@ function Forum() {
         <h2 className="font-semibold text-lg text-purple-400 mb-10">
           Join the conversation to connect with the community!
         </h2>
+      </div>
+      <div className="flex justify-end w-1/4 pr-6">
+        <Select
+          value={language}
+          onChange={handleLanguageChange}
+          style={{ width: 120 }}
+        >
+          <Option value="en">English</Option>
+          <Option value="es">Spanish</Option>
+          <Option value="fr">French</Option>
+          <Option value="de">German</Option>
+          <Option value="hi">Hindi</Option>
+          <Option value="mr">Marathi</Option>
+          <Option value="ur">Urdu</Option>
+        </Select>
       </div>
       <div
         className={`flex flex-col justify-center items-center ${
@@ -159,8 +224,12 @@ function Forum() {
 
         <div className="w-3/4">
           <div className="space-y-8">
-            {posts.length > 0 ? (
-              posts.map((post) => (
+            {loadingTranslations ? (
+              <div className="flex justify-center items-center">
+                <Spin />
+              </div>
+            ) : translatedPosts.length > 0 ? (
+              translatedPosts.map((post) => (
                 <div
                   key={post.id}
                   className="w-full bg-white/10 backdrop-blur-md p-6 rounded-lg shadow-md relative cursor-pointer"
@@ -186,10 +255,12 @@ function Forum() {
                   <h2 className="font-bold text-xl text-indigo-950 mb-2">
                     {post.title}
                   </h2>
-                  <div className="w-[400px]  ">
-                    <img src={post?.imageURL} className="w-full" alt="" />
+                  <div className="w-[400px]">
+                    <img src={post?.imageURL} alt="" className="mb-4" />
                   </div>
-                  <p className="text-gray-800 mb-4 font-semibold">{post.desc}</p>
+                  <p className="text-gray-800 mb-4 font-semibold">
+                    {post.desc}
+                  </p>
                   <div className="text-gray-600 mb-4">
                     <p className="text-sm font-medium text-slate-900">
                       Posted by: {post.displayName}
@@ -245,21 +316,15 @@ function Forum() {
               />
             </div>
             <div>
-              <label className="block text-gray-700 mb-2">Image <small className="text-red-700">(Optional)</small></label>
+              <label className="block text-gray-700 mb-2">
+                Image <small className="text-red-700">(Optional)</small>
+              </label>
               <Upload {...uploadProps}>
                 <Button icon={<UploadOutlined />}>Click to Upload</Button>
               </Upload>
               {uploadError && (
                 <p className="error text-red-800">{uploadError}</p>
               )}
-              {/* {imgFile && (
-                <Button
-                  className="mt-2"
-                  onClick={() => handleUpload(imgFile)}
-                >
-                  Upload
-                </Button>
-              )} */}
             </div>
             <div className="flex justify-end space-x-4">
               <button

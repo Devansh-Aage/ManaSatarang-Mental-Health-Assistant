@@ -42,6 +42,14 @@ model = genai.GenerativeModel(
     ),
 )
 
+TherapistModel = genai.GenerativeModel(
+    model_name="gemini-1.5-pro",
+    generation_config=generation_config,
+    system_instruction=(
+        ""
+    ),
+)
+
 # Initialize chat session and response count
 chat_session = model.start_chat(history=[])
 response_count = 0
@@ -82,6 +90,28 @@ def chat():
     formatted_response = response.text.replace('*', '')
 
     return jsonify({"response": formatted_response, "youtube_videos": youtube_videos})
+
+@app.route('/recommend', methods=['POST'])
+def recommend_therapists():
+    user_data = request.json
+    user_description = user_data.get('description')
+
+    if not user_description:
+        return jsonify({'error': 'Description is required'}), 400
+
+    # Fetch therapist data from Firebase
+    therapists_ref = db.collection('therapists')
+    therapists = therapists_ref.stream()
+    
+    therapist_list = []
+    for therapist in therapists:
+        therapist_data = therapist.to_dict()
+        therapist_list.append(f"Name: {therapist_data['name']}, Specialization: {therapist_data['specialization']}, Experience: {therapist_data['experience']}, Location: {therapist_data['location']}, Bio: {therapist_data['bio']}")
+
+    # Generate recommendations based on user description
+    recommendations = generate_recommendations(user_description, therapist_list)
+
+    return jsonify(recommendations)
 
 @app.route("/search", methods=["GET"])
 def search_articles():
@@ -176,6 +206,20 @@ def search_google(query, num_results=5):
     except HttpError as error:
         print(error)
         return []
+
+def generate_recommendations(user_description, therapists):
+    response = TherapistModel.send_message(f"Based on the following description: '{user_description}', recommend 5 therapists from the list below:\n\n{therapists}\n")
+    recommendations = response.text
+
+    # Parse the response to extract therapist details
+    recommended_therapists = []
+    for line in recommendations.splitlines():
+        # Assume that each recommendation is formatted in a specific way
+        if line.strip():  # Make sure line is not empty
+            recommended_therapists.append(line.strip())
+
+    return recommended_therapists
+
 
 if __name__ == "__main__":
     app.run(debug=True)

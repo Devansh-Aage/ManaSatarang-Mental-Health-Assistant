@@ -219,7 +219,7 @@ const App = () => {
               element={user ? <Appointments user={user} /> : <Login />}
             />
             <Route path="/forum/post/:postId" element={<PostPage />} />
-            <Route path="/chatbot" element={<Chatbot />} />
+            <Route path="/chatbot" element={<Chatbot user={user} />} />
             <Route
               path="/community/student"
               element={

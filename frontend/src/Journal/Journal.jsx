@@ -50,7 +50,7 @@ function Journal({ user }) {
 
     try {
       const { data } = await axios.post(
-        "http://localhost:5000/classify-emotion",
+        "http://localhost:8070/classify-emotion",
         {
           text: formState.desc,
         }
