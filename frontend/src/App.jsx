@@ -179,7 +179,7 @@ const App = () => {
   };
 
   return (
-    <div className="flex  absolute inset-0 h-full w-full bg-white [background:radial-gradient(125%_125%_at_50%_10%,#fff_40%,#63e_100%)]">
+    <div className="flex absolute inset-0 h-full w-full bg-white [background:radial-gradient(125%_125%_at_50%_10%,#fff_40%,#63e_100%)]">
       <Navbar
         user={user}
         onNavbarToggle={(isOpen) =>
@@ -198,10 +198,10 @@ const App = () => {
               element={<Login user={user} lang={appLanguage} />}
             />
             <Route
-              path="/"
+              path="/search"
               element={<Home activities={activities} userData={userData} />}
             />
-            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/" element={<Dashboard />} />
             <Route
               path="/profile"
               element={
