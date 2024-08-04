@@ -136,124 +136,22 @@ const Navbar = ({ user, setAppLanguage }) => {
         <div
           className={`flex flex-col flex-1 p-4 ${isOpen ? "block" : "hidden"}`}
         >
-          {loadingTranslations ? (
-            <div className="flex justify-center items-center">
-              <Spin />
-            </div>
-          ) : (
-            translatedLinks.length > 0 && (
-              <nav className="flex flex-col gap-8">
-                <Link
-                  to="/dashboard"
-                  className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left"
-                >
-                  <LayoutDashboard size={20} />
-                  <span className={`${isOpen ? "block" : "hidden"}`}>
-                  {translatedLinks[0]}
-                  </span>
-                </Link>
-                <Link
-                  to="/"
-                  className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left"
-                >
-                  <Home size={20} />
-                  <span className={`${isOpen ? "block" : "hidden"}`}>
-                  {translatedLinks[1]}
-                  </span>
-                </Link>
-                <Link
-                  to="/chatbot"
-                  className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left"
-                >
-                  <MessageCircle size={20} />
-                  <span className={`${isOpen ? "block" : "hidden"}`}>
-                    {translatedLinks[2]}
-                  </span>
-                </Link>
-                <Link
-                  to="/community/student"
-                  className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left"
-                >
-                  <Users size={20} />
-                  <span className={`${isOpen ? "block" : "hidden"}`}>
-                    {translatedLinks[3]}
-                  </span>
-                </Link>
-                <Link
-                  to="/forum"
-                  className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left"
-                >
-                  <BookOpen size={20} />
-                  <span className={`${isOpen ? "block" : "hidden"}`}>
-                    {translatedLinks[4]}
-                  </span>
-                </Link>
-                <Link
-                  to="/activitydetails"
-                  className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left"
-                >
-                  <Activity size={20} />
-                  <span className={`${isOpen ? "block" : "hidden"}`}>
-                    {translatedLinks[5]}
-                  </span>
-                </Link>
-                <Link
-                  to="/therapists"
-                  className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left"
-                >
-                  <User size={20} />
-                  <span className={`${isOpen ? "block" : "hidden"}`}>
-                    {translatedLinks[6]}
-                  </span>
-                </Link>
-                <Link
-                  to="/appointments"
-                  className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left"
-                >
-                  <CalendarDays size={20} />
-                  <span className={`${isOpen ? "block" : "hidden"}`}>
-                    {translatedLinks[7]}
-                  </span>
-                </Link>
-                <Link
-                  to="/journal"
-                  className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left"
-                >
-                  <NotebookPen size={20} />
-                  <span className={`${isOpen ? "block" : "hidden"}`}>
-                    {translatedLinks[8]}
-                  </span>
-                </Link>
-                {!user && (
-                  <Link
-                    to="/login"
-                    className="text-center bg-purple-900 text-white text-base px-3 py-2 rounded-lg"
-                  >
-                    Login
-                  </Link>
-                )}
-              </nav>
-            )
-          )}
-        <div className={`flex flex-col flex-1 p-4 ${isOpen ? "block" : "hidden"}`}>
           <nav className="flex flex-col space-y-10">
-            {user && (
-              <Link
-                to="/"
-                className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left"
-              >
-                <LayoutDashboard size={20} />
-                <span className={`${isOpen ? "block" : "hidden"}`}>
-                  Dashboard
-                </span>
-              </Link>
-            )}
-            <Link
-              to="/search"
+          <Link
+              to="/dashboard"
               className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left"
             >
-              <TextSearch size={20} />
-              <span className={`${isOpen ? "block" : "hidden"}`}>Wellness Library</span>
+              <LayoutDashboard size={20}/>
+              <span className={`${isOpen ? "block" : "hidden"}`}>
+                Dashboard
+              </span>
+            </Link>
+            <Link
+              to="/"
+              className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left"
+            >
+              <Home size={20} />
+              <span className={`${isOpen ? "block" : "hidden"}`}>Home</span>
             </Link>
             <Link
               to="/chatbot"
@@ -267,7 +165,9 @@ const Navbar = ({ user, setAppLanguage }) => {
               className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left"
             >
               <Users size={20} />
-              <span className={`${isOpen ? "block" : "hidden"}`}>Community</span>
+              <span className={`${isOpen ? "block" : "hidden"}`}>
+                Community
+              </span>
             </Link>
             <Link
               to="/forum"
@@ -277,13 +177,40 @@ const Navbar = ({ user, setAppLanguage }) => {
               <span className={`${isOpen ? "block" : "hidden"}`}>Forum</span>
             </Link>
             <Link
+              to="/activitydetails"
+              className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left"
+            >
+              <Activity size={20} />
+              <span className={`${isOpen ? "block" : "hidden"}`}>Activity</span>
+            </Link>
+            <Link
               to="/therapists"
               className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left"
             >
               <User size={20} />
-              <span className={`${isOpen ? "block" : "hidden"}`}>Our Therapists</span>
+              <span className={`${isOpen ? "block" : "hidden"}`}>
+                Our Therapists
+              </span>
             </Link>
-
+            <Link
+              to="/appointments"
+              className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left"
+            >
+              <CalendarDays size={20} />
+              <span className={`${isOpen ? "block" : "hidden"}`}>
+                Appointments
+              </span>
+            </Link>
+            <Link
+              to="/journal"
+              className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left"
+            >
+              <NotebookPen size={20} />
+              <span className={`${isOpen ? "block" : "hidden"}`}>
+                Personal Journal
+              </span>
+            </Link>
+            
             {!user && (
               <Link
                 to="/login"
