@@ -21,6 +21,7 @@ const { Option } = Select;
 
 
 const navlinks = [
+  "Dashboard",
   "Home",
   "SerenaAI",
   "Community",
@@ -36,7 +37,7 @@ const Navbar = ({ user, setAppLanguage }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [language, setLanguage] = useState("en");
   const [Links, setLinks] = useState(navlinks);
-  const [translatedLinks, setTranslatedLinks] = useState([]);
+  const [translatedLinks, setTranslatedLinks] = useState(navlinks);
   const [loadingTranslations, setLoadingTranslations] = useState(false);
   const router = useNavigate();
   const location = useLocation();
@@ -59,13 +60,15 @@ const Navbar = ({ user, setAppLanguage }) => {
     setIsOpen(false);
     setDropdownOpen(false);
   };
-
+  useEffect(() => {
+    translateLinks(navlinks, language);
+  }, [language]);
+  
   const handleLanguageChange = (value) => {
     setLanguage(value);
     setAppLanguage(value);
-    translateLinks(Links, value);
   };
-
+  
   const translateText = async (text, targetLanguage) => {
     try {
       const response = await axios.post(
@@ -85,15 +88,12 @@ const Navbar = ({ user, setAppLanguage }) => {
       return text;
     }
   };
-
+  
   const translateLinks = async (navlinks, targetLanguage) => {
     try {
       setLoadingTranslations(true);
       const translatedLinksArray = await Promise.all(
-        navlinks.map(async (link) => {
-          const translatedLink = await translateText(link, targetLanguage);
-          return translatedLink;
-        })
+        navlinks.map((link) => translateText(link, targetLanguage))
       );
       setTranslatedLinks(translatedLinksArray);
     } catch (error) {
@@ -102,10 +102,7 @@ const Navbar = ({ user, setAppLanguage }) => {
       setLoadingTranslations(false);
     }
   };
-
-  useEffect(() => {
-    translateLinks(Links, language);
-  }, [Links, language]);
+  
 
   if (location.pathname === "/scan") {
     return null;
@@ -165,7 +162,7 @@ const Navbar = ({ user, setAppLanguage }) => {
                 >
                   <LayoutDashboard size={20} />
                   <span className={`${isOpen ? "block" : "hidden"}`}>
-                    Dashboard
+                  {translatedLinks[0]}
                   </span>
                 </Link>
                 <Link
@@ -174,7 +171,7 @@ const Navbar = ({ user, setAppLanguage }) => {
                 >
                   <Home size={20} />
                   <span className={`${isOpen ? "block" : "hidden"}`}>
-                    {translatedLinks[0]}
+                  {translatedLinks[1]}
                   </span>
                 </Link>
                 <Link
@@ -183,7 +180,7 @@ const Navbar = ({ user, setAppLanguage }) => {
                 >
                   <MessageCircle size={20} />
                   <span className={`${isOpen ? "block" : "hidden"}`}>
-                    {translatedLinks[1]}
+                    {translatedLinks[2]}
                   </span>
                 </Link>
                 <Link
@@ -192,7 +189,7 @@ const Navbar = ({ user, setAppLanguage }) => {
                 >
                   <Users size={20} />
                   <span className={`${isOpen ? "block" : "hidden"}`}>
-                    {translatedLinks[2]}
+                    {translatedLinks[3]}
                   </span>
                 </Link>
                 <Link
@@ -201,7 +198,7 @@ const Navbar = ({ user, setAppLanguage }) => {
                 >
                   <BookOpen size={20} />
                   <span className={`${isOpen ? "block" : "hidden"}`}>
-                    {translatedLinks[3]}
+                    {translatedLinks[4]}
                   </span>
                 </Link>
                 <Link
@@ -210,7 +207,7 @@ const Navbar = ({ user, setAppLanguage }) => {
                 >
                   <Activity size={20} />
                   <span className={`${isOpen ? "block" : "hidden"}`}>
-                    {translatedLinks[4]}
+                    {translatedLinks[5]}
                   </span>
                 </Link>
                 <Link
@@ -219,7 +216,7 @@ const Navbar = ({ user, setAppLanguage }) => {
                 >
                   <User size={20} />
                   <span className={`${isOpen ? "block" : "hidden"}`}>
-                    {translatedLinks[5]}
+                    {translatedLinks[6]}
                   </span>
                 </Link>
                 <Link
@@ -228,7 +225,7 @@ const Navbar = ({ user, setAppLanguage }) => {
                 >
                   <CalendarDays size={20} />
                   <span className={`${isOpen ? "block" : "hidden"}`}>
-                    {translatedLinks[6]}
+                    {translatedLinks[7]}
                   </span>
                 </Link>
                 <Link
@@ -237,7 +234,7 @@ const Navbar = ({ user, setAppLanguage }) => {
                 >
                   <NotebookPen size={20} />
                   <span className={`${isOpen ? "block" : "hidden"}`}>
-                    {translatedLinks[7]}
+                    {translatedLinks[8]}
                   </span>
                 </Link>
                 {!user && (

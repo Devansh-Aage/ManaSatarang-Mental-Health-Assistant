@@ -7,12 +7,13 @@ import {
   onSnapshot,
 } from "firebase/firestore";
 import Skeleton from "react-loading-skeleton";
-import { BadgeCheck } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth, db } from "./config/firebase-config";
+import axios from "axios";
+import { translateText } from "./utils";
 
-const Chat = ({}) => {
+const Chat = ({ lang }) => {
   const [user] = useAuthState(auth);
   const params = useParams();
   const router = useNavigate();
@@ -32,9 +33,8 @@ const Chat = ({}) => {
   }, [user.uid, userId1, userId2, router]);
 
   // Use therapistId as the collection name
-  //   const therapistId = user.uid === userId1 ? userId2 : userId1;
   const therapistId = "oQyoMJNC6oZ3gh2Xxv8LIZTgfuw2";
-  const patientId=therapistId===userId1?userId2:userId1;
+  const patientId = therapistId === userId1 ? userId2 : userId1;
 
   useEffect(() => {
     const q = query(collection(db, patientId), orderBy("timestamp", "asc"));
@@ -43,11 +43,26 @@ const Chat = ({}) => {
       querySnapshot.forEach((doc) => {
         messages.push(doc.data());
       });
-      setMessages(messages);
+      translateMessages(messages);
       setLoading(false);
     });
     return () => unsubscribe();
-  }, [patientId]);
+  }, [patientId, lang]);
+
+  const translateMessages = async (messages) => {
+    const translatedMessages = await Promise.all(
+      messages.map(async (msg) => {
+        if (lang !== "en") {
+          const translatedText = await translateText(msg.text, lang);
+          return { ...msg, translatedText };
+        }
+        return msg;
+      })
+    );
+    setMessages(translatedMessages);
+  };
+
+
 
   const handleSendMessage = async () => {
     if (newMessage.trim()) {
@@ -110,7 +125,9 @@ const Chat = ({}) => {
                         {msg.name}
                       </span>
                     </div>
-                    <div className="break-words">{msg.text}</div>
+                    <div className="break-words">
+                      {msg.translatedText || msg.text}
+                    </div>
                   </div>
                   {msg.userId === user.uid && (
                     <img

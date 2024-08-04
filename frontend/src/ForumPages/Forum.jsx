@@ -23,10 +23,11 @@ import {
 import { auth, db, storage } from "../config/firebase-config";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { UploadOutlined } from '@ant-design/icons';
-import { Button, message, Upload } from 'antd';
+import { UploadOutlined } from "@ant-design/icons";
+import { Button, message, Upload } from "antd";
+import { translateText } from "../utils";
 
-function Forum() {
+function Forum({ lang }) {
   const [user, loading, error] = useAuthState(auth);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [posts, setPosts] = useState([]);
@@ -35,6 +36,12 @@ function Forum() {
   const [uploadError, setUploadError] = useState(null);
   const [downloadURL, setDownloadURL] = useState(null);
   const [imgFile, setImgFile] = useState(null);
+  const [staticText, setStaticText] = useState([
+    "Public Forum",
+    "Join the conversation to connect with the community!",
+    "Create a new Discussion",
+  ]);
+  const [loadingTranslation, setLoadingTranslation] = useState(false);
 
   const navigate = useNavigate();
 
@@ -73,6 +80,46 @@ function Forum() {
     }
   };
 
+  const translatePosts = async (posts, targetLanguage) => {
+    try {
+      const translatedPosts = await Promise.all(
+        posts.map(async (post) => {
+          const translatedTitle = await translateText(post.title, targetLanguage);
+          const translatedDesc = await translateText(post.desc, targetLanguage);
+          return { ...post, title: translatedTitle, desc: translatedDesc };
+        })
+      );
+      return translatedPosts;
+    } catch (error) {
+      console.error("Error translating posts: ", error);
+      return posts;
+    }
+  };
+
+  const translatePage = async (targetLanguage) => {
+    try {
+      setLoadingTranslation(true);
+      const translatedPageText = await Promise.all(
+        staticText.map(async (t) => {
+          const translatedStatic = await translateText(t, targetLanguage);
+          return translatedStatic;
+        })
+      );
+      setStaticText(translatedPageText);
+
+      const translatedPosts = await translatePosts(posts, targetLanguage);
+      setPosts(translatedPosts);
+    } catch (error) {
+      console.error("Error translating static text: ", error);
+    } finally {
+      setLoadingTranslation(false);
+    }
+  };
+
+  useEffect(() => {
+    translatePage(lang);
+  }, [lang]);
+
   const handleSavePost = async () => {
     if (!newPost.title || !newPost.description) {
       message.error("Title and Description are required!");
@@ -98,15 +145,18 @@ function Forum() {
 
   useEffect(() => {
     const q = query(collection(db, "forumPosts"), orderBy("timestamp", "desc"));
-    const unsubscribe = onSnapshot(q, (qSnapShot) => {
+    const unsubscribe = onSnapshot(q, async (qSnapShot) => {
       const posts = [];
       qSnapShot.forEach((doc) => {
         posts.push({ id: doc.id, ...doc.data() });
       });
-      setPosts(posts);
+
+      // Translate the fetched posts based on the selected language
+      const translatedPosts = await translatePosts(posts, lang);
+      setPosts(translatedPosts);
     });
     return () => unsubscribe();
-  }, []);
+  }, [lang]);
 
   const handleChange = (e) => {
     const { id, value } = e.target;
@@ -114,7 +164,9 @@ function Forum() {
   };
 
   const handlePostClick = (postId) => {
-    navigate(`/forum/post/${postId}`);
+    navigate(`/forum/post/${postId}`,{state:{
+      lang:lang
+    }});
   };
 
   const handleDropdownToggle = (postId) => {
@@ -123,13 +175,13 @@ function Forum() {
 
   const uploadProps = {
     beforeUpload: (file) => {
-     setImgFile(file);
+      setImgFile(file);
       return false; // Prevent automatic upload
     },
     onRemove: () => {
       setDownloadURL(null);
       setUploadError(null);
-      setImgFile(null)
+      setImgFile(null);
     },
   };
 
@@ -137,10 +189,10 @@ function Forum() {
     <div className="relative pt-10 pb-32 h-screen overflow-y-auto">
       <div className="flex flex-col items-center mb-10">
         <h2 className="font-extrabold text-3xl text-indigo-950 mb-3">
-          Public Forum
+          {staticText[0]}
         </h2>
         <h2 className="font-semibold text-lg text-purple-400 mb-10">
-          Join the conversation to connect with the community!
+          {staticText[1]}
         </h2>
       </div>
       <div
@@ -153,7 +205,7 @@ function Forum() {
             className="w-full bg-indigo-950 text-white px-4 py-2 rounded mb-6 hover:bg-purple-400 transition-colors duration-300"
             onClick={handleOpenModal}
           >
-            Create a New Discussion
+            {staticText[2]}
           </button>
         </div>
 
@@ -186,10 +238,12 @@ function Forum() {
                   <h2 className="font-bold text-xl text-indigo-950 mb-2">
                     {post.title}
                   </h2>
-                  <div className="w-[400px]  ">
+                  <div className="w-[400px]">
                     <img src={post?.imageURL} className="w-full" alt="" />
                   </div>
-                  <p className="text-gray-800 mb-4 font-semibold">{post.desc}</p>
+                  <p className="text-gray-800 mb-4 font-semibold">
+                    {post.desc}
+                  </p>
                   <div className="text-gray-600 mb-4">
                     <p className="text-sm font-medium text-slate-900">
                       Posted by: {post.displayName}
@@ -245,21 +299,15 @@ function Forum() {
               />
             </div>
             <div>
-              <label className="block text-gray-700 mb-2">Image <small className="text-red-700">(Optional)</small></label>
+              <label className="block text-gray-700 mb-2">
+                Image <small className="text-red-700">(Optional)</small>
+              </label>
               <Upload {...uploadProps}>
                 <Button icon={<UploadOutlined />}>Click to Upload</Button>
               </Upload>
               {uploadError && (
                 <p className="error text-red-800">{uploadError}</p>
               )}
-              {/* {imgFile && (
-                <Button
-                  className="mt-2"
-                  onClick={() => handleUpload(imgFile)}
-                >
-                  Upload
-                </Button>
-              )} */}
             </div>
             <div className="flex justify-end space-x-4">
               <button

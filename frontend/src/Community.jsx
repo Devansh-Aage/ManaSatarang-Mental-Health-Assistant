@@ -11,32 +11,63 @@ import "react-loading-skeleton/dist/skeleton.css";
 import { BadgeCheck, Users } from "lucide-react";
 import CommunitySidebar from "./components/CommunitySidebar";
 import { db } from "./config/firebase-config";
+import axios from "axios";
+import { translateText } from "./utils";
 
-const staticText = [
-  'Communities',
-  "Student Circle",
-  "Chronic Illness Support Group",
-  "Workplace Wellness",
-];
-
-const Community = ({ user, userData,lang }) => {
+const Community = ({ user, userData, lang }) => {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [loading, setLoading] = useState(true);
+  const [loadingTranslation, setloadingTranslation] = useState(false);
+  const [staticText, setstaticText] = useState([
+    "Community",
+    "Student Circle",
+    "Chronic Illness Support Group",
+    "Corporate Group",
+  ]);
   const messagesEndRef = useRef(null);
 
   useEffect(() => {
     const q = query(collection(db, "messages"), orderBy("timestamp", "asc"));
-    const unsubscribe = onSnapshot(q, (querySnapshot) => {
-      const messages = [];
-      querySnapshot.forEach((doc) => {
-        messages.push(doc.data());
-      });
-      setMessages(messages);
+    const unsubscribe = onSnapshot(q, async (querySnapshot) => {
+      const translatedMessages = [];
+      for (const doc of querySnapshot.docs) {
+        const messageData = doc.data();
+        const translatedText = await translateText(messageData.text, lang);
+        const translatedMessage = {
+          ...messageData,
+          text: translatedText,
+        };
+        translatedMessages.push(translatedMessage);
+      }
+      setMessages(translatedMessages);
       setLoading(false);
     });
     return () => unsubscribe();
-  }, []);
+  }, [lang]);
+
+
+
+  const translatePage = async (text, targetLanguage) => {
+    try {
+      setloadingTranslation(true);
+      const translatedPageText = await Promise.all(
+        staticText.map(async (t) => {
+          const translatedStatic = await translateText(t, targetLanguage);
+          return translatedStatic;
+        })
+      );
+      setstaticText(translatedPageText);
+    } catch (error) {
+      console.error("Error translating links: ", error);
+    } finally {
+      setloadingTranslation(false);
+    }
+  };
+
+  useEffect(() => {
+    translatePage(staticText, lang);
+  }, [lang]);
 
   useEffect(() => {
     if (!loading) {
@@ -66,7 +97,7 @@ const Community = ({ user, userData,lang }) => {
       <div className="hidden  lg:block  min-h-[85vh] justify-self-center self-center lg:w-[25vw] flex-shrink-0">
         <div className="mt-14"></div>
         <div className="ml-4">
-          <CommunitySidebar />
+          <CommunitySidebar staticText={staticText} />
         </div>
       </div>
       <div className="flex flex-col justify-end h-[90vh] mt-[6rem] flex-grow px-2">
@@ -102,7 +133,13 @@ const Community = ({ user, userData,lang }) => {
                           : "bg-white text-left"
                       }`}
                     >
-                      <div className={`flex ${ msg.userId === user.uid ? 'justify-end':'justify-start'}  items-center mb-1`}>
+                      <div
+                        className={`flex ${
+                          msg.userId === user.uid
+                            ? "justify-end"
+                            : "justify-start"
+                        }  items-center mb-1`}
+                      >
                         <span className="font-bold text-slate-600  mr-1">
                           {msg.name}
                         </span>
