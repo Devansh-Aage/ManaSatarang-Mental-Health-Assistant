@@ -25,7 +25,7 @@ model = genai.GenerativeModel(
     model_name="gemini-1.5-pro",
     generation_config=generation_config,
     system_instruction=(
-        "Recommend strictly 5 therapists. Just give name. Nothing else"
+        "Recommend strictly 5 therapists. Just give email. Nothing else"
     ),
 )
 
@@ -72,7 +72,7 @@ def recommend_therapists():
     therapist_list = []
     for therapist in therapists:
         therapist_data = therapist.to_dict()
-        therapist_list.append(f"Name: {therapist_data['name']}, Specialization: {therapist_data['specialization']}, Location: {therapist_data['location']}, Bio: {therapist_data['bio']}")
+        therapist_list.append(f"Name: {therapist_data['name']}, Specialization: {therapist_data['specialization']}, Location: {therapist_data['location']}, Bio: {therapist_data['bio']}, Email: {therapist_data['email']}")
 
     # Generate recommendations based on user description
     recommendations = generate_recommendations(user_description, therapist_list)
