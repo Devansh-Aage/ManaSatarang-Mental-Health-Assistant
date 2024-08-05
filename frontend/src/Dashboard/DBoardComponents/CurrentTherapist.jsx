@@ -14,7 +14,7 @@ function CurrentTherapist() {
   }, []);
 
   return (
-    <div className='bg-white border-2 rounded-xl p-4 flex flex-col items-center justify-center col-span-2 row-span-3'>
+    <div className='bg-white border rounded-xl p-4 flex flex-col items-center justify-center row-span-3'>
       {therapist ? (
         <>
         <h2 className='text-lg text-black mb-7'>Current Therapist</h2>

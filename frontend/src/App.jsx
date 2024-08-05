@@ -179,7 +179,7 @@ const App = () => {
   };
 
   return (
-    <div className="flex absolute inset-0 h-full w-full bg-white [background:radial-gradient(125%_125%_at_50%_10%,#fff_40%,#63e_100%)]">
+    <div className="flex absolute inset-0 h-full w-full bg-[#F9F9F9]">
       <Navbar
         user={user}
         onNavbarToggle={(isOpen) =>
@@ -193,6 +193,7 @@ const App = () => {
         <ToastContainer />
         <div className="overflow-hidden ">
           <Routes>
+            <Route path="/" element={<Dashboard lang={appLanguage}/>} />
             <Route
               path="/login"
               element={<Login user={user} lang={appLanguage} />}
@@ -201,7 +202,7 @@ const App = () => {
               path="/search"
               element={<Home activities={activities} userData={userData} />}
             />
-            <Route path="/" element={<Dashboard />} />
+            
             <Route
               path="/profile"
               element={

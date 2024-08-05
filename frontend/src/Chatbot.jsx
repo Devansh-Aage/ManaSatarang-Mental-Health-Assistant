@@ -245,7 +245,7 @@ const Chatbot = ({ user, lang }) => {
           {staticText[1]}
         </h2>
       </div>
-      <div className="flex flex-col lg:w-[65vw] max-h-[80vh] overflow-hidden mx-auto px-3 py-2 backdrop-blur-sm bg-white/30 rounded-lg">
+      <div className="flex flex-col lg:w-[65vw] max-h-[80vh] overflow-hidden lg:mx-auto px-3 py-2 backdrop-blur-sm bg-white/30 rounded-lg">
         <div className="flex-1 min-h-[40vh] overflow-y-auto backdrop-blur-sm bg-slate-200/30 border rounded-lg p-3 border-purple-400">
           <div className="flex flex-col gap-2">
             {messages?.length > 0 ? (
@@ -333,7 +333,7 @@ const Chatbot = ({ user, lang }) => {
           {!readingEnabled && (
             <button
               onClick={toggleReading}
-              className="p-3 bg-purple-800 font-semibold text-white rounded-lg hover:bg-purple-600"
+              className="p-3 sm:text-sm bg-purple-800 font-semibold text-white rounded-lg hover:bg-purple-600"
             >
               Enable Reading
             </button>

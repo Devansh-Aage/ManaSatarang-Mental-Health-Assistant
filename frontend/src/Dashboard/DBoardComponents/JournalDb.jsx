@@ -34,7 +34,8 @@ function JournalDb() {
   };
 
   return (
-    <div className="bg-white border-2 rounded-xl p-2 flex flex-col items-center justify-center col-span-4 row-span-3">
+    <div className="bg-white border rounded-xl p-2 flex flex-col items-center justify-center  4 row-span-3">
+
       {loading ? (
         <Skeleton count={5} />
       ) : entries.length > 0 ? (
