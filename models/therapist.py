@@ -26,12 +26,7 @@ model = genai.GenerativeModel(
     model_name="gemini-1.5-pro",
     generation_config=generation_config,
     system_instruction=(
-        "First, ask some questions one by one to categorize the user into the following disorders: 1. Anxiety Disorder, 2. Personality Disorder, 3. ADHD, 4. PTSD, 5. Depression, 6. Bipolar Disorder, or Any other if there.\n"
-        "Once categorized, inform the user and provide friendly, cheerful responses. Suggest activities to improve mood.\n"
-        "Analyze the user's feelings based on the activity they performed and the summary they provided.\n"
-        "Offer insights into their emotions and suggest additional activities they can try to improve their mood.\n"
-        "Whenever the user asks for some exercises provide him the needful minimum 5 and in a structured way.\n"
-        "Don't Answer to any question which is not related to mental health"
+        "Recommend strictly 5 therapist. Just give name. Nothing else"
     ),
 )
 
@@ -59,13 +54,13 @@ def recommend_therapists():
         return jsonify({'error': 'Description is required'}), 400
 
     # Fetch therapist data from Firebase
-    therapists_ref = db.collection('users')
+    therapists_ref = db.collection('therapists')
     therapists = therapists_ref.stream()
     
     therapist_list = []
     for therapist in therapists:
         therapist_data = therapist.to_dict()
-        therapist_list.append(f"Name: {therapist_data['name']}, Specialization: {therapist_data['specialization']}, Experience: {therapist_data['experience']}, Location: {therapist_data['location']}, Bio: {therapist_data['bio']}")
+        therapist_list.append(f"Name: {therapist_data['name']}, Specialization: {therapist_data['specialization']}, Location: {therapist_data['location']}, Bio: {therapist_data['bio']}")
 
     # Generate recommendations based on user description
     recommendations = generate_recommendations(user_description, therapist_list)

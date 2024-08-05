@@ -96,7 +96,7 @@ const Chatbot = ({ user }) => {
     try {
       const response = await axios.post(
         "http://127.0.0.1:5000/chat",
-        { user_input: userInput, uid: user.uid },
+        { user_input: userInput, uid: "u39J8dETQaU42VLVk9Dxft8pDmy2" },
         {
           headers: {
             "Content-Type": "application/json",
