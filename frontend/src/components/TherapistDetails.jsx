@@ -11,7 +11,7 @@ import "antd/dist/reset.css"; // Ensure Ant Design styles are imported
 
 const TherapistDetails = () => {
   const location = useLocation();
-  const { name, degree, experience, specialty, imgPath, fees, description } =
+  const { name, email, bio, specialization, profile, fees, offLocation } =
     location.state || {};
   const [user, loading, error] = useAuthState(auth);
 
@@ -99,12 +99,12 @@ const TherapistDetails = () => {
             <h1 className="text-3xl font-extrabold text-indigo-950 mb-4">
               Therapist Details
             </h1>
-            <p className="text-lg text-gray-600">{description}</p>
+          
           </div>
 
           <div className="flex flex-row items-center bg-white shadow-lg rounded-lg p-6 mb-6">
             <img
-              src={imgPath}
+              src={profile}
               alt={name}
               className="w-60 h-48 object-cover rounded-lg mb-4 md:mb-0 mr-10"
             />
@@ -112,9 +112,10 @@ const TherapistDetails = () => {
               <h2 className="text-2xl font-extrabold text-indigo-950 mb-2">
                 {name}
               </h2>
-              <p className="text-lg text-gray-700">{degree}</p>
-              <p className="text-lg text-gray-700">Experience: {experience}</p>
-              <p className="text-lg text-gray-700">{specialty}</p>
+              <p className="text-lg text-gray-600">{bio}</p>
+              <p className="text-lg text-gray-700">{offLocation}</p>
+              {/* <p className="text-lg text-gray-700">Experience: {experience}</p> */}
+              <p className="text-lg text-gray-700">{specialization}</p>
               <p className="text-lg font-semibold text-green-600 mt-2">
                 &#x20b9;{fees} per Appointment
               </p>

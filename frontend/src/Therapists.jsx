@@ -2,42 +2,44 @@ import React, { useState, useEffect } from "react";
 import TherapistCard from "./components/TherapistCard";
 import axios from "axios";
 import { translateText } from "./utils";
+import { db } from "./config/firebase-config";
+import { collection, getDocs } from "firebase/firestore";
 
-const therapists = [
-  {
-    name: "Dr. Emily Johnson",
-    degree: "Ph.D. in Clinical Psychology",
-    experience: "10 years",
-    specialty: "Cognitive Behavioral Therapy (CBT)",
-    imgPath: "/female3.jpg",
-    fees: 1500,
-  },
-  {
-    name: "Dr. Michael Smith",
-    degree: "Psy.D. in Clinical Psychology",
-    experience: "8 years",
-    specialty: "Trauma and PTSD",
-    imgPath: "/male1.jpg",
-    fees: 1400,
-  },
-  {
-    name: "Dr. Sarah Brown",
-    degree: "M.S. in Counseling Psychology",
-    experience: "6 years",
-    specialty: "Anxiety and Depression",
-    imgPath: "/female2.jpg",
-    fees: 1300,
-  },
-  {
-    uid: "oQyoMJNC6oZ3gh2Xxv8LIZTgfuw2",
-    name: "Dr. David Miller",
-    degree: "Ph.D. in Counseling Psychology",
-    experience: "12 years",
-    specialty: "Family and Couples Therapy",
-    imgPath: "/male2.jpg",
-    fees: 1600,
-  },
-];
+// const therapists = [
+//   {
+//     name: "Dr. Emily Johnson",
+//     degree: "Ph.D. in Clinical Psychology",
+//     experience: "10 years",
+//     specialty: "Cognitive Behavioral Therapy (CBT)",
+//     imgPath: "/female3.jpg",
+//     fees: 1500,
+//   },
+//   {
+//     name: "Dr. Michael Smith",
+//     degree: "Psy.D. in Clinical Psychology",
+//     experience: "8 years",
+//     specialty: "Trauma and PTSD",
+//     imgPath: "/male1.jpg",
+//     fees: 1400,
+//   },
+//   {
+//     name: "Dr. Sarah Brown",
+//     degree: "M.S. in Counseling Psychology",
+//     experience: "6 years",
+//     specialty: "Anxiety and Depression",
+//     imgPath: "/female2.jpg",
+//     fees: 1300,
+//   },
+//   {
+//     uid: "oQyoMJNC6oZ3gh2Xxv8LIZTgfuw2",
+//     name: "Dr. David Miller",
+//     degree: "Ph.D. in Counseling Psychology",
+//     experience: "12 years",
+//     specialty: "Family and Couples Therapy",
+//     imgPath: "/male2.jpg",
+//     fees: 1600,
+//   },
+// ];
 
 const Therapists = ({ lang }) => {
   const [staticText, setStaticText] = useState([
@@ -48,8 +50,24 @@ const Therapists = ({ lang }) => {
     "Our experienced therapists provide a range of services to support your mental health. From individual therapy sessions to group workshops, we offer comprehensive support tailored to your specific needs. Our team is committed to creating a safe and supportive environment where you can explore your feelings, set goals, and work towards a healthier, happier you.",
     "Therapists We Provide",
   ]);
+  const [therapists, settherapists] = useState([]);
 
+  useEffect(() => {
+    const fetchTherapists = async () => {
+      try {
+        const therapistCollection = await getDocs(collection(db, "therapists"));
+        const therapistList = therapistCollection.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        settherapists(therapistList);
+      } catch (error) {
+        console.error("Error fetching therapists:", error);
+      }
+    };
 
+    fetchTherapists();
+  }, []);
 
   useEffect(() => {
     const translateStaticText = async () => {
