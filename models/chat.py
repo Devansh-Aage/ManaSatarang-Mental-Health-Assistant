@@ -42,13 +42,7 @@ model = genai.GenerativeModel(
     ),
 )
 
-TherapistModel = genai.GenerativeModel(
-    model_name="gemini-1.5-pro",
-    generation_config=generation_config,
-    system_instruction=(
-        ""
-    ),
-)
+
 
 # Initialize chat session and response count
 chat_session = model.start_chat(history=[])
@@ -91,8 +85,7 @@ def chat():
 
     return jsonify({"response": formatted_response, "youtube_videos": youtube_videos})
 
-@app.route('/recommend', methods=['POST'])
-def recommend_therapists():
+
     user_data = request.json
     user_description = user_data.get('description')
 
@@ -207,18 +200,6 @@ def search_google(query, num_results=5):
         print(error)
         return []
 
-def generate_recommendations(user_description, therapists):
-    response = TherapistModel.send_message(f"Based on the following description: '{user_description}', recommend 5 therapists from the list below:\n\n{therapists}\n")
-    recommendations = response.text
-
-    # Parse the response to extract therapist details
-    recommended_therapists = []
-    for line in recommendations.splitlines():
-        # Assume that each recommendation is formatted in a specific way
-        if line.strip():  # Make sure line is not empty
-            recommended_therapists.append(line.strip())
-
-    return recommended_therapists
 
 
 if __name__ == "__main__":

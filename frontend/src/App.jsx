@@ -268,7 +268,7 @@ const App = () => {
               path="/forum/post/:postId"
               element={<PostPage lang={appLanguage} />}
             />
-            <Route path="/chatbot" element={<Chatbot lang={appLanguage} />} />
+            <Route path="/chatbot" element={<Chatbot lang={appLanguage} user={user} />} />
             <Route
               path="/community/student"
               element={

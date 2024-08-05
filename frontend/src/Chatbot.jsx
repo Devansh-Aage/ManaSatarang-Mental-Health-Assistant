@@ -7,9 +7,25 @@ import "react-loading-skeleton/dist/skeleton.css";
 import Filter from "bad-words";
 import EmojiPicker from "emoji-picker-react";
 import { toast } from "react-toastify";
+import { db } from "./config/firebase-config"; // Import your Firestore config
+import {
+  collection,
+  addDoc,
+  Timestamp,
+  query,
+  orderBy,
+  onSnapshot,
+  where,
+} from "firebase/firestore";
+import { translateText } from "./utils";
 
-const Chatbot = ({ user }) => {
+const Chatbot = ({ user, lang }) => {
   const [messages, setMessages] = useState([]);
+  const [staticText, setstaticText] = useState([
+    "Meet Serena!",
+    "Your Supportive Friend for a Happier You!",
+    "Disable Reading",
+  ]);
   const [userInput, setUserInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [isEmojiPickerVisible, setIsEmojiPickerVisible] = useState(false);
@@ -23,6 +39,8 @@ const Chatbot = ({ user }) => {
   const [videoMessages, setVideoMessages] = useState([]);
   const { speak, speaking, cancel, supported, voices } = useSpeechSynthesis();
   const filter = new Filter();
+  console.log(user);
+  
 
   const recognition = useRef(null);
   const [readingEnabled, setReadingEnabled] = useState(true);
@@ -49,6 +67,19 @@ const Chatbot = ({ user }) => {
     const index = parseInt(event.target.value, 10);
     setSelectedVoice(voices[index]);
     setVoiceIndex(index);
+  };
+
+  const saveMessageToFirestore = async (sender, text) => {
+    try {
+      await addDoc(collection(db, "chatbot"), {
+        uid: user?.uid,
+        sender,
+        text,
+        timestamp: Timestamp.now(),
+      });
+    } catch (error) {
+      console.error("Error saving message to Firestore:", error);
+    }
   };
 
   const handlePitchChange = (event) => {
@@ -93,10 +124,12 @@ const Chatbot = ({ user }) => {
     setLoading(true);
     setUserInput("");
 
+    await saveMessageToFirestore("user", newMessage.text);
+
     try {
       const response = await axios.post(
         "http://127.0.0.1:5000/chat",
-        { user_input: userInput, uid: user.uid },
+        { user_input: userInput, uid: user?.uid },
         {
           headers: {
             "Content-Type": "application/json",
@@ -105,30 +138,31 @@ const Chatbot = ({ user }) => {
       );
 
       const chatbotResponse = { sender: "bot", text: response.data.response };
-      const videoMessages = response.data.youtube_videos.map(
-        (video, index) => ({
-          sender: "bot",
-          text: (
-            <div key={index} className="flex flex-col items-center">
-              <a
-                href={video.link}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-center"
-              >
-                <img
-                  src={video.thumbnail}
-                  alt={video.title}
-                  className="w-full max-w-xs rounded-lg mb-2"
-                />
-                <p className="text-sm text-gray-600">{video.title}</p>
-              </a>
-            </div>
-          ),
-        })
-      );
+      // const videoMessages = response.data.youtube_videos.map(
+      //   (video, index) => ({
+      //     sender: "bot",
+      //     text: (
+      //       <div key={index} className="flex flex-col items-center">
+      //         <a
+      //           href={video.link}
+      //           target="_blank"
+      //           rel="noopener noreferrer"
+      //           className="text-center"
+      //         >
+      //           <img
+      //             src={video.thumbnail}
+      //             alt={video.title}
+      //             className="w-full max-w-xs rounded-lg mb-2"
+      //           />
+      //           <p className="text-sm text-gray-600">{video.title}</p>
+      //         </a>
+      //       </div>
+      //     ),
+      //   })
+      // );
 
       setMessages((prevMessages) => [...prevMessages, chatbotResponse]);
+      await saveMessageToFirestore("bot", chatbotResponse.text);
       setVideoMessages(videoMessages);
       speakResponse(response.data.response);
     } catch (error) {
@@ -161,41 +195,82 @@ const Chatbot = ({ user }) => {
     setUserInput((prevInput) => prevInput + emojiObject.emoji);
   };
 
+  useEffect(() => {
+    const q = query(
+      collection(db, "chatbot"),
+      where("uid", "==", user?.uid), // Only retrieve messages with the matching UID
+      orderBy("timestamp", "asc")
+    );
+
+    const unsubscribe = onSnapshot(q, async (querySnapshot) => {
+      const translatedMessages = [];
+      for (const doc of querySnapshot.docs) {
+        const messageData = doc.data();
+        const translatedText = await translateText(messageData.text, lang);
+        const translatedMessage = {
+          ...messageData,
+          text: translatedText,
+        };
+        translatedMessages.push(translatedMessage);
+      }
+      setMessages(translatedMessages);
+    });
+
+    translatePage(staticText, lang);
+
+    return () => unsubscribe();
+  }, [lang, user?.uid]);
+
+  const translatePage = async (text, targetLanguage) => {
+    try {
+      const translatedPageText = await Promise.all(
+        staticText.map(async (t) => {
+          const translatedStatic = await translateText(t, targetLanguage);
+          return translatedStatic;
+        })
+      );
+      setstaticText(translatedPageText);
+    } catch (error) {
+      console.error("Error translating links: ", error);
+    }
+  };
+
   return (
     <div className="pt-10">
       <div className="flex flex-col items-center mb-10">
         <h2 className="font-extrabold text-3xl text-indigo-950 mb-3">
-          Meet Serena!
+          {staticText[0]}
         </h2>
         <h2 className="font-semibold text-lg text-purple-400">
-          Your Supportive Friend for a Happier You!
+          {staticText[1]}
         </h2>
       </div>
       <div className="flex flex-col lg:w-[65vw] max-h-[80vh] overflow-hidden mx-auto px-3 py-2 backdrop-blur-sm bg-white/30 rounded-lg">
         <div className="flex-1 min-h-[40vh] overflow-y-auto backdrop-blur-sm bg-slate-200/30 border rounded-lg p-3 border-purple-400">
           <div className="flex flex-col gap-2">
-            {messages.map((msg, index) => (
-              <div
-                key={index}
-                className={`flex mb-2 ${
-                  msg.sender === "user" ? "justify-end" : "justify-start"
-                }`}
-              >
+            {messages?.length > 0 ? (
+              messages.map((msg, index) => (
                 <div
-                  className={`rounded-xl p-3 max-w-xs ${
-                    msg.sender === "user"
-                      ? "bg-purple-300 text-right"
-                      : "bg-white text-left"
+                  key={index}
+                  className={`flex mb-2 ${
+                    msg.sender === "user" ? "justify-end" : "justify-start"
                   }`}
                 >
-                  {msg.text}
+                  <div
+                    className={`rounded-xl p-3 max-w-xs ${
+                      msg.sender === "user"
+                        ? "bg-purple-300 text-right"
+                        : "bg-white text-left"
+                    }`}
+                  >
+                    {msg.text}
+                  </div>
+                  <div ref={messagesEndRef} />
                 </div>
-              </div>
-            ))}
-            {loading && (
-              <Skeleton height={50} count={1} className="mb-2 w-[50%]" />
+              ))
+            ) : (
+              <p>No messages yet</p>
             )}
-            <div ref={messagesEndRef} />
           </div>
         </div>
 
@@ -271,7 +346,7 @@ const Chatbot = ({ user }) => {
                   readingEnabled ? "bg-purple-400" : "bg-purple-800"
                 } font-semibold text-white rounded-lg hover:bg-purple-600`}
               >
-                Disable Reading
+                {staticText[2] || 'Disable Reading'}
               </button>
             </>
           )}
@@ -292,6 +367,8 @@ const Chatbot = ({ user }) => {
         </div>
 
         {readingEnabled && (
+
+
           <>
             <div className="mt-4 flex flex-col gap-4">
               {videoMessages.map((msg, index) => (
