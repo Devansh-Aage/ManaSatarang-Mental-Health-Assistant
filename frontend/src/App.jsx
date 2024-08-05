@@ -130,7 +130,7 @@ const App = () => {
 
   const fetchTaskData = async () => {
     const storedLastUpdateDate = localStorage.getItem("lastUpdateDate");
-    // const storedLastUpdateDate = "30/07/2024";
+    // const storedLastUpdateDate = "05/06/2024";
     const today = new Date().toLocaleDateString("en-GB");
     console.log(today);
     console.log(storedLastUpdateDate);
@@ -193,7 +193,7 @@ const App = () => {
         <ToastContainer />
         <div className="overflow-hidden ">
           <Routes>
-            <Route path="/" element={<Dashboard lang={appLanguage}/>} />
+            <Route path="/" element={<Dashboard lang={appLanguage} />} />
             <Route
               path="/login"
               element={<Login user={user} lang={appLanguage} />}
@@ -202,7 +202,7 @@ const App = () => {
               path="/search"
               element={<Home activities={activities} userData={userData} />}
             />
-            
+
             <Route
               path="/profile"
               element={

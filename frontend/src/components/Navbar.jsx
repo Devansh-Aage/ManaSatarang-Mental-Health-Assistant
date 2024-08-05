@@ -54,8 +54,6 @@ const Navbar = ({ user, setAppLanguage }) => {
     router("/profile");
   };
 
-  
-
   const handleLogout = async () => {
     await signOut(auth);
     router("/login");
@@ -65,12 +63,12 @@ const Navbar = ({ user, setAppLanguage }) => {
   useEffect(() => {
     translateLinks(navlinks, language);
   }, [language]);
-  
+
   const handleLanguageChange = (value) => {
     setLanguage(value);
     setAppLanguage(value);
   };
-  
+
   const translateText = async (text, targetLanguage) => {
     try {
       const response = await axios.post(
@@ -90,7 +88,7 @@ const Navbar = ({ user, setAppLanguage }) => {
       return text;
     }
   };
-  
+
   const translateLinks = async (navlinks, targetLanguage) => {
     try {
       setLoadingTranslations(true);
@@ -104,8 +102,6 @@ const Navbar = ({ user, setAppLanguage }) => {
       setLoadingTranslations(false);
     }
   };
-  
-
 
   const handleLogin = async () => {
     const provider = new GoogleAuthProvider();
@@ -138,13 +134,10 @@ const Navbar = ({ user, setAppLanguage }) => {
         {/* Toggle Button */}
         <div className={`flex items-center justify-between p-3 border-y-0`}>
           <button
-           
             onClick={handleToggle}
-           
             className="text-gray-700 hover:bg-gray-200 rounded transition-colors duration-200"
-          
           >
-            {isOpen ? <ChevronLeft size={24}  /> : <ChevronRight size={24}  />}
+            {isOpen ? <ChevronLeft size={24} /> : <ChevronRight size={24} />}
           </button>
           <Select
             value={language}
@@ -158,13 +151,17 @@ const Navbar = ({ user, setAppLanguage }) => {
             <Option value="de">German</Option>
             <Option value="hi">Hindi</Option>
             <Option value="mr">Marathi</Option>
+            <Option value="or">Odia</Option>
+            <Option value="ur">Urdu</Option>
             {/* Add more languages as needed */}
           </Select>
         </div>
 
         {/* Navigation Links */}
         {/* Navigation Links */}
-        <div className={`flex flex-col flex-1 p-4 ${isOpen ? "block" : "hidden"}`}>
+        <div
+          className={`flex flex-col flex-1 p-4 ${isOpen ? "block" : "hidden"}`}
+        >
           <nav className="flex flex-col space-y-10">
             {user && (
               <Link
@@ -182,7 +179,9 @@ const Navbar = ({ user, setAppLanguage }) => {
               className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left"
             >
               <TextSearch size={20} />
-              <span className={`${isOpen ? "block" : "hidden"}`}>Wellness Library</span>
+              <span className={`${isOpen ? "block" : "hidden"}`}>
+                Wellness Library
+              </span>
             </Link>
             <Link
               to="/chatbot"
@@ -196,7 +195,9 @@ const Navbar = ({ user, setAppLanguage }) => {
               className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left"
             >
               <Users size={20} />
-              <span className={`${isOpen ? "block" : "hidden"}`}>Community</span>
+              <span className={`${isOpen ? "block" : "hidden"}`}>
+                Community
+              </span>
             </Link>
             <Link
               to="/forum"
@@ -210,7 +211,9 @@ const Navbar = ({ user, setAppLanguage }) => {
               className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left"
             >
               <User size={20} />
-              <span className={`${isOpen ? "block" : "hidden"}`}>Our Therapists</span>
+              <span className={`${isOpen ? "block" : "hidden"}`}>
+                Our Therapists
+              </span>
             </Link>
 
             {!user && (
@@ -226,10 +229,12 @@ const Navbar = ({ user, setAppLanguage }) => {
 
         {/* Icon Container in Closed View */}
         <div
-          className={`flex flex-col justify-between flex-1 p-4 ${isOpen ? "hidden" : "block"}`}
+          className={`flex flex-col justify-between flex-1 p-4 ${
+            isOpen ? "hidden" : "block"
+          }`}
         >
           <div className="lg:flex hidden flex-col items-center space-y-10">
-          {user && (
+            {user && (
               <Link
                 to="/"
                 className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left"
@@ -288,7 +293,9 @@ const Navbar = ({ user, setAppLanguage }) => {
         {/* Profile Section */}
         {user && (
           <div
-            className={`p-4 bg-white shadow-md border-t border-gray-300 ${isOpen ? "block " : "hidden"}`}
+            className={`p-4 bg-white shadow-md border-t border-gray-300 ${
+              isOpen ? "block " : "hidden"
+            }`}
           >
             <div className="flex items-center space-x-3">
               <img

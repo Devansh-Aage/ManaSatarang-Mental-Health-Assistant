@@ -40,7 +40,6 @@ const Chatbot = ({ user, lang }) => {
   const { speak, speaking, cancel, supported, voices } = useSpeechSynthesis();
   const filter = new Filter();
   console.log(user);
-  
 
   const recognition = useRef(null);
   const [readingEnabled, setReadingEnabled] = useState(true);
@@ -346,7 +345,7 @@ const Chatbot = ({ user, lang }) => {
                   readingEnabled ? "bg-purple-400" : "bg-purple-800"
                 } font-semibold text-white rounded-lg hover:bg-purple-600`}
               >
-                {staticText[2] || 'Disable Reading'}
+                {staticText[2] || "Disable Reading"}
               </button>
             </>
           )}
@@ -367,8 +366,6 @@ const Chatbot = ({ user, lang }) => {
         </div>
 
         {readingEnabled && (
-
-
           <>
             <div className="mt-4 flex flex-col gap-4">
               {videoMessages.map((msg, index) => (
