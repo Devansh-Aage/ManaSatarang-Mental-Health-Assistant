@@ -15,6 +15,7 @@ import Skeleton from "react-loading-skeleton";
 import { Collapse } from "antd";
 import axios from "axios"; // Import axios for API calls
 const { Panel } = Collapse;
+import EmojiPicker from "emoji-picker-react";
 
 function Journal({ user }) {
   const [formState, setformState] = useState({

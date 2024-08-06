@@ -312,7 +312,7 @@ const App = () => {
               path="/therapists"
               element={
                 user ? (
-                  <Therapists lang={appLanguage} />
+                  <Therapists lang={appLanguage} user={user} />
                 ) : (
                   <Login lang={appLanguage} />
                 )
