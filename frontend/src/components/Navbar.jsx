@@ -18,19 +18,20 @@ import {
 } from "lucide-react";
 import { Select, Spin } from "antd";
 import axios from "axios";
+import { translateText } from "../utils";
 const { Option } = Select;
 
 const Navbar = ({ user, setAppLanguage }) => {
   const navlinks = [
     "Dashboard",
-    "Home",
+    "Wellness Library",
     "SerenaAI",
     "Community",
     "Forum",
-    "Activity",
+    // "Activity",
     "Our Therapists",
-    "Appointments",
-    "Personal Journal",
+    // "Appointments",
+    // "Personal Journal",
   ];
 
   const [isOpen, setIsOpen] = useState(false);
@@ -60,33 +61,11 @@ const Navbar = ({ user, setAppLanguage }) => {
     setIsOpen(false);
     setDropdownOpen(false);
   };
-  useEffect(() => {
-    translateLinks(navlinks, language);
-  }, [language]);
 
   const handleLanguageChange = (value) => {
     setLanguage(value);
     setAppLanguage(value);
-  };
-
-  const translateText = async (text, targetLanguage) => {
-    try {
-      const response = await axios.post(
-        `https://translation.googleapis.com/language/translate/v2`,
-        {},
-        {
-          params: {
-            q: text,
-            target: targetLanguage,
-            key: import.meta.env.VITE_TRANSLATE_KEY,
-          },
-        }
-      );
-      return response.data.data.translations[0].translatedText;
-    } catch (error) {
-      console.error("Error translating text: ", error);
-      return text;
-    }
+    translateLinks(navlinks, value);
   };
 
   const translateLinks = async (navlinks, targetLanguage) => {
@@ -102,12 +81,15 @@ const Navbar = ({ user, setAppLanguage }) => {
       setLoadingTranslations(false);
     }
   };
+  useEffect(() => {
+    translateLinks(navlinks, language);
+  }, [language]);
 
   const handleLogin = async () => {
     const provider = new GoogleAuthProvider();
     try {
       await signInWithPopup(auth, provider);
-      router("/");
+      router("/dashboard");
     } catch (error) {
       console.error("Error signing in: ", error);
     }
@@ -146,13 +128,13 @@ const Navbar = ({ user, setAppLanguage }) => {
             className={`${isOpen ? "flex" : "hidden"}`}
           >
             <Option value="en">English</Option>
-            <Option value="es">Spanish</Option>
-            <Option value="fr">French</Option>
-            <Option value="de">German</Option>
             <Option value="hi">Hindi</Option>
             <Option value="mr">Marathi</Option>
             <Option value="or">Odia</Option>
             <Option value="ur">Urdu</Option>
+            <Option value="es">Spanish</Option>
+            <Option value="fr">French</Option>
+            <Option value="de">German</Option>
             {/* Add more languages as needed */}
           </Select>
         </div>
@@ -165,12 +147,12 @@ const Navbar = ({ user, setAppLanguage }) => {
           <nav className="flex flex-col space-y-10">
             {user && (
               <Link
-                to="/"
+                to="/dashboard"
                 className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left"
               >
                 <LayoutDashboard size={20} />
                 <span className={`${isOpen ? "block" : "hidden"}`}>
-                  Dashboard
+                  {translatedLinks[0]}
                 </span>
               </Link>
             )}
@@ -180,7 +162,7 @@ const Navbar = ({ user, setAppLanguage }) => {
             >
               <TextSearch size={20} />
               <span className={`${isOpen ? "block" : "hidden"}`}>
-                Wellness Library
+                {translatedLinks[1]}
               </span>
             </Link>
             <Link
@@ -188,7 +170,9 @@ const Navbar = ({ user, setAppLanguage }) => {
               className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left"
             >
               <MessageCircle size={20} />
-              <span className={`${isOpen ? "block" : "hidden"}`}>SerenaAI</span>
+              <span className={`${isOpen ? "block" : "hidden"}`}>
+                {translatedLinks[2]}
+              </span>
             </Link>
             <Link
               to="/community/student"
@@ -196,7 +180,7 @@ const Navbar = ({ user, setAppLanguage }) => {
             >
               <Users size={20} />
               <span className={`${isOpen ? "block" : "hidden"}`}>
-                Community
+                {translatedLinks[3]}
               </span>
             </Link>
             <Link
@@ -204,7 +188,9 @@ const Navbar = ({ user, setAppLanguage }) => {
               className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left"
             >
               <BookOpen size={20} />
-              <span className={`${isOpen ? "block" : "hidden"}`}>Forum</span>
+              <span className={`${isOpen ? "block" : "hidden"}`}>
+                {translatedLinks[4]}
+              </span>
             </Link>
             <Link
               to="/therapists"
@@ -212,7 +198,7 @@ const Navbar = ({ user, setAppLanguage }) => {
             >
               <User size={20} />
               <span className={`${isOpen ? "block" : "hidden"}`}>
-                Our Therapists
+                {translatedLinks[5]}
               </span>
             </Link>
 
@@ -236,7 +222,7 @@ const Navbar = ({ user, setAppLanguage }) => {
           <div className="lg:flex hidden flex-col items-center space-y-10">
             {user && (
               <Link
-                to="/"
+                to="/dashboard"
                 className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left"
               >
                 <LayoutDashboard size={20} />

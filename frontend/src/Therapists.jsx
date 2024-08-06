@@ -4,6 +4,7 @@ import axios from "axios";
 import { translateText } from "./utils";
 import { db } from "./config/firebase-config";
 import { collection, getDocs } from "firebase/firestore";
+import { toast } from "react-toastify";
 
 // const therapists = [
 //   {
@@ -41,7 +42,7 @@ import { collection, getDocs } from "firebase/firestore";
 //   },
 // ];
 
-const Therapists = ({ lang }) => {
+const Therapists = ({ lang, user }) => {
   const [staticText, setStaticText] = useState([
     "Meet Our Therapists",
     "Our team of highly qualified therapists is here to support your mental health journey. Explore our range of specialized programs and find the right fit for you.",
@@ -51,6 +52,7 @@ const Therapists = ({ lang }) => {
     "Therapists We Provide",
   ]);
   const [therapists, settherapists] = useState([]);
+  const [recommendTherapist, setrecommendTherapist] = useState([]);
 
   useEffect(() => {
     const fetchTherapists = async () => {
@@ -65,6 +67,22 @@ const Therapists = ({ lang }) => {
         console.error("Error fetching therapists:", error);
       }
     };
+
+    const fetchRecommendTherapist = async () => {
+      try {
+        const res = await axios.post("http://127.0.0.1:8050/recommend", {
+          uid: user?.uid,
+        });
+        if (!res.data) {
+          toast.error("Some Error Occured");
+        }
+        setrecommendTherapist(res.data);
+        console.log(res.data);
+        
+      } catch (error) {}
+    };
+    fetchRecommendTherapist()
+
 
     fetchTherapists();
   }, []);
@@ -110,6 +128,8 @@ const Therapists = ({ lang }) => {
           <TherapistCard key={index} {...therapist} />
         ))}
       </div>
+      <div>{recommendTherapist}</div>
+
     </div>
   );
 };

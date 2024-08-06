@@ -193,7 +193,7 @@ const App = () => {
         <ToastContainer />
         <div className="overflow-hidden ">
           <Routes>
-            <Route path="/" element={<Dashboard lang={appLanguage} />} />
+            <Route path="/dashboard" element={<Dashboard lang={appLanguage}/>} />
             <Route
               path="/login"
               element={<Login user={user} lang={appLanguage} />}
@@ -312,7 +312,7 @@ const App = () => {
               path="/therapists"
               element={
                 user ? (
-                  <Therapists lang={appLanguage} />
+                  <Therapists lang={appLanguage} user={user} />
                 ) : (
                   <Login lang={appLanguage} />
                 )
