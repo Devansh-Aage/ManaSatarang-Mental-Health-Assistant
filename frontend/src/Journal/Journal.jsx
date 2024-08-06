@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { ClipboardList, Loader2, Save } from "lucide-react";
+import React, { useEffect, useState, useRef } from "react";
+import { ClipboardList, Loader2, Save, Mic, MicOff } from "lucide-react";
 import { auth, db } from "../config/firebase-config";
 import {
   addDoc,
@@ -13,7 +13,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { toast } from "react-toastify";
 import Skeleton from "react-loading-skeleton";
 import { Collapse } from "antd";
-import axios from "axios"; // Import axios for API calls
+import axios from "axios";
 const { Panel } = Collapse;
 import EmojiPicker from "emoji-picker-react";
 
@@ -24,6 +24,8 @@ function Journal({ user }) {
   });
   const [loading, setLoading] = useState(false);
   const [entries, setEntries] = useState([]);
+  const [listening, setListening] = useState(false);
+  const recognitionRef = useRef(null);
 
   useEffect(() => {
     const q = query(collection(db, "journals"), where("uid", "==", user.uid));
@@ -38,6 +40,44 @@ function Journal({ user }) {
     return () => unsubscribe();
   }, [user]);
 
+  useEffect(() => {
+    if ("webkitSpeechRecognition" in window) {
+      const SpeechRecognition = window.webkitSpeechRecognition;
+      recognitionRef.current = new SpeechRecognition();
+      recognitionRef.current.continuous = true;
+      recognitionRef.current.interimResults = true;
+      recognitionRef.current.lang = "en-US";
+
+      recognitionRef.current.onresult = (event) => {
+        let interimTranscript = "";
+        let finalTranscript = "";
+
+        for (let i = event.resultIndex; i < event.results.length; i++) {
+          const transcript = event.results[i][0].transcript;
+          if (event.results[i].isFinal) {
+            finalTranscript += transcript;
+          } else {
+            interimTranscript += transcript;
+          }
+        }
+
+        setformState((prev) => ({
+          ...prev,
+          desc: prev.desc + finalTranscript,
+        }));
+      };
+
+      recognitionRef.current.onerror = (event) => {
+        console.error(event.error);
+        setListening(false);
+      };
+
+      recognitionRef.current.onend = () => {
+        setListening(false);
+      };
+    }
+  }, []);
+
   const clearForm = () => {
     setformState({
       title: "",
@@ -51,7 +91,7 @@ function Journal({ user }) {
 
     try {
       const { data } = await axios.post(
-        "http://localhost:8070/classify-emotion",
+        "http://localhost:8080/classify-emotion",
         {
           text: formState.desc,
         }
@@ -79,6 +119,15 @@ function Journal({ user }) {
 
   const onChange = (e) => {
     setformState((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
+  const toggleListening = () => {
+    if (listening) {
+      recognitionRef.current.stop();
+    } else {
+      recognitionRef.current.start();
+    }
+    setListening(!listening);
   };
 
   const emotionColors = {
@@ -118,20 +167,43 @@ function Journal({ user }) {
               required
               minLength={6}
             />
-            <button
-              disabled={loading}
-              className="flex items-center justify-center px-4 py-2 bg-purple-600 text-white border rounded-lg cursor-pointer"
-              type="submit"
-            >
-              {loading ? (
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              ) : (
-                <>
-                  <Save size={16} className="mr-1" />
-                  <span>Save Entry</span>
-                </>
-              )}
-            </button>
+            <div className="flex items-center justify-between">
+              <button
+                type="button"
+                onClick={toggleListening}
+                className={`flex items-center justify-center px-4 py-2 border rounded-lg cursor-pointer ${
+                  listening
+                    ? "bg-red-600 text-white"
+                    : "bg-purple-600 text-white"
+                }`}
+              >
+                {listening ? (
+                  <>
+                    <MicOff size={16} className="mr-1" />
+                    <span>Stop Recording</span>
+                  </>
+                ) : (
+                  <>
+                    <Mic size={16} className="mr-1" />
+                    <span>Start Recording</span>
+                  </>
+                )}
+              </button>
+              <button
+                disabled={loading}
+                className="flex items-center justify-center px-4 py-2 bg-purple-600 text-white border rounded-lg cursor-pointer"
+                type="submit"
+              >
+                {loading ? (
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                ) : (
+                  <>
+                    <Save size={16} className="mr-1" />
+                    <span>Save Entry</span>
+                  </>
+                )}
+              </button>
+            </div>
           </form>
         </div>
       </div>
