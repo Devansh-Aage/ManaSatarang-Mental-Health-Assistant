@@ -2,7 +2,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import Slider from "react-slick";
 
-const Dashboard = () => {
+const Helpline = () => {
   const helplineNumbers = [
     { name: "Arpita Suicide Prevention Helpline", number: "080-23655557" },
     { name: "Vandrevala Foundation", number: "9999 666 555" },
@@ -162,4 +162,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default Helpline;
