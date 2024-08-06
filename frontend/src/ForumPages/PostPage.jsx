@@ -150,7 +150,7 @@
             {translatedPost.title}
           </h1>
 
-          <div className="bg-transparent p-6 rounded mb-6">
+          <div className="bg-transparent rounded mb-6">
             <div className="w-[400px]">
               <img src={post?.imageURL} className="w-full" alt="" />
             </div>
