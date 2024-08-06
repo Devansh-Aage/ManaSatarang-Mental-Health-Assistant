@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { Tabs, Upload, Button, message } from "antd";
-import { UploadOutlined } from "@ant-design/icons";
+import { Tabs, Upload, Button, message, Dropdown, Menu } from "antd";
+import { UploadOutlined, DownOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
-import { collection, addDoc, query, orderBy, onSnapshot } from "firebase/firestore";
+import { collection, addDoc, query, orderBy, onSnapshot, doc, updateDoc, arrayUnion } from "firebase/firestore";
 import { auth, db, storage } from "../config/firebase-config";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
@@ -16,6 +16,7 @@ function Forum({ lang }) {
   const [user, loading, error] = useAuthState(auth);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [posts, setPosts] = useState([]);
+  const [filteredPosts, setFilteredPosts] = useState([]);
   const [newPost, setNewPost] = useState({ title: "", description: "" });
   const [dropdownOpen, setDropdownOpen] = useState(null);
   const [uploadError, setUploadError] = useState(null);
@@ -27,6 +28,9 @@ function Forum({ lang }) {
     "Create a new Discussion",
   ]);
   const [loadingTranslation, setLoadingTranslation] = useState(false);
+  const [newComment, setNewComment] = useState("");
+  const [currentPostId, setCurrentPostId] = useState(null);
+  const [filterType, setFilterType] = useState("all");
 
   const navigate = useNavigate();
   const filter = new Filter();
@@ -107,8 +111,8 @@ function Forum({ lang }) {
   }, [lang]);
 
   const handleSavePost = async (type) => {
-    if (!newPost.title || !newPost.description) {
-      message.error("Title and Description are required!");
+    if (!newPost.description) {
+      message.error("Description is required!");
       return;
     }
     if (filter.isProfane(newPost.title) || filter.isProfane(newPost.description)) {
@@ -145,6 +149,7 @@ function Forum({ lang }) {
 
       const translatedPosts = await translatePosts(posts, lang);
       setPosts(translatedPosts);
+      filterPosts(filterType, translatedPosts); // Filter posts after fetching
     });
     return () => unsubscribe();
   }, [lang]);
@@ -154,8 +159,12 @@ function Forum({ lang }) {
     setNewPost((prev) => ({ ...prev, [id]: value }));
   };
 
-  const handlePostClick = (postId) => {
-    navigate(`/forum/post/${postId}`, { state: { lang: lang } });
+  const handlePostClick = (postId, hasImage) => {
+    if (!hasImage) {
+      navigate(`/forum/post/${postId}`, { state: { lang: lang } });
+    } else {
+      setCurrentPostId(postId);
+    }
   };
 
   const handleDropdownToggle = (postId) => {
@@ -174,6 +183,60 @@ function Forum({ lang }) {
     },
   };
 
+  const handlePostComment = async () => {
+    if (newComment.trim() && currentPostId) {
+      const postRef = doc(db, "forumPosts", currentPostId);
+
+      const newCommentObj = {
+        id: Date.now(),
+        username: user.displayName || "Anonymous",
+        text: newComment,
+      };
+
+      try {
+        await updateDoc(postRef, {
+          comments: arrayUnion(newCommentObj),
+        });
+
+        setPosts((prevPosts) =>
+          prevPosts.map((post) =>
+            post.id === currentPostId
+              ? { ...post, comments: [...post.comments, newCommentObj] }
+              : post
+          )
+        );
+        setNewComment("");
+      } catch (error) {
+        console.error("Error updating document: ", error);
+      }
+    }
+  };
+
+  const filterPosts = (type, postsToFilter) => {
+    let filtered = postsToFilter;
+
+    if (type === "postWithPicture") {
+      filtered = postsToFilter.filter((post) => post.imageURL);
+    } else if (type === "discussionWithText") {
+      filtered = postsToFilter.filter((post) => !post.imageURL);
+    }
+
+    setFilteredPosts(filtered);
+  };
+
+  const handleMenuClick = (e) => {
+    setFilterType(e.key);
+    filterPosts(e.key, posts);
+  };
+
+  const menu = (
+    <Menu onClick={handleMenuClick}>
+      <Menu.Item key="all">All</Menu.Item>
+      <Menu.Item key="postWithPicture">Posts</Menu.Item>
+      <Menu.Item key="discussionWithText">Discussions</Menu.Item>
+    </Menu>
+  );
+
   return (
     <div className="relative pt-10 pb-32 h-screen overflow-y-auto">
       <div className="flex flex-col items-center mb-10">
@@ -181,34 +244,46 @@ function Forum({ lang }) {
         <h2 className="font-semibold text-lg text-purple-400 mb-10">{staticText[1]}</h2>
       </div>
       <div className={`flex flex-col justify-center items-center ${isModalOpen ? "blur-sm" : ""}`}>
-        <div className="w-1/4 pr-6">
+        <div className="flex items-center mb-6 w-9/12 justify-between">
           <button
-            className="w-full bg-indigo-950 text-white px-4 py-2 rounded mb-6 hover:bg-purple-400 transition-colors duration-300"
+            className="bg-indigo-950 text-white px-4 py-2 rounded hover:bg-purple-400 transition-colors duration-300"
             onClick={handleOpenModal}
           >
             {staticText[2]}
           </button>
+          <Dropdown overlay={menu} trigger={['click']}>
+            <Button>
+              Filter<DownOutlined />
+            </Button>
+          </Dropdown>
         </div>
 
-        <div className="w-11/12">
-          <div className="space-y-8">
-            {posts.length > 0 ? (
-              posts.map((post) => (
+        <div className="w-10/12">
+          <div>
+            {filteredPosts.length > 0 ? (
+              filteredPosts.map((post) => (
                 <div
                   key={post.id}
                   className="w-full backdrop-blur-md py-10 rounded-lg relative cursor-pointer"
-                  onClick={() => handlePostClick(post.id)}
+                  onClick={() => handlePostClick(post.id, post.imageURL)}
                 >
                   <div className="flex ml-10">
-                  
                     <div className="flex-1 flex flex-col items-start bg-white shadow-md rounded-lg">
                       {post?.imageURL && (
-                        <img src={post?.imageURL} className="w-full mb-2 rounded-lg" alt="" />
+                        <>
+                          <img src={post?.imageURL} className="w-full mb-2 rounded-lg" alt="" />
+                          <p className="text-gray-800 px-4 mt-2 font-semibold">{post.displayName}</p>
+                        </>
                       )}
-                      <p className="text-gray-800 p-2 font-semibold">{post.displayName}</p>
-                      <p className="text-gray-800 mb-4 px-2 text-sm font-normal">{post.desc}</p>
+                      {!post?.imageURL && (
+                        <>
+                          <p className="text-gray-800 px-4 mt-4 text-lg font-semibold">{post.title}</p>
+                          <p className="text-gray-800 px-4 mt-1 text-sm font-normal">{post.displayName}</p>
+                        </>
+                      )}
+                      <p className="text-gray-800 mb-4 px-4 mt-3 text-sm font-normal">{post.desc}</p>
                     </div>
-          
+
                     {post?.imageURL && (
                       <div className="flex-1 flex flex-col items-end mx-10">
                         <div className="w-full flex flex-col space-y-4">
@@ -224,11 +299,12 @@ function Forum({ lang }) {
                             className="w-full border border-gray-300 rounded mb-2"
                             placeholder="Write a comment..."
                             rows="1"
-                            onChange={handleChange}
+                            value={newComment}
+                            onChange={(e) => setNewComment(e.target.value)}
                           />
                           <button
                             className="bg-indigo-950 text-white px-4 py-2 rounded hover:bg-purple-400 transition-colors duration-300"
-                            onClick={handleSavePost}
+                            onClick={handlePostComment}
                           >
                             Post Comment
                           </button>
@@ -251,18 +327,6 @@ function Forum({ lang }) {
             <Tabs defaultActiveKey="1">
               <TabPane tab="Post" key="1">
                 <h2 className="text-xl font-bold mb-6">Create a new Post</h2>
-                <div className="mb-4">
-                  <label htmlFor="title" className="block text-gray-700 font-bold">
-                    Title
-                  </label>
-                  <input
-                    type="text"
-                    id="title"
-                    className="w-full p-2 border border-gray-300 rounded"
-                    value={newPost.title}
-                    onChange={handleChange}
-                  />
-                </div>
                 <div className="mb-4">
                   <label htmlFor="description" className="block text-gray-700 font-bold">
                     Description

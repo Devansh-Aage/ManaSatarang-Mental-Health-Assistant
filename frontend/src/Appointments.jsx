@@ -1,9 +1,8 @@
-import { collection, getDocs, query, where } from "firebase/firestore";
+import { collection, getDocs, query, where, doc, getDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { db } from "./config/firebase-config";
 import { useNavigate } from "react-router-dom";
 import { chatHrefConstructor } from "./utils";
-import { Card } from "antd";
 
 const Appointments = ({ user }) => {
   const [appointments, setAppointments] = useState([]);
@@ -42,23 +41,37 @@ const Appointments = ({ user }) => {
 
   return (
     <div className="mx-10 my-2 mt-10">
-      <h1>Appointments</h1>
-      <div className="flex items-center flex-wrap gap-5 mx-2 mt-5 w-full ">
-        {
-          appointments.length>0 ?
-        appointments.map((a, index) => (
-          <AppointmentItem key={index} appointment={a} router={router} />
-        ))
-
-        :
-        <div>You have no appointments</div>}
+      <h1 className="font-extrabold text-3xl text-indigo-950">Your Appointments</h1>
+      
+      <div className="mt-5 w-full overflow-x-auto">
+        {appointments.length > 0 ? (
+          <table className="min-w-full bg-white border border-gray-300 rounded-lg shadow-md">
+            <thead className="bg-gray-100 border-b">
+              <tr>
+                <th className="py-2 px-4 text-left text-gray-600">Patient</th>
+                <th className="py-2 px-4 text-left text-gray-600">Date</th>
+                <th className="py-2 px-4 text-left text-gray-600">Time</th>
+                <th className="py-2 px-4 text-left text-gray-600">Therapist</th>
+                <th className="py-2 px-4 text-left text-gray-600">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {appointments.map((a, index) => (
+                <AppointmentRow key={index} appointment={a} router={router} />
+              ))}
+            </tbody>
+          </table>
+        ) : (
+          <div>You have no appointments</div>
+        )}
       </div>
     </div>
   );
 };
 
-const AppointmentItem = ({ appointment, router }) => {
+const AppointmentRow = ({ appointment, router }) => {
   const [patient, setPatient] = useState(null);
+  const [therapist, setTherapist] = useState(null);
 
   useEffect(() => {
     const fetchPatientData = async () => {
@@ -76,8 +89,22 @@ const AppointmentItem = ({ appointment, router }) => {
       }
     };
 
+    const fetchTherapistData = async () => {
+      const therapistRef = doc(db, "users", appointment.therapistId);
+
+      try {
+        const therapistDoc = await getDoc(therapistRef);
+        if (therapistDoc.exists()) {
+          setTherapist(therapistDoc.data());
+        }
+      } catch (error) {
+        console.error("Error fetching therapist data:", error);
+      }
+    };
+
     fetchPatientData();
-  }, [appointment.userId]);
+    fetchTherapistData();
+  }, [appointment]);
 
   const handleChatClick = () => {
     const chatHref = chatHrefConstructor(
@@ -88,20 +115,20 @@ const AppointmentItem = ({ appointment, router }) => {
   };
 
   return (
-    <div className="mb-4">
-      <Card
-        title={patient && patient.name}
-        bordered={false}
-        style={{ width: 300 }}
-        className="hover:border hover:border-purple-600 border-transparent"
-      >
-        <p>Date: {appointment.date}</p>
-        <p>Time: {appointment.time}</p>
-        <div onClick={handleChatClick} className="cursor-pointer bg-purple-900 hover:bg-purple-800 px-4 py-2 text-white rounded-lg">
+    <tr className="border-b hover:bg-gray-50">
+      <td className="py-2 px-4 text-gray-800">{patient?.name || "Loading..."}</td>
+      <td className="py-2 px-4 text-gray-800">{appointment.date}</td>
+      <td className="py-2 px-4 text-gray-800">{appointment.time}</td>
+      <td className="py-2 px-4 text-gray-800">{therapist?.name || "Loading..."}</td>
+      <td className="py-2 px-4">
+        <button
+          onClick={handleChatClick}
+          className="bg-purple-900 hover:bg-purple-800 text-white px-4 py-2 rounded-lg"
+        >
           Chat
-        </div>
-      </Card>
-    </div>
+        </button>
+      </td>
+    </tr>
   );
 };
 

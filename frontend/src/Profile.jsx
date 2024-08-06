@@ -34,9 +34,9 @@ function Profile({ user, userData }) {
 
   return (
     user && (
-      <div className="flex flex-col items-center w-[1120px] h-[513px] mx-auto my-20 px-3 py-2  ">
+      <div className="flex flex-col items-center mx-32 my-20 px-3">
         <div className="flex flex-row items-center justify-between gap-4 bg-slate-200/30 border rounded-lg p-4 border-purple-400 w-full h-full">
-          <div className="flex flex-col ml-40">
+          <div className="flex flex-col ml-40 py-10">
             <h1 className="text-xl font-bold text-indigo-950 mb-1">Name</h1>
             <h2 className="text-lg text-indigo-950 mb-1">
               {user.displayName || "example"}

@@ -102,12 +102,12 @@ const Therapists = ({ lang, user }) => {
         <h2 className="font-extrabold text-3xl text-indigo-950 mb-3">
           {staticText[0]}
         </h2>
-        <p className="font-semibold text-lg text-purple-400 mb-10 text-center">
+        <p className="font-semibold text-lg text-purple-400 mb-10 px-28 text-center">
           {staticText[1]}
         </p>
       </div>
       {/* Information Boxes */}
-      <div className="flex flex-col items-center gap-6 mb-10">
+      {/* <div className="flex flex-col items-center gap-6 mb-10">
         <div className="w-full max-w-4xl p-6 bg-indigo-950 text-white rounded-lg shadow-md">
           <h2 className="text-2xl font-bold mb-4">{staticText[2]}</h2>
           <p className="text-lg">{staticText[3]}</p>
@@ -115,10 +115,10 @@ const Therapists = ({ lang, user }) => {
         <div className="w-full max-w-4xl p-6 bg-purple-400 text-white rounded-lg shadow-md mb-5">
           <h2 className="text-2xl font-bold mb-4">{staticText[4]}</h2>
         </div>
-      </div>
+      </div> */}
 
       {/* Therapist Cards */}
-      <h2 className="font-extrabold text-2xl text-indigo-950 mb-5 ml-36">
+      <h2 className="font-extrabold text-2xl text-indigo-950 mb-5">
         {staticText[5]}
       </h2>
       <div className="flex flex-wrap gap-5 justify-center">

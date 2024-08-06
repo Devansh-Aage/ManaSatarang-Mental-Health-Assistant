@@ -4,7 +4,7 @@ import Skeleton from 'react-loading-skeleton';
 import { useNavigate } from 'react-router-dom';
 
 function ActivityDb({ activities, user }) {
- const navigate=useNavigate()
+ const navigate= useNavigate();
   
   return (
     <div className='bg-white border rounded-xl p-4 flex flex-col row-span-3 py-3'>

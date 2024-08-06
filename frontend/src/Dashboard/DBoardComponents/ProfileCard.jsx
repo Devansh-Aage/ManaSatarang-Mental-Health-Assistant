@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { getAuth } from "firebase/auth";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { Gem, BarChartBig  } from "lucide-react";
 
 function ProfileCard({ user }) {
   // const [user, setUser] = useState(user);
@@ -13,6 +14,10 @@ function ProfileCard({ user }) {
   //     setUser(currentUser);
   //   }
   // }, []);
+
+  const navigate = useNavigate();
+
+
 
   return (
     <div className="bg-white border rounded-xl p-4 flex flex-col items-center justify-center row-span-2">
@@ -33,8 +38,9 @@ function ProfileCard({ user }) {
       ) : (
         <p className="text-gray-500 text-sm mb-4">Loading...</p>
       )}
-      <div className="mt-auto">
-        <p className="text-gray-500 text-sm">Wellness Points: #</p>
+      <div className="mt-auto flex gap-3 justify-center items-center">
+        <button className="bg-purple-900 text-white p-2 rounded-lg text-sm flex flex-row items-center hover:bg-purple-800 transition-colors duration-200" onClick={() => navigate("/profile/coupon")}><Gem size={15} className="mr-2"/>Coupons</button>
+        <button className="bg-purple-900 text-white p-2 rounded-lg text-sm flex flex-row items-center hover:bg-purple-800 transition-colors duration-200" onClick={() => navigate("/profile/leaderboard")}><BarChartBig size={15} className="mr-2"/>Leaderboard</button>
       </div>
     </div>
   );
