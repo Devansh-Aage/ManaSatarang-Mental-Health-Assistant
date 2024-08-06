@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "react-toastify/dist/ReactToastify.css";
 
-const ActivityBlock = ({ date, isDone, id, uid, title, user ,}) => {
+const ActivityBlock = ({ date, isDone, id, uid, title, user ,translatedTitle}) => {
   const [isDoneState, setIsDoneState] = useState(isDone);
 
 
@@ -24,7 +24,7 @@ const ActivityBlock = ({ date, isDone, id, uid, title, user ,}) => {
           isDoneState ? "line-through" : ""
         }`}
       >
-        {title}
+        {translatedTitle}
       </span>
       
     </div>

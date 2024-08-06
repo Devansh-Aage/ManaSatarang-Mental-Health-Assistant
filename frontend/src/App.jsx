@@ -39,9 +39,7 @@ import Chat from "./Chat";
 import "./App.css";
 import Journal from "./Journal/Journal";
 import ScanFace from "./ScanFace";
-import { Select } from "antd";
 
-const { Option } = Select;
 import Dashboard from "./Dashboard/Dashboard";
 
 const getRandomActivities = (list, count) => {
@@ -51,7 +49,7 @@ const getRandomActivities = (list, count) => {
 
 const App = () => {
   const [activities, setActivities] = React.useState([]);
-  const [user, loading, error] = useAuthState(auth);
+  const [user] = useAuthState(auth);
   const [userData, setUserData] = useState(null);
   const [lastUpdateDate, setLastUpdateDate] = useState(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
