@@ -70,7 +70,7 @@ const Therapists = ({ lang, user }) => {
 
     const fetchRecommendTherapist = async () => {
       try {
-        const res = await axios.post("http://127.0.0.1:8050/recommend", {
+        const res = await axios.post("http://127.0.0.1:8080/recommend", {
           uid: user?.uid,
         });
         if (!res.data) {
@@ -78,11 +78,9 @@ const Therapists = ({ lang, user }) => {
         }
         setrecommendTherapist(res.data);
         console.log(res.data);
-        
       } catch (error) {}
     };
-    fetchRecommendTherapist()
-
+    fetchRecommendTherapist();
 
     fetchTherapists();
   }, []);
@@ -129,7 +127,6 @@ const Therapists = ({ lang, user }) => {
         ))}
       </div>
       <div>{recommendTherapist}</div>
-
     </div>
   );
 };
