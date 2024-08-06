@@ -96,7 +96,7 @@ const AppointmentItem = ({ appointment, router }) => {
         style={{ width: 300 }}
         className="hover:border hover:border-purple-600 border-transparent"
       >
-        <p className="font-semibold text-gray-600">{formattedDate}</p>
+        <p className="font-semibold text-gray-600">Text</p>
         <p>Date: {appointment.date}</p>
         <p>Time: {appointment.time}</p>
         <div
