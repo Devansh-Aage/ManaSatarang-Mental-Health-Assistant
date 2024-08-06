@@ -7,7 +7,7 @@ import google.generativeai as genai
 app = Flask(__name__)
 CORS(app)
 
-GENAI_API_KEY = "AIzaSyAra4V0IQWR0W0lc82oYNMcyPP0nawwcoI"
+GENAI_API_KEY = "AIzaSyBpyZIpak-ZWttvc2dTZYi2ZONycC_HoO0"
 
 cred = credentials.Certificate("./config/firebase-config.json")
 initialize_app(cred)

@@ -193,7 +193,16 @@ const App = () => {
         <ToastContainer />
         <div className="overflow-hidden ">
           <Routes>
-            <Route path="/dashboard" element={<Dashboard lang={appLanguage}/>} />
+            <Route
+              path="/dashboard"
+              element={
+                <Dashboard
+                  lang={appLanguage}
+                  activities={activities}
+                  user={user}
+                />
+              }
+            />
             <Route
               path="/login"
               element={<Login user={user} lang={appLanguage} />}
@@ -269,7 +278,10 @@ const App = () => {
               path="/forum/post/:postId"
               element={<PostPage lang={appLanguage} />}
             />
-            <Route path="/chatbot" element={<Chatbot lang={appLanguage} user={user} />} />
+            <Route
+              path="/chatbot"
+              element={<Chatbot lang={appLanguage} user={user} />}
+            />
             <Route
               path="/community/student"
               element={
