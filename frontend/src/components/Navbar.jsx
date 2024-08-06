@@ -111,7 +111,7 @@ const Navbar = ({ user, setAppLanguage }) => {
     const provider = new GoogleAuthProvider();
     try {
       await signInWithPopup(auth, provider);
-      router("/");
+      router("/dashboard");
     } catch (error) {
       console.error("Error signing in: ", error);
     }
@@ -168,7 +168,7 @@ const Navbar = ({ user, setAppLanguage }) => {
           <nav className="flex flex-col space-y-10">
             {user && (
               <Link
-                to="/"
+                to="/dashboard"
                 className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left"
               >
                 <LayoutDashboard size={20} />
@@ -231,7 +231,7 @@ const Navbar = ({ user, setAppLanguage }) => {
           <div className="lg:flex hidden flex-col items-center space-y-10">
           {user && (
               <Link
-                to="/"
+                to="/dashboard"
                 className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left"
               >
                 <LayoutDashboard size={20} />

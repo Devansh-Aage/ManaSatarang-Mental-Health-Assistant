@@ -65,7 +65,7 @@ function Forum({ lang }) {
         displayName: user.displayName || "Anonymous",
         title: newPost.title,
         desc: newPost.description,
-        imageURL: imageURL || "", // Add image URL to the post if it exists
+        imageURL: imageURL || "",
         likes: 0,
         comments: [],
         timestamp: new Date(),
@@ -172,13 +172,13 @@ function Forum({ lang }) {
     setNewPost((prev) => ({ ...prev, [id]: value }));
   };
 
-  const handlePostClick = (postId) => {
-    navigate(`/forum/post/${postId}`, {
-      state: {
-        lang: lang,
-      },
-    });
-  };
+  // const handlePostClick = (postId) => {
+  //   navigate(`/forum/post/${postId}`, {
+  //     state: {
+  //       lang: lang,
+  //     },
+  //   });
+  // };
 
   const handleDropdownToggle = (postId) => {
     setDropdownOpen(dropdownOpen === postId ? null : postId);
@@ -187,7 +187,7 @@ function Forum({ lang }) {
   const uploadProps = {
     beforeUpload: (file) => {
       setImgFile(file);
-      return false; // Prevent automatic upload
+      return false;
     },
     onRemove: () => {
       setDownloadURL(null);
@@ -226,45 +226,48 @@ function Forum({ lang }) {
               posts.map((post) => (
                 <div
                   key={post.id}
-                  className="w-full bg-white/10 backdrop-blur-md p-6 rounded-lg shadow-md relative cursor-pointer"
+                  className="w-full bg-white/10 backdrop-blur-md py-10 rounded-lg shadow-md relative cursor-pointer"
                   onClick={() => handlePostClick(post.id)}
                 >
-                  <button
-                    className="absolute top-2 right-2 p-2 text-gray-600 hover:text-red-600"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleDropdownToggle(post.id);
-                    }}
-                  >
-                    <MoreHorizontal className="w-5 h-5" />
-                  </button>
-                  {dropdownOpen === post.id && (
-                    <div className="absolute top-10 right-2 bg-white border border-gray-300 shadow-lg rounded p-2 z-10">
-                      <div className="flex items-center text-red-600">
-                        <MoreHorizontal className="w-4 h-4 mr-2" />
-                        <span>Report</span>
+                  <div className="flex ml-10">
+                    <div className="flex-1 flex flex-col items-start">
+                      <img src={post?.imageURL} className="w-full mb-2" alt="" />
+                      <p className="text-gray-600 mb-1 font-semibold">
+                        {post.displayName}
+                      </p>
+                      <p className="text-gray-800 mb-4 font-semibold">
+                        {post.desc}
+                      </p>
+                    </div>
+                    <div className="flex-1 flex flex-col items-end mx-10">
+                      <div className="w-full flex flex-col space-y-4">
+                        <div className="max-h-72 overflow-y-auto">
+                          {post.comments.map((comment) => (
+                            <div
+                              key={comment.id}
+                              className="bg-white p-2 rounded shadow-sm mb-2"
+                            >
+                              <p className="font-semibold text-gray-800">
+                                {comment.username}:
+                              </p>
+                              <p className="text-gray-700">{comment.text}</p>
+                            </div>
+                          ))}
+                        </div>
+                        <textarea
+                          className="w-full border border-gray-300 rounded mb-2"
+                          placeholder="Write a comment..."
+                          rows="1"
+                          onChange={handleChange}
+                        />
+                        <button
+                          className="bg-indigo-950 text-white px-4 py-2 rounded hover:bg-purple-400 transition-colors duration-300"
+                          onClick={handleSavePost}
+                        >
+                          Post Comment
+                        </button>
                       </div>
                     </div>
-                  )}
-                  <h2 className="font-bold text-xl text-indigo-950 mb-2">
-                    {post.title}
-                  </h2>
-                  <div className="w-[400px]">
-                    <img src={post?.imageURL} className="w-full" alt="" />
-                  </div>
-                  <p className="text-gray-800 mb-4 font-semibold">
-                    {post.desc}
-                  </p>
-                  <div className="text-gray-600 mb-4">
-                    <p className="text-sm font-medium text-slate-900">
-                      Posted by: {post.displayName}
-                    </p>
-                  </div>
-                  <div className="flex items-center text-gray-600">
-                    <HeartIcon className="w-4 h-4 mr-2 text-red-500" />
-                    <span>{post.likes || 0}</span>
-                    <CommentIcon className="w-4 h-4 ml-4 mr-2 text-blue-500" />
-                    <span>{(post.comments || []).length}</span>
                   </div>
                 </div>
               ))
@@ -276,53 +279,44 @@ function Forum({ lang }) {
       </div>
 
       {isModalOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
-          <div className="bg-white p-8 rounded shadow-lg w-full max-w-lg">
-            <h3 className="text-xl font-semibold mb-4">
-              Create a New Discussion
-            </h3>
+        <div className="fixed inset-0 flex items-center justify-center z-50">
+          <div className="bg-white w-1/3 p-8 rounded shadow-lg">
+            <h2 className="text-xl font-bold mb-6">Create a new Discussion</h2>
             <div className="mb-4">
-              <label className="block text-gray-700 mb-2" htmlFor="title">
+              <label htmlFor="title" className="block text-gray-700 font-bold">
                 Title
               </label>
               <input
-                id="title"
                 type="text"
+                id="title"
                 className="w-full p-2 border border-gray-300 rounded"
-                placeholder="Enter discussion title"
                 value={newPost.title}
                 onChange={handleChange}
-                required
               />
             </div>
             <div className="mb-4">
-              <label className="block text-gray-700 mb-2" htmlFor="description">
+              <label
+                htmlFor="description"
+                className="block text-gray-700 font-bold"
+              >
                 Description
               </label>
               <textarea
                 id="description"
                 className="w-full p-2 border border-gray-300 rounded"
-                placeholder="Enter discussion description"
                 rows="4"
                 value={newPost.description}
                 onChange={handleChange}
-                required
               />
             </div>
-            <div>
-              <label className="block text-gray-700 mb-2">
-                Image <small className="text-red-700">(Optional)</small>
-              </label>
+            <div className="mb-4">
               <Upload {...uploadProps}>
-                <Button icon={<UploadOutlined />}>Click to Upload</Button>
+                <Button icon={<UploadOutlined />}>Upload Image</Button>
               </Upload>
-              {uploadError && (
-                <p className="error text-red-800">{uploadError}</p>
-              )}
             </div>
-            <div className="flex justify-end space-x-4">
+            <div className="flex justify-end">
               <button
-                className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition-colors duration-300"
+                className="bg-gray-300 text-gray-800 px-4 py-2 rounded mr-2"
                 onClick={handleCloseModal}
               >
                 Cancel
