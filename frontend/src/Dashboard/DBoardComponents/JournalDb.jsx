@@ -4,12 +4,15 @@ import { collection, onSnapshot, orderBy, query, where } from "firebase/firestor
 import { useAuthState } from "react-firebase-hooks/auth";
 import Skeleton from "react-loading-skeleton";
 import { Collapse } from "antd";
+import { useNavigate } from "react-router-dom";
 const { Panel } = Collapse;
+import { SquarePlus } from "lucide-react";  
 
 function JournalDb() {
   const [user] = useAuthState(auth);
   const [entries, setEntries] = useState([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (user) {
@@ -34,8 +37,16 @@ function JournalDb() {
   };
 
   return (
-    <div className="bg-white border rounded-xl p-2 flex flex-col items-center justify-center  4 row-span-3">
-
+    <div className="bg-white border rounded-xl p-2 flex flex-col items-center py-10 row-span-5">
+    <div className="mb-5">
+      <button
+        className="mt-4 px-4 py-2 bg-purple-500 text-white rounded-md flex items-center hover:bg-purple-800 transition-colors duration-200"
+        onClick={() => navigate("/journal")}
+      >
+        <SquarePlus className="mr-2" />
+        Create Journal
+      </button>
+      </div>
       {loading ? (
         <Skeleton count={5} />
       ) : entries.length > 0 ? (
@@ -67,6 +78,7 @@ function JournalDb() {
       ) : (
         <div>No Logs Present in Journal</div>
       )}
+      
     </div>
   );
 }

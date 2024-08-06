@@ -1,218 +1,218 @@
-import React, { useRef, useState, useEffect } from "react";
-import { Heart as HeartIcon, MessageCircle as CommentIcon } from "lucide-react";
-import { db, auth } from "../config/firebase-config";
-import {
-  doc,
-  getDoc,
-  updateDoc,
-  arrayUnion,
-  increment,
-} from "firebase/firestore";
-import { useLocation, useParams } from "react-router-dom";
-import axios from "axios";
-import { translateText } from "../utils";
+  import React, { useRef, useState, useEffect } from "react";
+  import { Heart as HeartIcon, MessageCircle as CommentIcon } from "lucide-react";
+  import { db, auth } from "../config/firebase-config";
+  import {
+    doc,
+    getDoc,
+    updateDoc,
+    arrayUnion,
+    increment,
+  } from "firebase/firestore";
+  import { useLocation, useParams } from "react-router-dom";
+  import axios from "axios";
+  import { translateText } from "../utils";
 
-function PostPage() {
-  const { postId } = useParams();
-  const [post, setPost] = useState({
-    title: "",
-    description: "",
-    likes: 0,
-    likedByUser: false,
-    comments: [],
-    author: "",
-  });
-  const [newComment, setNewComment] = useState("");
-  const [translatedPost, setTranslatedPost] = useState({
-    title: "",
-    description: "",
-    comments: [],
-  });
-  const location = useLocation();
-  const [language, setLanguage] = useState(location.state.lang);
-  const commentsEndRef = useRef(null);
+  function PostPage() {
+    const { postId } = useParams();
+    const [post, setPost] = useState({
+      title: "",
+      description: "",
+      likes: 0,
+      likedByUser: false,
+      comments: [],
+      author: "",
+    });
+    const [newComment, setNewComment] = useState("");
+    const [translatedPost, setTranslatedPost] = useState({
+      title: "",
+      description: "",
+      comments: [],
+    });
+    const location = useLocation();
+    const [language, setLanguage] = useState(location.state.lang);
+    const commentsEndRef = useRef(null);
 
 
 
-  const translatePost = async (postData) => {
-    try {
-      const translatedTitle = await translateText(postData.title, language);
-      const translatedDescription = await translateText(
-        postData.desc,
-        language
-      );
-      const translatedComments = await Promise.all(
-        postData.comments.map(async (comment) => {
-          const translatedText = await translateText(comment.text, language);
-          return { ...comment, text: translatedText };
-        })
-      );
+    const translatePost = async (postData) => {
+      try {
+        const translatedTitle = await translateText(postData.title, language);
+        const translatedDescription = await translateText(
+          postData.desc,
+          language
+        );
+        const translatedComments = await Promise.all(
+          postData.comments.map(async (comment) => {
+            const translatedText = await translateText(comment.text, language);
+            return { ...comment, text: translatedText };
+          })
+        );
 
-      setTranslatedPost({
-        title: translatedTitle,
-        description: translatedDescription,
-        comments: translatedComments,
-      });
-    } catch (error) {
-      console.error("Error translating post: ", error);
-    }
-  };
-
-  useEffect(() => {
-    const fetchPost = async () => {
-      const postRef = doc(db, "forumPosts", postId);
-      const postSnap = await getDoc(postRef);
-
-      if (postSnap.exists()) {
-        const postData = postSnap.data();
-        setPost({
-          title: postData.title || "",
-          description: postData.desc || "",
-          likes: postData.likes || 0,
-          likedByUser: postData.likedByUser || false,
-          comments: postData.comments || [],
-          displayName: postData.displayName || "Unknown Author",
-          imageURL: postData?.imageURL,
+        setTranslatedPost({
+          title: translatedTitle,
+          description: translatedDescription,
+          comments: translatedComments,
         });
-        translatePost(postData);
-      } else {
-        console.log("No such document!");
+      } catch (error) {
+        console.error("Error translating post: ", error);
       }
     };
 
-    fetchPost();
-  }, [postId, language]);
+    useEffect(() => {
+      const fetchPost = async () => {
+        const postRef = doc(db, "forumPosts", postId);
+        const postSnap = await getDoc(postRef);
 
-  const handleLike = async () => {
-    const postRef = doc(db, "forumPosts", postId);
-
-    try {
-      await updateDoc(postRef, {
-        likes: post.likedByUser ? increment(-1) : increment(1),
-        likedByUser: !post.likedByUser,
-      });
-
-      setPost((prev) => ({
-        ...prev,
-        likes: prev.likedByUser ? prev.likes - 1 : prev.likes + 1,
-        likedByUser: !prev.likedByUser,
-      }));
-    } catch (error) {
-      console.error("Error updating document: ", error);
-    }
-  };
-
-  const handleCommentChange = (e) => {
-    setNewComment(e.target.value);
-  };
-
-  const handlePostComment = async () => {
-    if (newComment.trim()) {
-      const postRef = doc(db, "forumPosts", postId);
-      const user = auth.currentUser;
-
-      if (user) {
-        const newCommentObj = {
-          id: Date.now(),
-          username: user.displayName || "Anonymous",
-          text: newComment,
-        };
-
-        try {
-          await updateDoc(postRef, {
-            comments: arrayUnion(newCommentObj),
+        if (postSnap.exists()) {
+          const postData = postSnap.data();
+          setPost({
+            title: postData.title || "",
+            description: postData.desc || "",
+            likes: postData.likes || 0,
+            likedByUser: postData.likedByUser || false,
+            comments: postData.comments || [],
+            displayName: postData.displayName || "Unknown Author",
+            imageURL: postData?.imageURL,
           });
-
-          setPost((prev) => ({
-            ...prev,
-            comments: prev.comments
-              ? [...prev.comments, newCommentObj]
-              : [newCommentObj],
-          }));
-          translatePost({
-            ...post,
-            comments: [...post.comments, newCommentObj],
-          });
-          setNewComment("");
-        } catch (error) {
-          console.error("Error updating document: ", error);
+          translatePost(postData);
+        } else {
+          console.log("No such document!");
         }
-      } else {
-        console.log("User is not logged in");
+      };
+
+      fetchPost();
+    }, [postId, language]);
+
+    const handleLike = async () => {
+      const postRef = doc(db, "forumPosts", postId);
+
+      try {
+        await updateDoc(postRef, {
+          likes: post.likedByUser ? increment(-1) : increment(1),
+          likedByUser: !post.likedByUser,
+        });
+
+        setPost((prev) => ({
+          ...prev,
+          likes: prev.likedByUser ? prev.likes - 1 : prev.likes + 1,
+          likedByUser: !prev.likedByUser,
+        }));
+      } catch (error) {
+        console.error("Error updating document: ", error);
       }
-    }
-  };
+    };
 
-  return (
-    <div className="w-full px-5 h-screen overflow-y-auto py-10">
-      <div className="w-full bg-white/10 backdrop-blur-md p-6 rounded-lg shadow-md">
-        <h1 className="font-bold text-3xl text-indigo-950 mb-2">
-          {translatedPost.title}
-        </h1>
+    const handleCommentChange = (e) => {
+      setNewComment(e.target.value);
+    };
 
-        <div className="bg-transparent p-6 rounded mb-6">
-          <div className="w-[400px]">
-            <img src={post?.imageURL} className="w-full" alt="" />
+    const handlePostComment = async () => {
+      if (newComment.trim()) {
+        const postRef = doc(db, "forumPosts", postId);
+        const user = auth.currentUser;
+
+        if (user) {
+          const newCommentObj = {
+            id: Date.now(),
+            username: user.displayName || "Anonymous",
+            text: newComment,
+          };
+
+          try {
+            await updateDoc(postRef, {
+              comments: arrayUnion(newCommentObj),
+            });
+
+            setPost((prev) => ({
+              ...prev,
+              comments: prev.comments
+                ? [...prev.comments, newCommentObj]
+                : [newCommentObj],
+            }));
+            translatePost({
+              ...post,
+              comments: [...post.comments, newCommentObj],
+            });
+            setNewComment("");
+          } catch (error) {
+            console.error("Error updating document: ", error);
+          }
+        } else {
+          console.log("User is not logged in");
+        }
+      }
+    };
+
+    return (
+      <div className="w-full px-5 h-screen overflow-y-auto py-10">
+        <div className="w-full bg-white/10 backdrop-blur-md p-6 rounded-lg shadow-md">
+          <h1 className="font-bold text-3xl text-indigo-950 mb-2">
+            {translatedPost.title}
+          </h1>
+
+          <div className="bg-transparent p-6 rounded mb-6">
+            <div className="w-[400px]">
+              <img src={post?.imageURL} className="w-full" alt="" />
+            </div>
+            <p className="text-gray-700 mt-5">{translatedPost.description}</p>
           </div>
-          <p className="text-gray-700 mt-5">{translatedPost.description}</p>
-        </div>
-        <p className="text-gray-600 mb-4">
-          Posted by: <span className="font-semibold">{post.displayName}</span>
-        </p>
-        <button
-          className={`px-4 py-2 rounded transition-colors duration-300 ${
-            post.likedByUser
-              ? "text-white bg-red-500"
-              : "bg-indigo-950 text-white hover:bg-red-500"
-          }`}
-          onClick={handleLike}
-        >
-          <HeartIcon
-            className={`w-5 h-5 inline-block mr-2 ${
-              post.likedByUser ? "text-white" : "text-gray-700"
+          <p className="text-gray-600 mb-4">
+            Posted by: <span className="font-semibold">{post.displayName}</span>
+          </p>
+          <button
+            className={`px-4 py-2 rounded transition-colors duration-300 ${
+              post.likedByUser
+                ? "text-white bg-red-500"
+                : "bg-indigo-950 text-white hover:bg-red-500"
             }`}
-          />
-          {post.likedByUser ? "Liked" : "Like"} ({post.likes})
-        </button>
-      </div>
-
-      <div className="mt-8">
-        <div className="bg-white/10 backdrop-blur-md p-6 rounded shadow-md">
-          <h2 className="font-semibold text-xl text-indigo-950 mb-4">
-            Comments ({translatedPost.comments.length})
-          </h2>
-          <div className="max-h-[200px] overflow-y-auto space-y-4 mb-4 py-3 px-4">
-            {translatedPost.comments.map((comment) => (
-              <div
-                key={comment.id}
-                className="bg-white p-4 rounded shadow-sm"
-              >
-                <p className="font-semibold text-gray-800">
-                  {comment.username}:
-                </p>
-                <p className="text-gray-700">{comment.text}</p>
-              </div>
-            ))}
-          </div>
-          <div className="flex flex-col">
-            <textarea
-              className="w-full p-2 border border-gray-300 rounded mb-2"
-              placeholder="Write a comment..."
-              value={newComment}
-              onChange={handleCommentChange}
-              rows="1"
+            onClick={handleLike}
+          >
+            <HeartIcon
+              className={`w-5 h-5 inline-block mr-2 ${
+                post.likedByUser ? "text-white" : "text-gray-700"
+              }`}
             />
-            <button
-              className="bg-indigo-950 text-white px-4 py-2 rounded hover:bg-purple-400 transition-colors duration-300"
-              onClick={handlePostComment}
-            >
-              Post Comment
-            </button>
+            {post.likedByUser ? "Liked" : "Like"} ({post.likes})
+          </button>
+        </div>
+
+        <div className="mt-8">
+          <div className="bg-white/10 backdrop-blur-md p-6 rounded shadow-md">
+            <h2 className="font-semibold text-xl text-indigo-950 mb-4">
+              Comments ({translatedPost.comments.length})
+            </h2>
+            <div className="max-h-[200px] overflow-y-auto space-y-4 mb-4 py-3 px-4">
+              {translatedPost.comments.map((comment) => (
+                <div
+                  key={comment.id}
+                  className="bg-white p-4 rounded shadow-sm"
+                >
+                  <p className="font-semibold text-gray-800">
+                    {comment.username}:
+                  </p>
+                  <p className="text-gray-700">{comment.text}</p>
+                </div>
+              ))}
+            </div>
+            <div className="flex flex-col">
+              <textarea
+                className="w-full p-2 border border-gray-300 rounded mb-2"
+                placeholder="Write a comment..."
+                value={newComment}
+                onChange={handleCommentChange}
+                rows="1"
+              />
+              <button
+                className="bg-indigo-950 text-white px-4 py-2 rounded hover:bg-purple-400 transition-colors duration-300"
+                onClick={handlePostComment}
+              >
+                Post Comment
+              </button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  );
-}
+    );
+  }
 
-export default PostPage;
+  export default PostPage;
