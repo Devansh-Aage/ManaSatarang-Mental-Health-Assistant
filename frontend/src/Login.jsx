@@ -112,7 +112,7 @@ const Login = () => {
           //   }
           // }, 2000); // Adjust timeout as needed to ensure capture
         } else {
-          navigate("/");
+          navigate("/dashboard");
           toast.success(`Welcome back, ${userData.name}!`);
         }
       } else {

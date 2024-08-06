@@ -21,7 +21,7 @@ import Login from "./Login";
 import Community from "./Community";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { activityList } from "./utils";
+import { activityList, translateText } from "./utils";
 import ActivityDetails from "./ActivityDetails";
 import Workspace from "./Workspace";
 import Chronic from "./Chronic";
@@ -42,6 +42,7 @@ import ScanFace from "./ScanFace";
 import { Select } from "antd";
 const { Option } = Select;
 import Helpline from "./Helpline";
+
 import Dashboard from "./Dashboard/Dashboard";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -52,8 +53,8 @@ const getRandomActivities = (list, count) => {
 };
 
 const App = () => {
-  const [activities, setActivities] = React.useState([]);
-  const [user, loading, error] = useAuthState(auth);
+  const [activities, setActivities] = useState([]);
+  const [user] = useAuthState(auth);
   const [userData, setUserData] = useState(null);
   const [lastUpdateDate, setLastUpdateDate] = useState(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -127,8 +128,21 @@ const App = () => {
     getUserFromDB();
     fetchTaskData();
     // redirectToHomeIfAuth();
-    console.log(appLanguage);
-  }, [user, appLanguage]);
+  }, [user]);
+
+  useEffect(() => {
+    const translate = async () => {
+      const translatedActivities = await Promise.all(
+        activities.map(async (a) => {
+          const translatedActivity = await translateText(a.title, appLanguage);
+          return { ...a, translatedTitle: translatedActivity };
+        })
+      );
+
+      setActivities(translatedActivities);
+    };
+    translate();
+  }, [appLanguage]);
 
   const fetchTaskData = async () => {
     const storedLastUpdateDate = localStorage.getItem("lastUpdateDate");
@@ -161,7 +175,6 @@ const App = () => {
       }
     }
   };
-  console.log(activities);
 
   const handleDropdownToggle = () => {
     setIsDropdownOpen(!isDropdownOpen);

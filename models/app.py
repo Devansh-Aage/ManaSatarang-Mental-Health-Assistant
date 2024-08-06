@@ -1,5 +1,4 @@
 import os
-import torch
 import tensorflow as tf
 from flask import Flask, request, jsonify, render_template
 from PIL import Image
