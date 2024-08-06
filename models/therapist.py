@@ -1,4 +1,4 @@
-# app.py
+import requests
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from firebase_admin import credentials, firestore, initialize_app
@@ -6,7 +6,6 @@ import google.generativeai as genai
 
 app = Flask(__name__)
 CORS(app)
-
 
 GENAI_API_KEY = "AIzaSyAra4V0IQWR0W0lc82oYNMcyPP0nawwcoI"
 
@@ -26,12 +25,7 @@ model = genai.GenerativeModel(
     model_name="gemini-1.5-pro",
     generation_config=generation_config,
     system_instruction=(
-        "First, ask some questions one by one to categorize the user into the following disorders: 1. Anxiety Disorder, 2. Personality Disorder, 3. ADHD, 4. PTSD, 5. Depression, 6. Bipolar Disorder, or Any other if there.\n"
-        "Once categorized, inform the user and provide friendly, cheerful responses. Suggest activities to improve mood.\n"
-        "Analyze the user's feelings based on the activity they performed and the summary they provided.\n"
-        "Offer insights into their emotions and suggest additional activities they can try to improve their mood.\n"
-        "Whenever the user asks for some exercises provide him the needful minimum 5 and in a structured way.\n"
-        "Don't Answer to any question which is not related to mental health"
+        "Recommend strictly 5 therapists. Just give email. Nothing else"
     ),
 )
 
@@ -53,19 +47,32 @@ def generate_recommendations(user_description, therapists):
 @app.route('/recommend', methods=['POST'])
 def recommend_therapists():
     user_data = request.json
-    user_description = user_data.get('description')
+    user_id = user_data.get('uid')
+
+    if not user_id:
+        return jsonify({'error': 'User ID is required'}), 400
+
+    # Make a request to the /chat endpoint to get the user description
+    chat_api_url = "http://127.0.0.1:5000/chat"
+    chat_response = requests.post(chat_api_url, json={"user_input": "Provide a brief description of the user", "uid": user_id})
+
+    if chat_response.status_code != 200:
+        return jsonify({'error': 'Failed to get user description from chat API'}), chat_response.status_code
+
+    chat_response_data = chat_response.json()
+    user_description = chat_response_data.get('response')
 
     if not user_description:
         return jsonify({'error': 'Description is required'}), 400
 
     # Fetch therapist data from Firebase
-    therapists_ref = db.collection('users')
+    therapists_ref = db.collection('therapists')
     therapists = therapists_ref.stream()
     
     therapist_list = []
     for therapist in therapists:
         therapist_data = therapist.to_dict()
-        therapist_list.append(f"Name: {therapist_data['name']}, Specialization: {therapist_data['specialization']}, Experience: {therapist_data['experience']}, Location: {therapist_data['location']}, Bio: {therapist_data['bio']}")
+        therapist_list.append(f"Name: {therapist_data['name']}, Specialization: {therapist_data['specialization']}, Location: {therapist_data['location']}, Bio: {therapist_data['bio']}, Email: {therapist_data['email']}")
 
     # Generate recommendations based on user description
     recommendations = generate_recommendations(user_description, therapist_list)
@@ -73,4 +80,4 @@ def recommend_therapists():
     return jsonify(recommendations)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True,port=8050)

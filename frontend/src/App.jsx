@@ -130,7 +130,7 @@ const App = () => {
 
   const fetchTaskData = async () => {
     const storedLastUpdateDate = localStorage.getItem("lastUpdateDate");
-    // const storedLastUpdateDate = "30/07/2024";
+    // const storedLastUpdateDate = "05/06/2024";
     const today = new Date().toLocaleDateString("en-GB");
     console.log(today);
     console.log(storedLastUpdateDate);
@@ -202,7 +202,7 @@ const App = () => {
               path="/search"
               element={<Home activities={activities} userData={userData} />}
             />
-            
+
             <Route
               path="/profile"
               element={
@@ -269,7 +269,7 @@ const App = () => {
               path="/forum/post/:postId"
               element={<PostPage lang={appLanguage} />}
             />
-            <Route path="/chatbot" element={<Chatbot lang={appLanguage} />} />
+            <Route path="/chatbot" element={<Chatbot lang={appLanguage} user={user} />} />
             <Route
               path="/community/student"
               element={
