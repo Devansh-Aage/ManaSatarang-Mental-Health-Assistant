@@ -7,7 +7,7 @@ import google.generativeai as genai
 app = Flask(__name__)
 CORS(app)
 
-GENAI_API_KEY = "AIzaSyAra4V0IQWR0W0lc82oYNMcyPP0nawwcoI"
+GENAI_API_KEY = "AIzaSyBpyZIpak-ZWttvc2dTZYi2ZONycC_HoO0"
 
 cred = credentials.Certificate("./config/firebase-config.json")
 initialize_app(cred)
@@ -15,7 +15,7 @@ db = firestore.client()
 # Initialize Gemini API
 genai.configure(api_key=GENAI_API_KEY)
 generation_config = {
-    "temperature": 1,
+    "temperature": 0.7,
     "top_p": 0.95,
     "top_k": 64,
     "max_output_tokens": 2000,
