@@ -15,7 +15,7 @@ db = firestore.client()
 # Initialize Gemini API
 genai.configure(api_key=GENAI_API_KEY)
 generation_config = {
-    "temperature": 1,
+    "temperature": 0.7,
     "top_p": 0.95,
     "top_k": 64,
     "max_output_tokens": 2000,

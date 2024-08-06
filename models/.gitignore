@@ -1,2 +1,3 @@
 multi_activity_classifier_vgg16.h5
 one_hot_encoder.pkl
+dataset
