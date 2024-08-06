@@ -163,8 +163,6 @@ function Journal({ user, lang }) {
     setActiveInput(inputName);
   };
 
-
-
   const translatePage = async () => {
     try {
       setloadingTranslation(true);
@@ -195,7 +193,7 @@ function Journal({ user, lang }) {
               ...entry,
               translatedTitle,
               translatedBody,
-              translatedEmotion
+              translatedEmotion,
             };
           })
         );
@@ -247,27 +245,32 @@ function Journal({ user, lang }) {
               required
               minLength={6}
             />
-            <div className="flex items-center justify-between">
+            <button
+              type="button"
+              onClick={toggleListening}
+              className={`flex items-center justify-center px-4 py-2 border rounded-lg mb-2 cursor-pointer ${
+                listening ? "bg-red-600 text-white" : "bg-purple-600 text-white"
+              }`}
+            >
+              {listening ? (
+                <>
+                  <MicOff size={16} className="mr-1" />
+                  <span>Stop Recording</span>
+                </>
+              ) : (
+                <>
+                  <Mic size={16} className="mr-1" />
+                  <span>Start Recording</span>
+                </>
+              )}
+            </button>
+            <div className="flex items-center gap-2">
               <button
+                onClick={() => setIsEmojiPickerVisible(!isEmojiPickerVisible)}
                 type="button"
-                onClick={toggleListening}
-                className={`flex items-center justify-center px-4 py-2 border rounded-lg cursor-pointer ${
-                  listening
-                    ? "bg-red-600 text-white"
-                    : "bg-purple-600 text-white"
-                }`}
+                className="mr-2 p-2 bg-gray-300 font-semibold text-black rounded-lg hover:bg-gray-400"
               >
-                {listening ? (
-                  <>
-                    <MicOff size={16} className="mr-1" />
-                    <span>Stop Recording</span>
-                  </>
-                ) : (
-                  <>
-                    <Mic size={16} className="mr-1" />
-                    <span>Start Recording</span>
-                  </>
-                )}
+                <Smile />
               </button>
               {isEmojiPickerVisible && (
                 <div className="absolute bottom-12 left-0 z-10">
@@ -280,7 +283,7 @@ function Journal({ user, lang }) {
               )}
               <button
                 disabled={loading}
-                className="flex items-center justify-center px-4 py-2 bg-purple-600 text-white border rounded-lg cursor-pointer"
+                className="flex items-center justify-center px-6 py-2 bg-purple-600 text-white border rounded-lg cursor-pointer"
                 type="submit"
               >
                 {loading ? (

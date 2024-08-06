@@ -172,7 +172,6 @@ const App = () => {
       }
     }
   };
-  console.log(activities)
 
   const handleDropdownToggle = () => {
     setIsDropdownOpen(!isDropdownOpen);

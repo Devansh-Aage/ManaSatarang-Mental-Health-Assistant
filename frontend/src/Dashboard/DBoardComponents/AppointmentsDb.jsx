@@ -30,7 +30,6 @@ const AppointmentsDb = ({ user }) => {
 
           const mergedAppointments = [...appointments1, ...appointments2];
           setAppointments(mergedAppointments);
-          console.log(mergedAppointments);
           
         } catch (error) {
           console.error("Error fetching appointments:", error);

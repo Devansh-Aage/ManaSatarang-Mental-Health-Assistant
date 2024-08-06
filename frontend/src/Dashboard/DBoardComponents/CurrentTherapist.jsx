@@ -1,4 +1,11 @@
-import { collection, doc, getDoc, getDocs, query, where } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  query,
+  where,
+} from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { db } from "../../config/firebase-config";
 
@@ -56,23 +63,20 @@ function CurrentTherapist({ user }) {
     getTherapist();
   }, [appointments]);
 
-  console.log(therapistData);
-  
-
   return (
     <div className="bg-white border rounded-xl p-4 flex flex-col items-center justify-center row-span-3">
       {user ? (
         <>
           <h2 className="text-lg text-black mb-7">Current Therapist</h2>
           <img
-            src={therapistData.photoURL || "default_therapist_icon.png"}
+            src={therapistData?.photoURL || "default_therapist_icon.png"}
             alt="Therapist Icon"
             width={90}
             height={90}
             className="mb-4 rounded-full"
           />
-          <p className="text-gray-700 text-md">{therapistData.displayName}</p>
-          <p className="text-gray-400 text-sm">{therapistData.email}</p>
+          <p className="text-gray-700 text-md">{therapistData?.displayName}</p>
+          <p className="text-gray-400 text-sm">{therapistData?.email}</p>
         </>
       ) : (
         <p className="text-gray-500 text-sm mb-4">Loading...</p>
