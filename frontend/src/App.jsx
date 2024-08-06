@@ -21,7 +21,7 @@ import Login from "./Login";
 import Community from "./Community";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { activityList } from "./utils";
+import { activityList, translateText } from "./utils";
 import ActivityDetails from "./ActivityDetails";
 import Workspace from "./Workspace";
 import Chronic from "./Chronic";
@@ -123,8 +123,25 @@ const App = () => {
     getUserFromDB();
     fetchTaskData();
     // redirectToHomeIfAuth();
+   
+
     console.log(appLanguage);
   }, [user, appLanguage]);
+
+  useEffect(() => {
+    const translate = async () => {
+      const translatedActivities = await Promise.all(
+        activities.map(async (a) => {
+          const translatedActivity = await translateText(a.title, appLanguage);
+          return { ...a, translatedTitle: translatedActivity };
+        })
+      );
+
+      setActivities(translatedActivities);
+    };
+    translate()
+  }, [appLanguage,user])
+  
 
   const fetchTaskData = async () => {
     const storedLastUpdateDate = localStorage.getItem("lastUpdateDate");

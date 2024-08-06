@@ -1,16 +1,23 @@
 import React, { useState } from "react";
 import "react-toastify/dist/ReactToastify.css";
 
-const ActivityBlock = ({ date, isDone, id, uid, title, user ,translatedTitle}) => {
+const ActivityBlock = ({
+  date,
+  isDone,
+  id,
+  uid,
+  title,
+  user,
+  translatedTitle,
+}) => {
   const [isDoneState, setIsDoneState] = useState(isDone);
-
-
+console.log(translatedTitle);
 
   return (
     <div
       className={`flex items-center mb-3 p-3 bg-gradient-to-r from-violet-700 to-purple-500 text-white rounded-lg cursor-pointer transition duration-300 ${
         isDoneState ? "bg-purple-700" : ""
-      }`}      
+      }`}
     >
       <div
         className={`w-6 h-6 border-2 border-white rounded-full flex justify-center items-center mr-3 ${
@@ -19,14 +26,9 @@ const ActivityBlock = ({ date, isDone, id, uid, title, user ,translatedTitle}) =
       >
         {isDoneState && <span className="text-purple-600">&#10003;</span>}
       </div>
-      <span
-        className={`flex-1 text-base ${
-          isDoneState ? "line-through" : ""
-        }`}
-      >
+      <span className={`flex-1 text-base ${isDoneState ? "line-through" : ""}`}>
         {translatedTitle}
       </span>
-      
     </div>
   );
 };

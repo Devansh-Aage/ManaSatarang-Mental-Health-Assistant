@@ -94,7 +94,7 @@ const CameraCapture = ({ userData, userId, username }) => {
       closeCamera();
       setloading(false);
       if (res.data.success) {
-        navigate("/");
+        navigate("/dashboard");
         toast.success(`Welcome back, ${username}!`);
       } else {
         toast.error("Biometric authentication failed.");
