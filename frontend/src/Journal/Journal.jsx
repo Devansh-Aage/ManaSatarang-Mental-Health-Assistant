@@ -9,7 +9,7 @@ import {
   query,
   where,
 } from "firebase/firestore";
-import { useAuthState } from "react-firebase-hooks/auth";
+import { Smile } from "lucide-react";
 import { toast } from "react-toastify";
 import Skeleton from "react-loading-skeleton";
 import { Collapse } from "antd";
@@ -138,19 +138,31 @@ function Journal({ user }) {
     // Add more emotions and corresponding colors here
   };
 
+  const handleEmojiClick = (emojiObject) => {
+    setformState((prevState) => {
+      const newValue = prevState[activeInput] + emojiObject.emoji;
+      return { ...prevState, [activeInput]: newValue };
+    });
+  };
+
+  const handleInputFocus = (inputName) => {
+    setActiveInput(inputName);
+  };
+
   return (
-    <div className="flex justify-between items-start p-4 max-w-1200 mx-auto">
+    <div className="flex justify-between mt-10 items-start p-4 max-w-1200 mx-auto">
       <div className="flex-1 mr-4 p-4 rounded-lg shadow-md bg-white/20 backdrop-blur">
         <div className="flex items-center">
           <ClipboardList size={20} className="text-purple-600 mt-1 ml-3" />
           <div className="font-semibold text-2xl ml-4">Journal</div>
         </div>
-        <div className="mt-4">
+        <div className="mt-4 relative">
           <form onSubmit={handleSave}>
             <input
               type="text"
               value={formState.title}
               onChange={onChange}
+              onFocus={() => handleInputFocus("title")}
               placeholder="Title of your entry..."
               className="w-full px-4 py-2 text-lg font-bold border rounded-lg mb-4"
               required
@@ -160,6 +172,7 @@ function Journal({ user }) {
             <textarea
               value={formState.desc}
               onChange={onChange}
+              onFocus={() => handleInputFocus("desc")}
               placeholder="Write your thoughts here..."
               rows={10}
               name="desc"
