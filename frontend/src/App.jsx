@@ -48,7 +48,7 @@ const getRandomActivities = (list, count) => {
 };
 
 const App = () => {
-  const [activities, setActivities] = React.useState([]);
+  const [activities, setActivities] = useState([]);
   const [user] = useAuthState(auth);
   const [userData, setUserData] = useState(null);
   const [lastUpdateDate, setLastUpdateDate] = useState(null);
@@ -124,9 +124,7 @@ const App = () => {
     fetchTaskData();
     // redirectToHomeIfAuth();
    
-
-    console.log(appLanguage);
-  }, [user, appLanguage]);
+  }, [user]);
 
   useEffect(() => {
     const translate = async () => {
@@ -140,7 +138,7 @@ const App = () => {
       setActivities(translatedActivities);
     };
     translate()
-  }, [appLanguage,user])
+  }, [appLanguage])
   
 
   const fetchTaskData = async () => {
@@ -174,7 +172,7 @@ const App = () => {
       }
     }
   };
-  console.log(activities);
+  console.log(activities)
 
   const handleDropdownToggle = () => {
     setIsDropdownOpen(!isDropdownOpen);

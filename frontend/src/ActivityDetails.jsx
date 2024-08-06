@@ -179,11 +179,15 @@ const ActivityDetails = ({ activities, user, lang }) => {
           return translatedMsg;
         })
       );
-      
+      const translatedActivities = await Promise.all(
+        activities.map(async (a) => {
+          const translatedActivity = await translateText(a.title, lang);
+          return { ...a, translatedTitle: translatedActivity };
+        })
+      );
       setstaticText(translatedPage);
       setTranslatedactivity(translatedActivities);
       console.log(translatedActivities);
-      
     } catch (error) {
       console.error("Error translating static text: ", error);
     } finally {

@@ -27,7 +27,7 @@ console.log(translatedTitle);
         {isDoneState && <span className="text-purple-600">&#10003;</span>}
       </div>
       <span className={`flex-1 text-base ${isDoneState ? "line-through" : ""}`}>
-        {translatedTitle}
+        {translatedTitle ?? title}
       </span>
     </div>
   );
