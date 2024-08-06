@@ -6,7 +6,7 @@ import ActivityDb from './DBoardComponents/ActivityDb';
 import CouponsDb from './DBoardComponents/CouponsDb';
 import AppointmentsDb from './DBoardComponents/AppointmentsDb';
 
-function Dashboard() {
+function Dashboard({user}) {
     return (
        <div>
             <div className='grid lg:grid-cols-3 auto-rows-[120px] gap-2 lg:mx-6 lg:my-3 my-6 mx-12'>
