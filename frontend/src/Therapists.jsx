@@ -70,7 +70,7 @@ const Therapists = ({ lang, user }) => {
 
     const fetchRecommendTherapist = async () => {
       try {
-        const res = await axios.post("http://127.0.0.1:8080/recommend", {
+        const res = await axios.post("http://localhost:5050/recommend", {
           uid: user?.uid,
         });
         if (!res.data) {
