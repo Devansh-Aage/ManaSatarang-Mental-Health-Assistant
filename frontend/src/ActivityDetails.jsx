@@ -9,9 +9,11 @@ import { doc, updateDoc, increment } from "firebase/firestore";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
+import { translateText } from "./utils";
+import { useEffect } from "react";
 // import { ReactMic } from "react-mic";
 
-const ActivityDetails = ({ activities, user }) => {
+const ActivityDetails = ({ activities, user, lang }) => {
   const [input, setInput] = useState("");
   const [geminiInput, setGeminiInput] = useState("");
   const [botResponse, setBotResponse] = useState("");
@@ -21,7 +23,16 @@ const ActivityDetails = ({ activities, user }) => {
   const [imageFile, setImageFile] = useState(null);
   const [record, setRecord] = useState(false);
   const [emotion, setEmotion] = useState("");
+  const [staticText, setstaticText] = useState([
+    "Daily Activities",
+    "Activity Details",
+    "Summary",
+    "Upload Image",
+    "Submit",
+  ]);
+  const [translatedactivity, setTranslatedactivity] = useState(activities);
 
+  const [loadingTranslation, setloadingTranslation] = useState(false);
   // const startRecording = () => {
   //   setRecord(true);
   // };
@@ -118,7 +129,7 @@ const ActivityDetails = ({ activities, user }) => {
 
   const handleActivityClick = (activity) => {
     setSelectedActivity(activity);
-    setInput(`Title: ${activity.title} \n`);
+    setInput(`Title: ${activity.translatedTitle} \n`);
     setGeminiInput(`Title: ${activity.title} \n`);
   };
 
@@ -159,23 +170,50 @@ const ActivityDetails = ({ activities, user }) => {
     }
   };
 
+  const translatePage = async () => {
+    try {
+      setloadingTranslation(true);
+      const translatedPage = await Promise.all(
+        staticText.map(async (t) => {
+          const translatedMsg = await translateText(t, lang);
+          return translatedMsg;
+        })
+      );
+      const translatedActivities = await Promise.all(
+        activities.map(async (a) => {
+          const translatedActivity = await translateText(a.title, lang);
+          return { ...a, translatedTitle: translatedActivity };
+        })
+      );
+      setstaticText(translatedPage);
+      setTranslatedactivity(translatedActivities);
+      console.log(translatedActivities);
+      
+    } catch (error) {
+      console.error("Error translating static text: ", error);
+    } finally {
+      setloadingTranslation(false);
+    }
+  };
+
+  useEffect(() => {
+    translatePage();
+  }, [lang, activities]);
+
   return (
     <div className="w-full flex justify-center items-center p-4 mx-2 overscroll-none">
       <div className="w-[40%] lg:w-[30%]">
         <div className="flex mb-3">
           <ClipboardList size={20} className="text-purple-600 mt-1 ml-3" />
-          <div className="font-semibold text-2xl ml-4">Daily Activities</div>
+          <div className="font-semibold text-2xl ml-4">{staticText[0]}</div>
         </div>
-        {activities
-          ? activities.slice(0, 5).map((activity) => (
-              <div
-                key={activity.id}
-                onClick={() => handleActivityClick(activity)}
-              >
+        {translatedactivity.length > 0
+          ? translatedactivity.slice(0, 5).map((a) => (
+              <div key={a.id} onClick={() => handleActivityClick(a)}>
                 <ActivityBlock
-                  key={activity.id}
+                  key={a.id}
                   isDoneState={isDoneState}
-                  {...activity}
+                  {...a}
                   user={user}
                 />
               </div>
@@ -196,7 +234,7 @@ const ActivityDetails = ({ activities, user }) => {
             htmlFor="activityTitle"
             className="block text-lg font-medium text-gray-700"
           >
-            {selectedActivity ? selectedActivity.title : "Activity Details"}
+            {staticText[1]}
           </label>
         </div>
         <div className="mb-3">
@@ -204,12 +242,12 @@ const ActivityDetails = ({ activities, user }) => {
             htmlFor="summary"
             className="block text-sm font-medium text-gray-700"
           >
-            Summary
+            {staticText[2]}
           </label>
           <TextareaAutosize
             className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border border-gray-300 rounded-md p-2"
             value={input}
-            rows={3}
+            rows={8}
             onChange={(e) => setInput(e.target.value)}
           />
         </div>
@@ -218,7 +256,7 @@ const ActivityDetails = ({ activities, user }) => {
             htmlFor="image"
             className="block text-sm font-medium text-gray-700"
           >
-            Upload Image
+            {staticText[3]}
           </label>
           <input
             type="file"
@@ -254,7 +292,7 @@ const ActivityDetails = ({ activities, user }) => {
           type="submit"
           className="w-full inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
         >
-          Submit
+          {staticText[4]}
         </button>
         <button
           type="button"

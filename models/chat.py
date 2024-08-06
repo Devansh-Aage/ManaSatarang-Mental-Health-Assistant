@@ -18,12 +18,12 @@ db = firestore.client()
 # Configuration
 DEVELOPER_KEY = "AIzaSyAtlZQExJ-QTrRh-3BZ0NYfPnnBjPQjLdc"
 CUSTOM_SEARCH_ENGINE_ID = "52dcf3fb99a344f61"
-GENAI_API_KEY = "AIzaSyAra4V0IQWR0W0lc82oYNMcyPP0nawwcoI"
+GENAI_API_KEY = "AIzaSyBpyZIpak-ZWttvc2dTZYi2ZONycC_HoO0"
 
 # Initialize Gemini API
 genai.configure(api_key=GENAI_API_KEY)
 generation_config = {
-    "temperature": 1,
+    "temperature": 0.7,
     "top_p": 0.95,
     "top_k": 64,
     "max_output_tokens": 2000,
@@ -33,7 +33,8 @@ model = genai.GenerativeModel(
     model_name="gemini-1.5-pro",
     generation_config=generation_config,
     system_instruction=(
-        "First, ask some questions one by one to categorize the user into the following disorders: 1. Anxiety Disorder, 2. Personality Disorder, 3. ADHD, 4. PTSD, 5. Depression, 6. Bipolar Disorder, or Any other if there.\n"
+        "First your name is Serena and you are a health assistant at ManaSatarang.\n"
+        "Ask some questions one by one to categorize the user into the following disorders: 1. Anxiety Disorder, 2. Personality Disorder, 3. ADHD, 4. PTSD, 5. Depression, 6. Bipolar Disorder, or Any other if there.\n"
         "Once categorized, inform the user and provide friendly, cheerful responses. Suggest activities to improve mood.\n"
         "Analyze the user's feelings based on the activity they performed and the summary they provided.\n"
         "Offer insights into their emotions and suggest additional activities they can try to improve their mood.\n"

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import Skeleton from "react-loading-skeleton";
-import { Mic, MicOff, Send, Smile } from "lucide-react";
+import { Mic, MicOff, Send, Smile, Volume2, VolumeX } from "lucide-react";
 import { useSpeechSynthesis } from "react-speech-kit";
 import "react-loading-skeleton/dist/skeleton.css";
 import Filter from "bad-words";
@@ -21,7 +21,7 @@ import { translateText } from "./utils";
 
 const Chatbot = ({ user, lang }) => {
   const [messages, setMessages] = useState([]);
-  const [staticText, setstaticText] = useState([
+  const [staticText, setStaticText] = useState([
     "Meet Serena!",
     "Your Supportive Friend for a Happier You!",
     "Disable Reading",
@@ -31,15 +31,15 @@ const Chatbot = ({ user, lang }) => {
   const [isEmojiPickerVisible, setIsEmojiPickerVisible] = useState(false);
   const messagesEndRef = useRef(null);
   const [isListening, setIsListening] = useState(false);
-  const [voiceIndex, setVoiceIndex] = useState(0);
+  const [voiceIndex, setVoiceIndex] = useState(2);
   const [pitch, setPitch] = useState(1);
   const [rate, setRate] = useState(1.5);
   const [volume, setVolume] = useState(1);
   const [selectedVoice, setSelectedVoice] = useState(null);
   const [videoMessages, setVideoMessages] = useState([]);
   const { speak, speaking, cancel, supported, voices } = useSpeechSynthesis();
+  const [isBotSpeaking, setIsBotSpeaking] = useState(false);
   const filter = new Filter();
-  console.log(user);
 
   const recognition = useRef(null);
   const [readingEnabled, setReadingEnabled] = useState(true);
@@ -101,6 +101,21 @@ const Chatbot = ({ user, lang }) => {
     }
   };
 
+  const toggleSpeaker = () => {
+    if (speaking) {
+      cancel();
+    } else {
+      const lastBotMessage = messages
+        .slice()
+        .reverse()
+        .find((msg) => msg.sender === "bot");
+
+      if (lastBotMessage) {
+        speakResponse(lastBotMessage.text);
+      }
+    }
+  };
+
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
@@ -137,28 +152,6 @@ const Chatbot = ({ user, lang }) => {
       );
 
       const chatbotResponse = { sender: "bot", text: response.data.response };
-      // const videoMessages = response.data.youtube_videos.map(
-      //   (video, index) => ({
-      //     sender: "bot",
-      //     text: (
-      //       <div key={index} className="flex flex-col items-center">
-      //         <a
-      //           href={video.link}
-      //           target="_blank"
-      //           rel="noopener noreferrer"
-      //           className="text-center"
-      //         >
-      //           <img
-      //             src={video.thumbnail}
-      //             alt={video.title}
-      //             className="w-full max-w-xs rounded-lg mb-2"
-      //           />
-      //           <p className="text-sm text-gray-600">{video.title}</p>
-      //         </a>
-      //       </div>
-      //     ),
-      //   })
-      // );
 
       setMessages((prevMessages) => [...prevMessages, chatbotResponse]);
       await saveMessageToFirestore("bot", chatbotResponse.text);
@@ -180,10 +173,6 @@ const Chatbot = ({ user, lang }) => {
       rate,
       volume,
     });
-  };
-
-  const stopReading = () => {
-    cancel();
   };
 
   const toggleReading = () => {
@@ -228,7 +217,7 @@ const Chatbot = ({ user, lang }) => {
           return translatedStatic;
         })
       );
-      setstaticText(translatedPageText);
+      setStaticText(translatedPageText);
     } catch (error) {
       console.error("Error translating links: ", error);
     }
@@ -274,6 +263,12 @@ const Chatbot = ({ user, lang }) => {
         </div>
 
         <div className="flex mt-4 items-center relative">
+          <button
+            onClick={toggleSpeaker}
+            className="mr-2 p-2 bg-gray-300 font-semibold text-black rounded-lg hover:bg-gray-400"
+          >
+            {speaking ? <VolumeX /> : <Volume2 />}
+          </button>
           <button
             onClick={toggleListening}
             className="mr-2 p-2 bg-gray-300 font-semibold text-black rounded-lg hover:bg-gray-400"

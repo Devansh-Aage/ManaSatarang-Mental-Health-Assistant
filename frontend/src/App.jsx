@@ -39,9 +39,7 @@ import Chat from "./Chat";
 import "./App.css";
 import Journal from "./Journal/Journal";
 import ScanFace from "./ScanFace";
-import { Select } from "antd";
 
-const { Option } = Select;
 import Dashboard from "./Dashboard/Dashboard";
 
 const getRandomActivities = (list, count) => {
@@ -51,7 +49,7 @@ const getRandomActivities = (list, count) => {
 
 const App = () => {
   const [activities, setActivities] = React.useState([]);
-  const [user, loading, error] = useAuthState(auth);
+  const [user] = useAuthState(auth);
   const [userData, setUserData] = useState(null);
   const [lastUpdateDate, setLastUpdateDate] = useState(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -193,7 +191,16 @@ const App = () => {
         <ToastContainer />
         <div className="overflow-hidden ">
           <Routes>
-            <Route path="/dashboard" element={<Dashboard lang={appLanguage}/>} />
+            <Route
+              path="/dashboard"
+              element={
+                <Dashboard
+                  lang={appLanguage}
+                  activities={activities}
+                  user={user}
+                />
+              }
+            />
             <Route
               path="/login"
               element={<Login user={user} lang={appLanguage} />}
@@ -269,7 +276,10 @@ const App = () => {
               path="/forum/post/:postId"
               element={<PostPage lang={appLanguage} />}
             />
-            <Route path="/chatbot" element={<Chatbot lang={appLanguage} user={user} />} />
+            <Route
+              path="/chatbot"
+              element={<Chatbot lang={appLanguage} user={user} />}
+            />
             <Route
               path="/community/student"
               element={
@@ -312,7 +322,7 @@ const App = () => {
               path="/therapists"
               element={
                 user ? (
-                  <Therapists lang={appLanguage} />
+                  <Therapists lang={appLanguage} user={user} />
                 ) : (
                   <Login lang={appLanguage} />
                 )
