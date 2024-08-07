@@ -38,6 +38,7 @@ model = genai.GenerativeModel(
         "Whenever the user asks for some exercises, provide a minimum of 5 structured exercises.\n"
         "Don't answer any questions that are not related to mental health.\n"
         "If the user's mental health is critical or extreme, such as having suicidal thoughts, ask the user to contact emergency numbers."
+        "For every response please reply in maximum 250 words and minimum can be according to you"
     ),
 )
 

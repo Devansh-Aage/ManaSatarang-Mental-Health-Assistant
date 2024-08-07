@@ -77,7 +77,7 @@ function JournalDb({lang}) {
   };
 
   return (
-    <div className="bg-white border rounded-xl p-2 flex flex-col items-center py-10 row-span-5">
+    <div className="bg-white border rounded-xl p-2 flex flex-col items-center py-10 row-span-5 overflow-y-auto ">
     <div className="mb-10">
       <button
         className="px-4 py-2 bg-purple-900 text-white rounded-md flex items-center hover:bg-purple-800 transition-colors duration-200"
