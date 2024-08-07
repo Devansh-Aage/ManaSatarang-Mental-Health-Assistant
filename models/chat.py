@@ -164,7 +164,7 @@ def get_video_details(video_ids):
 
 def search_google(query, num_results=5):
     try:
-        service = build("customsearch", "v1", developerKey=os.getenv('DEVELOPER_KEY'))
+        service = build("customsearch", "v1", developerKey=os.getenv('YOUTUBE_KEY'))
         res = service.cse().list(
             q=query,
             cx=os.getenv('CUSTOM_SEARCH_ENGINE_ID'),
