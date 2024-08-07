@@ -60,7 +60,7 @@ function Journal({ user, lang }) {
       recognitionRef.current = new SpeechRecognition();
       recognitionRef.current.continuous = true;
       recognitionRef.current.interimResults = true;
-      recognitionRef.current.lang = "en-US";
+      recognitionRef.current.lang = lang; // Use lang prop
 
       recognitionRef.current.onresult = (event) => {
         let interimTranscript = "";
@@ -90,7 +90,7 @@ function Journal({ user, lang }) {
         setListening(false);
       };
     }
-  }, []);
+  }, [lang]); // Add lang as a dependency
 
   const clearForm = () => {
     setformState({
@@ -105,7 +105,7 @@ function Journal({ user, lang }) {
 
     try {
       const { data } = await axios.post(
-        "http://localhost:8080/classify-emotion",
+        "http://localhost:5050/classify-emotion",
         {
           text: formState.desc,
         }
