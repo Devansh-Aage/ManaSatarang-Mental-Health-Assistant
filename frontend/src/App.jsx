@@ -88,7 +88,7 @@ const App = () => {
 
   const getTasksFromDB = async () => {
     if (user) {
-      try {
+      try{
         console.log("inside");
         const today = new Date();
         today.setUTCHours(0, 0, 0, 0);
@@ -113,6 +113,7 @@ const App = () => {
           ...doc.data(),
         }));
         setActivities(tasksData);
+        console.log(tasksData);
       } catch (err) {
         console.error("Error fetching tasks:", err);
       }
@@ -142,8 +143,8 @@ const App = () => {
   
 
   const fetchTaskData = async () => {
-    const storedLastUpdateDate = localStorage.getItem("lastUpdateDate");
-    // const storedLastUpdateDate = "05/06/2024";
+    // const storedLastUpdateDate = localStorage.getItem("lastUpdateDate");
+    const storedLastUpdateDate = "05/06/2024";
     const today = new Date().toLocaleDateString("en-GB");
     console.log(today);
     console.log(storedLastUpdateDate);
@@ -206,7 +207,7 @@ const App = () => {
         <div className="overflow-hidden ">
           <Routes>
             <Route
-              path="/dashboard"
+              path="/"
               element={
                 <Dashboard
                   lang={appLanguage}
@@ -336,7 +337,7 @@ const App = () => {
               path="/therapists"
               element={
                 user ? (
-                  <Therapists lang={appLanguage} user={user} />
+                  <Therapists lang={appLanguage} user={user} userData={userData} />
                 ) : (
                   <Login lang={appLanguage} />
                 )

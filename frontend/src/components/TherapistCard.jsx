@@ -6,9 +6,11 @@ const TherapistCard = ({
   email,
   bio,
   specialization,
-  profile,
+  imgPath,
   fees,
   location,
+  userData,
+  experience
 }) => {
   const navigate = useNavigate();
 
@@ -19,27 +21,29 @@ const TherapistCard = ({
         email: email,
         bio: bio,
         specialization: specialization,
-        profile: profile ?? "",
+        profile: imgPath ?? "",
         fees: fees,
         offLocation: location,
-      },
+        userData:userData,
+        exp:experience,
+      }
     });
   };
 
   return (
     <div className="border-0 rounded-lg flex flex-col bg-white items-center gap-2 mb-10 mt-10 shadow-md hover:shadow-lg transition-shadow w-[240px] h-[320px]">
       <img
-        src="https://images.pexels.com/photos/4307869/pexels-photo-4307869.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+        src={imgPath}
         alt={name}
         className="w-[100%] h-[150px] aspect-square rounded-t-lg"
       />
       <div className="font-bold text-lg text-center">{name}</div>
-      <div className="font-normal text-base text-center">{specialization}</div>
+      <div className="font-normal text-base px-2 text-center">{specialization}</div>
       <button
         onClick={toDetails}
         className="bg-indigo-950 text-white px-4 py-2 rounded-lg mt-auto hover:bg-blue-900 transition-colors mb-4"
       >
-        Book an Appointment
+        Book an Session
       </button>
     </div>
   );

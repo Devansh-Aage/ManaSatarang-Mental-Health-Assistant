@@ -42,7 +42,7 @@ import { toast } from "react-toastify";
 //   },
 // ];
 
-const Therapists = ({ lang, user }) => {
+const Therapists = ({ lang, user,userData }) => {
   const [staticText, setStaticText] = useState([
     "Meet Our Therapists",
     "Our team of highly qualified therapists is here to support your mental health journey. Explore our range of specialized programs and find the right fit for you.",
@@ -123,7 +123,7 @@ const Therapists = ({ lang, user }) => {
       </h2>
       <div className="flex flex-wrap gap-5 justify-center">
         {therapists.map((therapist, index) => (
-          <TherapistCard key={index} {...therapist} />
+          <TherapistCard key={index} {...therapist} userData={userData} />
         ))}
       </div>
       <div>{recommendTherapist}</div>
