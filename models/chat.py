@@ -87,6 +87,8 @@ def search_articles():
     articles = search_google(query, num_results=5)
     return jsonify(articles)
 
+
+
 @app.route("/recommendations", methods=["GET"])
 def recommendations():
     keywords = extract_keywords(chat_history)

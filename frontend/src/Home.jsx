@@ -13,16 +13,20 @@ import { translateText } from "./utils";
 
 const { TabPane } = Tabs;
 
-
-
 const Home = ({ activities, userData, user, lang }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [loadingSearch, setLoadingSearch] = useState(false);
   const [loadingRecommendations, setLoadingRecommendations] = useState(true);
-  const [staticText, setstaticText] = useState(['Lift Your Spirit!', 'Explore Fun Ways to Brighten Your Mind.','Search Google for articles...','Recommended Videos','Recommended Articles'])
+  const [staticText, setstaticText] = useState([
+    "Lift Your Spirit!",
+    "Explore Fun Ways to Brighten Your Mind.",
+    "Search Google for articles...",
+    "Recommended Videos",
+    "Recommended Articles",
+  ]);
   const [recommendations, setRecommendations] = useState(null);
-  const [loadingTranslation, setloadingTranslation] = useState(false)
+  const [loadingTranslation, setloadingTranslation] = useState(false);
 
   useEffect(() => {
     if (!recommendations) {
@@ -74,7 +78,6 @@ const Home = ({ activities, userData, user, lang }) => {
     }
   };
 
-
   useEffect(() => {
     const translateStaticText = async () => {
       const translatedTextArray = await Promise.all(
@@ -85,7 +88,6 @@ const Home = ({ activities, userData, user, lang }) => {
 
     translateStaticText();
   }, [lang]);
-
 
   // Cache recommendations using useMemo
   const cachedRecommendations = useMemo(() => {
@@ -99,7 +101,7 @@ const Home = ({ activities, userData, user, lang }) => {
           {staticText[0]}
         </h2>
         <h2 className="text-sm md:text-lg lg:text-xl font-semibold text-purple-400">
-        {staticText[1]}
+          {staticText[1]}
         </h2>
       </div>
       <div className="flex flex-col md:flex-row gap-4">
@@ -161,34 +163,35 @@ const Home = ({ activities, userData, user, lang }) => {
                   </div>
                 ) : (
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {cachedRecommendations.youtube_videos.map((video, index) => (
-                      <div
-                        className="border border-gray-300 rounded-md overflow-hidden bg-white shadow-md relative"
-                        key={index}
-                      >
-                        <a
-                          href={video.link}
-                          target="_blank"
-                          rel="noopener noreferrer"
+                    {cachedRecommendations.youtube_videos.map(
+                      (video, index) => (
+                        <div
+                          className="border border-gray-300 rounded-md overflow-hidden bg-white shadow-md relative"
+                          key={index}
                         >
-                          <img
-                            src={video.thumbnail}
-                            alt={video.title}
-                            className="w-full h-auto"
-                          />
-                         
-                        </a>
-                        <p className="p-2 text-sm font-bold text-gray-800 text-center">
-                          {video.title}
-                        </p>
-                        <button
+                          <a
+                            href={video.link}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            <img
+                              src={video.thumbnail}
+                              alt={video.title}
+                              className="w-full h-auto"
+                            />
+                          </a>
+                          <p className="p-2 text-sm font-bold text-gray-800 text-center">
+                            {video.title}
+                          </p>
+                          <button
                             onClick={() => handleSavePost("video", video)}
                             className="px-2 py-2 text-base font-semibold rounded-lg bg-white text-purple-600 hover:underline absolute right-2 top-2"
                           >
                             Save
                           </button>
-                      </div>
-                    ))}
+                        </div>
+                      )
+                    )}
                   </div>
                 )}
               </TabPane>
@@ -203,7 +206,7 @@ const Home = ({ activities, userData, user, lang }) => {
                   <ul className="list-none p-0">
                     {cachedRecommendations.articles.map((article, index) => (
                       <li key={index} className="mb-5 w-full">
-                          <button
+                        <button
                           onClick={() => handleSavePost("article", article)}
                           className="ml-2 text-sm text-purple-600 hover:underline"
                         >
@@ -217,7 +220,6 @@ const Home = ({ activities, userData, user, lang }) => {
                         >
                           {article.title}
                         </a>
-                      
                       </li>
                     ))}
                   </ul>
