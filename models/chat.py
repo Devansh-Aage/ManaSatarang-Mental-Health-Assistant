@@ -16,8 +16,9 @@ cred = credentials.Certificate("./config/firebase-config.json")
 initialize_app(cred)
 db = firestore.client()
 
+GENAI_API_KEY = "AIzaSyCpJwfwReAlATvyR3puWeKejomoPz26UUM"
 # Initialize Gemini API
-genai.configure(api_key=os.getenv('GENAI_API_KEY'))
+genai.configure(api_key=GENAI_API_KEY)
 generation_config = {
     "temperature": 0.7,
     "top_p": 0.95,
@@ -38,7 +39,7 @@ model = genai.GenerativeModel(
         "Whenever the user asks for some exercises, provide a minimum of 5 structured exercises.\n"
         "Don't answer any questions that are not related to mental health.\n"
         "If the user's mental health is critical or extreme, such as having suicidal thoughts, ask the user to contact emergency numbers."
-        "For every response please reply in maximum 250 words and minimum can be according to you"
+        "For every response please reply in maximum 150 words and minimum can be according to you"
     ),
 )
 
@@ -130,7 +131,7 @@ def fetch_recommendations(keywords):
     return youtube_videos[:10], articles[:10]
 
 def search_youtube(query, max_results=5):
-    youtube = build("youtube", "v3", developerKey=os.getenv('DEVELOPER_KEY'))
+    youtube = build("youtube", "v3", developerKey=os.getenv('YOUTUBE_KEY'))
     try:
         search_response = youtube.search().list(
             part="snippet",
@@ -144,7 +145,7 @@ def search_youtube(query, max_results=5):
         return []
 
 def get_video_details(video_ids):
-    youtube = build("youtube", "v3", developerKey=os.getenv('DEVELOPER_KEY'))
+    youtube = build("youtube", "v3", developerKey=os.getenv('YOUTUBE_KEY'))
     try:
         video_details_response = youtube.videos().list(
             part="snippet",
@@ -179,4 +180,4 @@ def search_google(query, num_results=5):
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True,use_reloader=False)
