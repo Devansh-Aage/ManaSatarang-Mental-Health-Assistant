@@ -4,8 +4,8 @@ import "./css/home.css";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { Search } from "lucide-react";
-import { Tabs } from 'antd';
-import 'antd/dist/reset.css'; // Import Ant Design styles
+import { Tabs } from "antd";
+import "antd/dist/reset.css"; // Import Ant Design styles
 
 const { TabPane } = Tabs;
 
@@ -101,7 +101,10 @@ const Home = ({ activities, userData }) => {
             </div>
           )}
           <div className="mt-4">
-            <Tabs defaultActiveKey="1" className="w-full justify-center items-center">
+            <Tabs
+              defaultActiveKey="1"
+              className="w-full justify-center items-center"
+            >
               <TabPane tab="Recommended Videos" key="1">
                 {loadingRecommendations ? (
                   <div className="flex gap-4">
@@ -112,14 +115,23 @@ const Home = ({ activities, userData }) => {
                 ) : (
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     {recommendations.youtube_videos.map((video, index) => (
-                      <div className="border border-gray-300 rounded-md overflow-hidden bg-white shadow-md" key={index}>
+                      <div
+                        className="border border-gray-300 rounded-md overflow-hidden bg-white shadow-md"
+                        key={index}
+                      >
                         <a
                           href={video.link}
                           target="_blank"
                           rel="noopener noreferrer"
                         >
-                          <img src={video.thumbnail} alt={video.title} className="w-full h-auto" />
-                          <p className="p-2 text-sm font-bold text-gray-800 text-center">{video.title}</p>
+                          <img
+                            src={video.thumbnail}
+                            alt={video.title}
+                            className="w-full h-auto"
+                          />
+                          <p className="p-2 text-sm font-bold text-gray-800 text-center">
+                            {video.title}
+                          </p>
                         </a>
                       </div>
                     ))}

@@ -146,8 +146,8 @@ const App = () => {
   }, [appLanguage]);
 
   const fetchTaskData = async () => {
-    const storedLastUpdateDate = localStorage.getItem("lastUpdateDate");
-    // const storedLastUpdateDate = "05/06/2024";
+    // const storedLastUpdateDate = localStorage.getItem("lastUpdateDate");
+    const storedLastUpdateDate = "04/06/2024";
     const today = new Date().toLocaleDateString("en-GB");
     console.log(today);
     console.log(storedLastUpdateDate);
