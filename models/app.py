@@ -29,19 +29,21 @@ class_names = yolo_model.module.names if hasattr(yolo_model, 'module') else yolo
 # Initialize TensorFlow model
 classifier_model = tf.keras.models.load_model('multi_activity_classifier_vgg16.h5')
 
+# Define valid activities
 valid_activities = ['go_to_a_dog_park', 'listen_to_music', 'read_a_book', 'ride_a_bicycle', 'watch_a_sunrise_or_sunset']
 
-# Fetch API key from environment variable
-api_key = os.getenv('GOOGLE_API_KEY')
+# Fetch API key from environment variables
+api_key = os.getenv('GENAI_API_KEY')
 if not api_key:
     raise ValueError("API key not found. Please set your API key in the .env file.")
 
 # Initialize LangChain model
 llm = ChatGoogleGenerativeAI(model="gemini-pro", api_key=api_key)
 
+# Set up the LLM prompt template
 template = """Predict the single, most dominant emotion conveyed by the following sentence without any description or additional information.
-    Sentence: "{text}"
-    """
+Sentence: "{text}"
+"""
 prompt = PromptTemplate.from_template(template)
 llm_chain = LLMChain(llm=llm, prompt=prompt)
 
@@ -51,10 +53,7 @@ firebase_admin.initialize_app(cred)
 db = firestore.client()
 
 # Initialize Gemini API
-GENAI_API_KEY = "AIzaSyAra4V0IQWR0W0lc82oYNMcyPP0nawwcoI"
-# GENAI_API_KEY = "AIzaSyBpyZIpak-ZWttvc2dTZYi2ZONycC_HoO0"
-# firebase_admin.initialize_app(cred)
-genai.configure(api_key=GENAI_API_KEY)
+genai.configure(api_key=os.getenv('GOOGLE_API_KEY'))
 generation_config = {
     "temperature": 0.7,
     "top_p": 0.95,
@@ -65,9 +64,7 @@ generation_config = {
 model = genai.GenerativeModel(
     model_name="gemini-1.5-pro",
     generation_config=generation_config,
-    system_instruction=(
-        "Recommend strictly 5 therapists. Just give email. Nothing else"
-    ),
+    system_instruction="Recommend strictly 5 therapists. Just give email. Nothing else"
 )
 chat_session = model.start_chat(history=[])
 
@@ -80,11 +77,7 @@ def generate_recommendations(user_description, therapists):
     response = chat_session.send_message(f"Based on the following description: '{user_description}', recommend 5 therapists from the list below:\n\n{therapists}\n")
     recommendations = response.text
 
-    # Parse the response to extract therapist details
-    recommended_therapists = []
-    for line in recommendations.splitlines():
-        if line.strip():  # Make sure line is not empty
-            recommended_therapists.append(line.strip())
+    recommended_therapists = [line.strip() for line in recommendations.splitlines() if line.strip()]
 
     return recommended_therapists
 
@@ -103,7 +96,8 @@ def predict():
 
     image_file = request.files['image']
     activity = request.form['activity'].strip().lower()
-    
+    print(image_file)
+    print(activity)
     if activity not in valid_activities:
         return jsonify({'error': f'Invalid activity. Valid activities are {valid_activities}'}), 400
 
@@ -115,26 +109,11 @@ def predict():
 
     detected = False
     if activity == 'ride_a_bicycle':
-        for result in results:
-            for box in result.boxes:
-                cls = int(box.cls[0])
-                if class_names[cls] == 'bicycle':
-                    detected = True
-                    break
+        detected = any(class_names[int(box.cls[0])] == 'bicycle' for result in results for box in result.boxes)
     elif activity == 'read_a_book':
-        for result in results:
-            for box in result.boxes:
-                cls = int(box.cls[0])
-                if class_names[cls] == 'book':
-                    detected = True
-                    break
+        detected = any(class_names[int(box.cls[0])] == 'book' for result in results for box in result.boxes)
     elif activity == 'go_to_a_dog_park':
-        for result in results:
-            for box in result.boxes:
-                cls = int(box.cls[0])
-                if class_names[cls] == 'dog':
-                    detected = True
-                    break
+        detected = any(class_names[int(box.cls[0])] == 'dog' for result in results for box in result.boxes)
 
     if not detected and activity in ['ride_a_bicycle', 'read_a_book', 'go_to_a_dog_park']:
         os.remove(image_path)
@@ -207,10 +186,7 @@ def recommend_therapists():
     therapists_ref = db.collection('therapists')
     therapists = therapists_ref.stream()
     
-    therapist_list = []
-    for therapist in therapists:
-        therapist_data = therapist.to_dict()
-        therapist_list.append(f"Name: {therapist_data['name']}, Specialization: {therapist_data['specialization']}, Location: {therapist_data['location']}, Bio: {therapist_data['bio']}, Email: {therapist_data['email']}")
+    therapist_list = [f"Name: {therapist.to_dict()['name']}, Specialization: {therapist.to_dict()['specialization']}, Location: {therapist.to_dict()['location']}, Bio: {therapist.to_dict()['bio']}, Email: {therapist.to_dict()['email']}" for therapist in therapists]
 
     # Generate recommendations based on user description
     recommendations = generate_recommendations(user_description, therapist_list)
@@ -220,4 +196,4 @@ def recommend_therapists():
 if __name__ == '__main__':
     if not os.path.exists('temp'):
         os.makedirs('temp')
-    app.run(debug=True, port=5050)
+    app.run(debug=True, port=5050,use_reloader=False)

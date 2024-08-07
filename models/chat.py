@@ -6,6 +6,7 @@ from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
 from firebase_admin import credentials, firestore, initialize_app
 import google.generativeai as genai
+import os
 
 # Initialize Flask App and Firestore
 app = Flask(__name__)
@@ -15,14 +16,8 @@ cred = credentials.Certificate("./config/firebase-config.json")
 initialize_app(cred)
 db = firestore.client()
 
-# Configuration
-DEVELOPER_KEY = "AIzaSyAtlZQExJ-QTrRh-3BZ0NYfPnnBjPQjLdc"
-CUSTOM_SEARCH_ENGINE_ID = "52dcf3fb99a344f61"
-GENAI_API_KEY = "AIzaSyAra4V0IQWR0W0lc82oYNMcyPP0nawwcoI"
-# GENAI_API_KEY = "AIzaSyBpyZIpak-ZWttvc2dTZYi2ZONycC_HoO0"
-
 # Initialize Gemini API
-genai.configure(api_key=GENAI_API_KEY)
+genai.configure(api_key=os.getenv('GENAI_API_KEY'))
 generation_config = {
     "temperature": 0.7,
     "top_p": 0.95,
@@ -35,17 +30,18 @@ model = genai.GenerativeModel(
     generation_config=generation_config,
     system_instruction=(
         "First your name is Serena and you are a health assistant at ManaSatarang.\n"
-        "Ask some questions one by one to categorize the user into the following disorders: 1. Anxiety Disorder, 2. Personality Disorder, 3. ADHD, 4. PTSD, 5. Depression, 6. Bipolar Disorder, or Any other if there.\n"
+        "Begin by greeting the user cheerfully. Do not talk about journals initially.\n"
+        "Ask a brief question to classify the user into one of the following disorders: 1. Anxiety Disorder, 2. Personality Disorder, 3. ADHD, 4. PTSD, 5. Depression, 6. Bipolar Disorder, or any other if applicable.\n"
         "Once categorized, inform the user and provide friendly, cheerful responses. Suggest activities to improve mood.\n"
-        "Analyze the user's feelings based on the activity they performed and the summary they provided.\n"
+        "Analyze the user's feelings based on the activity they performed and the journals provided by the user.\n"
         "Offer insights into their emotions and suggest additional activities they can try to improve their mood.\n"
-        "Whenever the user asks for some exercises provide him the needful minimum 5 and in a structured way.\n"
-        "Don't Answer to any question which is not related to mental health.\n"
-        "Whenever the user mental health is critical or extreme for example Suicide thoughts, etc ask the user to contact emergency numbers"
+        "Whenever the user asks for some exercises, provide a minimum of 5 structured exercises.\n"
+        "Don't answer any questions that are not related to mental health.\n"
+        "If the user's mental health is critical or extreme, such as having suicidal thoughts, ask the user to contact emergency numbers."
+        "For every response please reply in maximum 250 words and minimum can be according to you"
     ),
 )
 
-# Initialize chat session and response count
 chat_session = model.start_chat(history=[])
 response_count = 0
 chat_history = []
@@ -91,6 +87,8 @@ def search_articles():
     articles = search_google(query, num_results=5)
     return jsonify(articles)
 
+
+
 @app.route("/recommendations", methods=["GET"])
 def recommendations():
     keywords = extract_keywords(chat_history)
@@ -132,7 +130,7 @@ def fetch_recommendations(keywords):
     return youtube_videos[:10], articles[:10]
 
 def search_youtube(query, max_results=5):
-    youtube = build("youtube", "v3", developerKey=DEVELOPER_KEY)
+    youtube = build("youtube", "v3", developerKey=os.getenv('DEVELOPER_KEY'))
     try:
         search_response = youtube.search().list(
             part="snippet",
@@ -146,7 +144,7 @@ def search_youtube(query, max_results=5):
         return []
 
 def get_video_details(video_ids):
-    youtube = build("youtube", "v3", developerKey=DEVELOPER_KEY)
+    youtube = build("youtube", "v3", developerKey=os.getenv('DEVELOPER_KEY'))
     try:
         video_details_response = youtube.videos().list(
             part="snippet",
@@ -165,10 +163,10 @@ def get_video_details(video_ids):
 
 def search_google(query, num_results=5):
     try:
-        service = build("customsearch", "v1", developerKey=DEVELOPER_KEY)
+        service = build("customsearch", "v1", developerKey=os.getenv('DEVELOPER_KEY'))
         res = service.cse().list(
             q=query,
-            cx=CUSTOM_SEARCH_ENGINE_ID,
+            cx=os.getenv('CUSTOM_SEARCH_ENGINE_ID'),
             num=num_results
         ).execute()
         return [{

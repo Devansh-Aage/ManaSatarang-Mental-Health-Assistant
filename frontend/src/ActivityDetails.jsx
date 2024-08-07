@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import TextareaAutosize from "react-textarea-autosize";
 import ActivityBlock from "./components/ActivityBlock";
 import { db } from "./config/firebase-config";
@@ -10,8 +10,6 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import { translateText } from "./utils";
-import { useEffect } from "react";
-// import { ReactMic } from "react-mic";
 
 const ActivityDetails = ({ activities, user, lang }) => {
   const [input, setInput] = useState("");
@@ -19,69 +17,43 @@ const ActivityDetails = ({ activities, user, lang }) => {
   const [botResponse, setBotResponse] = useState("");
   const [youtubeVideos, setYoutubeVideos] = useState([]);
   const [selectedActivity, setSelectedActivity] = useState(null);
-  const [isDoneState, setIsDoneState] = useState(selectedActivity?.isDone);
+  const [isDoneState, setIsDoneState] = useState(false);
   const [imageFile, setImageFile] = useState(null);
-  const [record, setRecord] = useState(false);
   const [emotion, setEmotion] = useState("");
-  const [staticText, setstaticText] = useState([
+  const [staticText, setStaticText] = useState([
     "Daily Activities",
     "Activity Details",
     "Summary",
     "Upload Image",
+    "Verify Activity",
     "Submit",
   ]);
-  const [translatedactivity, setTranslatedactivity] = useState(activities);
+  const [translatedActivities, setTranslatedActivities] = useState(activities);
+  const [loadingTranslation, setLoadingTranslation] = useState(false);
+  const [isVerified, setIsVerified] = useState(false);
 
-  const [loadingTranslation, setloadingTranslation] = useState(false);
-  // const startRecording = () => {
-  //   setRecord(true);
-  // };
+  const activityFormatMap = {
+    "Read a book": "read_a_book",
+    "Ride a bicycle": "ride_a_bicycle",
+    "Go to a dog park": "go_to_a_dog_park",
+    "Watch a sunrise": "watch_a_sunrise_or_sunset",
+    "Listen to music": "listen_to_music",
+  };
 
-  // const stopRecording = () => {
-  //   setRecord(false);
-  // };
+  const keywords = Object.keys(activityFormatMap);
 
-  // const onData = (recordedBlob) => {
-  //   console.log("Recording:", recordedBlob);
-  // };
-
-  // const onStop = async (recordedBlob) => {
-  //   console.log("Recorded Blob:", recordedBlob);
-  //   const formData = new FormData();
-  //   formData.append(
-  //     "audio",
-  //     recordedBlob.blob,
-  //     recordedBlob.startTime + ".webm"
-  //   );
-
-  //   try {
-  //     const response = await axios.post(
-  //       "http://localhost:3036/predict",
-  //       formData,
-  //       {
-  //         headers: {
-  //           "Content-Type": "multipart/form-data",
-  //         },
-  //       }
-  //     );
-
-  //     if (response.status === 200) {
-  //       console.log(response.data);
-  //       const { emotion } = response.data;
-  //       setEmotion(emotion);
-  //       toast.success(`Detected Emotion: ${emotion}`);
-  //     } else {
-  //       toast.error("Failed to detect emotion.");
-  //     }
-  //   } catch (error) {
-  //     console.error("Error detecting emotion:", error);
-  //     toast.error("Error detecting emotion.");
-  //   }
-  // };
+  const getFormattedActivity = (title) => {
+    for (const keyword of keywords) {
+      if (title.includes(keyword)) {
+        return activityFormatMap[keyword];
+      }
+    }
+    return title.toLowerCase().replace(/ /g, "-");
+  };
 
   const sendMessage = async () => {
     if (selectedActivity) {
-      if (!isDoneState) {
+      if (!isDoneState && isVerified) {
         try {
           const userRef = doc(db, "users", user.uid);
           await updateDoc(userRef, {
@@ -98,6 +70,8 @@ const ActivityDetails = ({ activities, user, lang }) => {
           console.error("Error updating task: ", error);
           toast.error("Failed to update task.");
         }
+      } else if (!isVerified) {
+        toast.error("Please verify the activity before submitting.");
       }
     }
   };
@@ -131,6 +105,7 @@ const ActivityDetails = ({ activities, user, lang }) => {
     setSelectedActivity(activity);
     setInput(`Title: ${activity.translatedTitle} \n`);
     setGeminiInput(`Title: ${activity.title} \n`);
+    setIsVerified(false); // Reset verification status when a new activity is selected
   };
 
   const handleFileChange = (e) => {
@@ -143,13 +118,15 @@ const ActivityDetails = ({ activities, user, lang }) => {
       return;
     }
 
+    const formattedActivity = getFormattedActivity(selectedActivity.title);
+
     const formData = new FormData();
     formData.append("image", imageFile);
-    formData.append("activity", selectedActivity.title);
+    formData.append("activity", formattedActivity);
 
     try {
       const response = await axios.post(
-        "http://127.0.0.1:8080/predict",
+        "http://localhost:5050/predict",
         formData,
         {
           headers: {
@@ -160,6 +137,7 @@ const ActivityDetails = ({ activities, user, lang }) => {
 
       if (response.status === 200) {
         const result = response.data.result;
+        setIsVerified(true); // Set the verification status to true
         toast.success(`Activity verification result: ${result}`);
       } else {
         toast.error("Failed to verify activity.");
@@ -172,7 +150,7 @@ const ActivityDetails = ({ activities, user, lang }) => {
 
   const translatePage = async () => {
     try {
-      setloadingTranslation(true);
+      setLoadingTranslation(true);
       const translatedPage = await Promise.all(
         staticText.map(async (t) => {
           const translatedMsg = await translateText(t, lang);
@@ -185,13 +163,13 @@ const ActivityDetails = ({ activities, user, lang }) => {
           return { ...a, translatedTitle: translatedActivity };
         })
       );
-      setstaticText(translatedPage);
-      setTranslatedactivity(translatedActivities);
+      setStaticText(translatedPage);
+      setTranslatedActivities(translatedActivities);
       console.log(translatedActivities);
     } catch (error) {
       console.error("Error translating static text: ", error);
     } finally {
-      setloadingTranslation(false);
+      setLoadingTranslation(false);
     }
   };
 
@@ -206,8 +184,8 @@ const ActivityDetails = ({ activities, user, lang }) => {
           <ClipboardList size={20} className="text-purple-600 mt-1 ml-3" />
           <div className="font-semibold text-2xl ml-4">{staticText[0]}</div>
         </div>
-        {translatedactivity.length > 0
-          ? translatedactivity.slice(0, 5).map((a) => (
+        {translatedActivities.length > 0
+          ? translatedActivities.slice(0, 3).map((a) => (
               <div key={a.id} onClick={() => handleActivityClick(a)}>
                 <ActivityBlock
                   key={a.id}
@@ -259,52 +237,32 @@ const ActivityDetails = ({ activities, user, lang }) => {
           </label>
           <input
             type="file"
-            className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border border-gray-300 rounded-md p-2"
+            id="image"
+            accept="image/*"
             onChange={handleFileChange}
+            className="mt-1 block w-full text-sm text-gray-900 bg-gray-50 rounded-md border border-gray-300 cursor-pointer focus:outline-none focus:border-indigo-500"
           />
         </div>
-        {/* <div className="mb-3">
-          <ReactMic
-            record={record}
-            className="sound-wave"
-            onStop={onStop}
-            onData={onData}
-            strokeColor="#000000"
-            backgroundColor="#FF4081"
-          />
+        <div className="flex space-x-4">
           <button
             type="button"
-            onClick={startRecording}
-            className="w-full inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 mt-2"
+            onClick={verifyActivity}
+            className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
           >
-            Start Recording
+            {staticText[4]}
           </button>
           <button
-            type="button"
-            onClick={stopRecording}
-            className="w-full inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 mt-2"
+            type="submit"
+            className={`inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white ${
+              isVerified
+                ? "bg-purple-600 hover:bg-purple-700"
+                : "bg-gray-400 cursor-not-allowed"
+            }`}
+            disabled={!isVerified}
           >
-            Stop Recording
+            {staticText[5]}
           </button>
-        </div> */}
-        <button
-          type="submit"
-          className="w-full inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-        >
-          {staticText[4]}
-        </button>
-        <button
-          type="button"
-          className="w-full inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 mt-2"
-          onClick={verifyActivity}
-        >
-          Verify Activity
-        </button>
-        {/* {emotion && (
-          <div className="mt-4 text-center">
-            <p className="text-lg font-semibold">Detected Emotion: {emotion}</p>
-          </div>
-        )} */}
+        </div>
       </form>
     </div>
   );

@@ -245,7 +245,7 @@ const Chatbot = ({ user, lang }) => {
                   }`}
                 >
                   <div
-                    className={`rounded-xl p-3 max-w-xs ${
+                    className={`rounded-xl p-3 max-w-xl ${
                       msg.sender === "user"
                         ? "bg-purple-300 text-right"
                         : "bg-gray-200 text-left"
