@@ -18,7 +18,7 @@ db = firestore.client()
 # Configuration
 DEVELOPER_KEY = "AIzaSyAtlZQExJ-QTrRh-3BZ0NYfPnnBjPQjLdc"
 CUSTOM_SEARCH_ENGINE_ID = "52dcf3fb99a344f61"
-GENAI_API_KEY = "AIzaSyAra4V0IQWR0W0lc82oYNMcyPP0nawwcoI"
+GENAI_API_KEY = "AIzaSyAfzizOF5FFdq4wd1n2G6yQsSl_wF5J8A0"
 # GENAI_API_KEY = "AIzaSyBpyZIpak-ZWttvc2dTZYi2ZONycC_HoO0"
 
 # Initialize Gemini API

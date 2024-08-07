@@ -62,6 +62,7 @@ const Therapists = ({ lang, user,userData }) => {
   }, [lang]);
   console.log(recommendTherapist);
 
+  exampleemails=['abc@gmail.com','abc@gmail.com','abc@gmail.com','abc@gmail.com','abc@gmail.com']
 
   // const getRecTherapist=async()=>{
   //   recommendTherapist.map(())
