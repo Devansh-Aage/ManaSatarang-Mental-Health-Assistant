@@ -38,9 +38,9 @@ function JournalDb() {
 
   return (
     <div className="bg-white border rounded-xl p-2 flex flex-col items-center py-10 row-span-5">
-    <div className="mb-5">
+    <div className="mb-10">
       <button
-        className="mt-4 px-4 py-2 bg-purple-500 text-white rounded-md flex items-center hover:bg-purple-800 transition-colors duration-200"
+        className="px-4 py-2 bg-purple-900 text-white rounded-md flex items-center hover:bg-purple-800 transition-colors duration-200"
         onClick={() => navigate("/journal")}
       >
         <SquarePlus className="mr-2" />
@@ -50,16 +50,16 @@ function JournalDb() {
       {loading ? (
         <Skeleton count={5} />
       ) : entries.length > 0 ? (
-        <Collapse>
+        <Collapse className="w-full">
           {entries.map((entry) => (
             <Panel
-              className="bg-white text-base font-bold"
+              className="bg-white borde text-base font-bold"
               header={entry.title || "Untitled"}
               key={entry.id}
               extra={
                 entry.emotion && (
                   <span
-                    className={`px-2 py-1 rounded-lg ${
+                    className={`px-2 py-1 rounded-md ${
                       emotionColors[entry.emotion] || "bg-gray-200 text-gray-800"
                     }`}
                   >

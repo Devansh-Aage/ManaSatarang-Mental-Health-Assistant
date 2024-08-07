@@ -51,7 +51,8 @@ firebase_admin.initialize_app(cred)
 db = firestore.client()
 
 # Initialize Gemini API
-GENAI_API_KEY = "AIzaSyBpyZIpak-ZWttvc2dTZYi2ZONycC_HoO0"
+GENAI_API_KEY = "AIzaSyAra4V0IQWR0W0lc82oYNMcyPP0nawwcoI"
+# GENAI_API_KEY = "AIzaSyBpyZIpak-ZWttvc2dTZYi2ZONycC_HoO0"
 # firebase_admin.initialize_app(cred)
 genai.configure(api_key=GENAI_API_KEY)
 generation_config = {

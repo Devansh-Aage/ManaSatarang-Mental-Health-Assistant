@@ -39,8 +39,13 @@ import Chat from "./Chat";
 import "./App.css";
 import Journal from "./Journal/Journal";
 import ScanFace from "./ScanFace";
+import { Select } from "antd";
+const { Option } = Select;
+import Helpline from "./Helpline";
 
 import Dashboard from "./Dashboard/Dashboard";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 const getRandomActivities = (list, count) => {
   const shuffled = [...list].sort(() => 0.5 - Math.random());
@@ -124,7 +129,6 @@ const App = () => {
     getUserFromDB();
     fetchTaskData();
     // redirectToHomeIfAuth();
-   
   }, [user]);
 
   useEffect(() => {
@@ -138,9 +142,8 @@ const App = () => {
 
       setActivities(translatedActivities);
     };
-    translate()
-  }, [appLanguage])
-  
+    translate();
+  }, [appLanguage]);
 
   const fetchTaskData = async () => {
     // const storedLastUpdateDate = localStorage.getItem("lastUpdateDate");
@@ -365,6 +368,7 @@ const App = () => {
               path="/scan"
               element={<ScanFace userData={userData} lang={appLanguage} />}
             />
+            <Route path="/helpline" element={<Helpline />} />
           </Routes>
         </div>
       </div>

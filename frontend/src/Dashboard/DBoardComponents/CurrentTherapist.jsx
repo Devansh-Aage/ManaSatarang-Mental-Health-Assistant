@@ -64,7 +64,7 @@ function CurrentTherapist({ user }) {
   }, [appointments]);
 
   return (
-    <div className="bg-white border rounded-xl p-4 flex flex-col items-center justify-center row-span-3">
+    <div className="bg-white border rounded-xl p-4 flex flex-col items-center justify-center row-span-2">
       {user ? (
         <>
           <h2 className="text-lg text-black mb-7">Current Therapist</h2>

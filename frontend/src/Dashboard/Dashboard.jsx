@@ -11,7 +11,7 @@ function Dashboard({ user, activities }) {
   
   return (
     <div>
-      <div className="grid lg:grid-cols-3 auto-rows-[120px] gap-2 lg:mx-6 lg:my-3 my-6 mx-12">
+      <div className="grid lg:grid-cols-3 auto-rows-[120px] gap-2 lg:mx-6 lg:my-3 my-6 mx-12 h-full">
         <ProfileCard user={user} />
         <JournalDb />
         <AppointmentsDb user={user} />

@@ -3,10 +3,11 @@ import { useEffect, useState } from "react";
 import { db } from "../../config/firebase-config";
 import { useNavigate } from "react-router-dom";
 import { chatHrefConstructor } from "../../utils";
-import { Card } from "antd";
+import { Card, Skeleton } from "antd";
 
 const AppointmentsDb = ({ user }) => {
-  const [appointments, setAppointments] = useState([]);
+  const [appointment, setAppointment] = useState(null);
+  const [loading, setLoading] = useState(true);
   const router = useNavigate();
 
   useEffect(() => {
@@ -29,10 +30,22 @@ const AppointmentsDb = ({ user }) => {
           );
 
           const mergedAppointments = [...appointments1, ...appointments2];
-          setAppointments(mergedAppointments);
-          
+
+          const sortedAppointments = mergedAppointments.sort((a, b) => {
+            const dateA = new Date(`${a.date}T${a.time}`);
+            const dateB = new Date(`${b.date}T${b.time}`);
+            return dateA - dateB;
+          });
+
+          if (sortedAppointments.length > 0) {
+            setAppointment(sortedAppointments[0]);
+          } else {
+            setAppointment(null); // Handle case with no appointments
+          }
         } catch (error) {
           console.error("Error fetching appointments:", error);
+        } finally {
+          setLoading(false); // Ensure loading state is stopped
         }
       }
     };
@@ -40,16 +53,27 @@ const AppointmentsDb = ({ user }) => {
     getAppointments();
   }, [user]);
 
+  const handleViewAllClick = () => {
+    router("/appointments");
+  };
+
   return (
-    <div className="bg-white border rounded-xl p-4 flex flex-col items-center justify-center row-span-2 md:row-span-2">
+    <div className="bg-white border rounded-xl p-4 flex flex-col items-center justify-center row-span-2 md:row-span-3">
+      <h2 className="text-xl font-semibold mb-4 text-gray-900">Upcoming Appointments</h2>
       <div className="flex items-center justify-center flex-wrap gap-5 mx-2 mt-5 w-full">
-        {appointments.length > 0 ? (
-          appointments.map((appointment, index) => (
-            <AppointmentItem key={index} appointment={appointment} router={router} />
-          ))
+        {loading ? (
+          <Skeleton height={120} width={300} className="mb-4" count={1} />
+        ): appointment ? (
+          <AppointmentItem appointment={appointment} router={router} />
         ) : (
           <div>You have no appointments</div>
         )}
+      </div>
+      <div
+        className="mt-4 text-gray-600 cursor-pointer text-sm hover:underline"
+        onClick={handleViewAllClick}
+      >
+        View all appointments
       </div>
     </div>
   );
@@ -57,6 +81,7 @@ const AppointmentsDb = ({ user }) => {
 
 const AppointmentItem = ({ appointment, router }) => {
   const [patient, setPatient] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchPatientData = async () => {
@@ -72,6 +97,9 @@ const AppointmentItem = ({ appointment, router }) => {
       } catch (error) {
         console.error("Error fetching patient data:", error);
       }
+      finally {
+        setLoading(false); 
+      }
     };
 
     fetchPatientData();
@@ -85,19 +113,19 @@ const AppointmentItem = ({ appointment, router }) => {
     router(`/chat/${chatHref}`);
   };
 
-  // const formattedDate = moment(appointment.date).format("ddd, Do MMM");
-
   return (
     <div className="mb-4">
+      {loading ? (
+        <Skeleton height={120} width={300} className="mb-4" count={1} />
+      ) : (
       <Card
         title={patient && patient.name}
         bordered={false}
         style={{ width: 300 }}
         className="hover:border hover:border-purple-600 border-transparent"
       >
-        <p className="font-semibold text-gray-600">Text</p>
         <p>Date: {appointment.date}</p>
-        <p>Time: {appointment.time}</p>
+        <p className="mb-2">Time: {appointment.time}</p>
         <div
           onClick={handleChatClick}
           className="cursor-pointer bg-purple-900 hover:bg-purple-800 px-4 py-2 text-white rounded-lg"
@@ -105,6 +133,7 @@ const AppointmentItem = ({ appointment, router }) => {
           Chat
         </div>
       </Card>
+      )}
     </div>
   );
 };
