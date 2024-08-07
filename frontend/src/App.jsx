@@ -46,6 +46,7 @@ import Helpline from "./Helpline";
 import Dashboard from "./Dashboard/Dashboard";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import SavedLinks from "./SavedLinks";
 
 const getRandomActivities = (list, count) => {
   const shuffled = [...list].sort(() => 0.5 - Math.random());
@@ -93,7 +94,7 @@ const App = () => {
 
   const getTasksFromDB = async () => {
     if (user) {
-      try{
+      try {
         console.log("inside");
         const today = new Date();
         today.setUTCHours(0, 0, 0, 0);
@@ -216,6 +217,7 @@ const App = () => {
                   lang={appLanguage}
                   activities={activities}
                   user={user}
+                  userData={userData}
                 />
               }
             />
@@ -225,9 +227,15 @@ const App = () => {
             />
             <Route
               path="/search"
-              element={<Home activities={activities} userData={userData} />}
+              element={
+                <Home
+                  activities={activities}
+                  userData={userData}
+                  user={user}
+                  lang={appLanguage}
+                />
+              }
             />
-
             <Route
               path="/profile"
               element={
@@ -340,7 +348,11 @@ const App = () => {
               path="/therapists"
               element={
                 user ? (
-                  <Therapists lang={appLanguage} user={user} userData={userData} />
+                  <Therapists
+                    lang={appLanguage}
+                    user={user}
+                    userData={userData}
+                  />
                 ) : (
                   <Login lang={appLanguage} />
                 )
@@ -367,6 +379,10 @@ const App = () => {
             <Route
               path="/scan"
               element={<ScanFace userData={userData} lang={appLanguage} />}
+            />
+            <Route
+              path="/saved-links"
+              element={<SavedLinks user={user} userData={userData} lang={appLanguage} />}
             />
             <Route path="/helpline" element={<Helpline />} />
           </Routes>
