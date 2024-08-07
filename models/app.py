@@ -32,7 +32,7 @@ classifier_model = tf.keras.models.load_model('multi_activity_classifier_vgg16.h
 valid_activities = ['go_to_a_dog_park', 'listen_to_music', 'read_a_book', 'ride_a_bicycle', 'watch_a_sunrise_or_sunset']
 
 # Fetch API key from environment variable
-api_key = os.getenv('GOOGLE_API_KEY')
+api_key = os.getenv('GENAI_API_KEY')
 if not api_key:
     raise ValueError("API key not found. Please set your API key in the .env file.")
 
@@ -51,10 +51,9 @@ firebase_admin.initialize_app(cred)
 db = firestore.client()
 
 # Initialize Gemini API
-GENAI_API_KEY = "AIzaSyAra4V0IQWR0W0lc82oYNMcyPP0nawwcoI"
 # GENAI_API_KEY = "AIzaSyBpyZIpak-ZWttvc2dTZYi2ZONycC_HoO0"
 # firebase_admin.initialize_app(cred)
-genai.configure(api_key=GENAI_API_KEY)
+genai.configure(api_key=os.getenv('GOOGLE_API_KEY'))
 generation_config = {
     "temperature": 0.7,
     "top_p": 0.95,
