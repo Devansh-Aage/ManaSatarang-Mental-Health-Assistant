@@ -1,8 +1,32 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Slider from "react-slick";
+import { translateText } from "./utils"; // Ensure this function is defined
 
-const Helpline = () => {
+const Helpline = ({ lang }) => {
+  const [staticText, setStaticText] = useState([
+    "Mental Health Helpline Dashboard",
+    "Helpline Numbers",
+    "Websites for Mental Health Help",
+    "Websites for Exercises",
+    "Things to Do in Different Mental Health Emergency Situations",
+
+    "If You're Feeling Suicidal",
+    "Call a crisis hotline immediately.",
+    "Reach out to a friend or family member.",
+    "Stay away from harmful substances.",
+
+    "If You're Experiencing a Panic Attack",
+    "Find a quiet space and practice deep breathing.",
+    "Focus on grounding techniques like 5-4-3-2-1.",
+    "Talk to someone you trust about how you're feeling.",
+
+    "If You're in an Abusive Situation",
+    "Contact the National Domestic Violence Hotline.",
+    "Create a safety plan with trusted friends or family.",
+    "Seek professional support from a counselor.",
+  ]);
+
   const helplineNumbers = [
     { name: "Arpita Suicide Prevention Helpline", number: "080-23655557" },
     { name: "Vandrevala Foundation", number: "9999 666 555" },
@@ -48,6 +72,21 @@ const Helpline = () => {
     },
   ];
 
+  useEffect(() => {
+    const translateStaticText = async () => {
+      try {
+        const translatedTextArray = await Promise.all(
+          staticText.map((text) => translateText(text, lang))
+        );
+        setStaticText(translatedTextArray);
+      } catch (error) {
+        console.error("Error translating text:", error);
+      }
+    };
+
+    translateStaticText();
+  }, [lang]);
+
   const settings = {
     dots: true,
     infinite: true,
@@ -67,9 +106,9 @@ const Helpline = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          Mental Health Helpline Dashboard
+          {staticText[0]}
         </motion.h1>
-        <p className="text-center text-lg italic mb-8 font-serif">
+        <p className="text-center text-base italic mb-8 font-serif">
           “You don’t have to control your thoughts. You just have to stop
           letting them control you.” – Dan Millman
         </p>
@@ -81,7 +120,7 @@ const Helpline = () => {
             whileHover={{ scale: 1.05 }}
             transition={{ duration: 0.2 }}
           >
-            <h2 className="text-xl font-semibold mb-2">Helpline Numbers</h2>
+            <h2 className="text-xl font-semibold mb-2">{staticText[1]}</h2>
             <ul className="list-disc pl-5">
               {helplineNumbers.map((helpline) => (
                 <li key={helpline.name} className="mb-1">
@@ -99,7 +138,7 @@ const Helpline = () => {
             transition={{ duration: 0.2 }}
           >
             <h2 className="text-xl font-semibold mb-2">
-              Websites for Mental Health Help
+              {staticText[2]}
             </h2>
             <ul className="list-disc pl-5">
               {mentalHealthWebsites.map((site) => (
@@ -119,7 +158,7 @@ const Helpline = () => {
             transition={{ duration: 0.2 }}
           >
             <h2 className="text-xl font-semibold mb-2">
-              Websites for Exercises
+              {staticText[3]}
             </h2>
             <ul className="list-disc pl-5">
               {exerciseWebsites.map((site) => (
@@ -140,7 +179,7 @@ const Helpline = () => {
           transition={{ duration: 0.5 }}
         >
           <h2 className="text-xl font-semibold mb-2">
-            Things to Do in Different Mental Health Emergency Situations
+            {staticText[4]}
           </h2>
           <Slider {...settings}>
             {emergencySituations.map((situation) => (
