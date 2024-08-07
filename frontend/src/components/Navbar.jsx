@@ -133,12 +133,8 @@ const Navbar = ({ user, setAppLanguage }) => {
             <Option value="es">Spanish</Option>
             <Option value="fr">French</Option>
             <Option value="de">German</Option>
-            {/* Add more languages as needed */}
           </Select>
         </div>
-
-        {/* Navigation Links */}
-        {/* Navigation Links */}
         <div
           className={`flex flex-col flex-1 p-4 ${isOpen ? "block" : "hidden"}`}
         >

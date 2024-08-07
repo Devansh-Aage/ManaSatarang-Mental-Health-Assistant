@@ -85,7 +85,7 @@ const ActivityDetails = ({ activities, user, lang }) => {
         try {
           const userRef = doc(db, "users", user.uid);
           await updateDoc(userRef, {
-            points: increment(5),
+            points: increment(10),
           });
 
           const taskRef = doc(db, "tasks", selectedActivity.id);
@@ -93,7 +93,7 @@ const ActivityDetails = ({ activities, user, lang }) => {
             isDone: true,
           });
           setIsDoneState(true);
-          toast.success("You got 5 points for completing the activity!");
+          toast.success("You got 10 points for completing the activity!");
         } catch (error) {
           console.error("Error updating task: ", error);
           toast.error("Failed to update task.");
