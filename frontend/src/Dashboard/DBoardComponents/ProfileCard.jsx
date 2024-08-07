@@ -40,7 +40,7 @@ function ProfileCard({ user,userData,lang }) {
           </Link>
           <h2 className="text-base text-black">{user.displayName}</h2>
           <p className="text-gray-500 text-xs mb-4">{user.email}</p>
-          <p className="text-xl text-purple-800 font-bold mb-4">Points:{userData?.points}</p>
+          <p className="text-sm text-purple-800 font-bold mb-4">Points:   {userData?.points}</p>
         </>
       ) : (
         <p className="text-gray-500 text-sm mb-4">Loading...</p>

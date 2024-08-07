@@ -15,6 +15,7 @@ import {
   LayoutDashboard,
   LogOut,
   LogIn,
+  HeartHandshake
 } from "lucide-react";
 import { Select, Spin } from "antd";
 import axios from "axios";
@@ -30,6 +31,7 @@ const Navbar = ({ user, setAppLanguage }) => {
     "Forum",
     // "Activity",
     "Our Therapists",
+    "Helpline"
     // "Appointments",
     // "Personal Journal",
   ];
@@ -195,7 +197,15 @@ const Navbar = ({ user, setAppLanguage }) => {
                 {translatedLinks[5]}
               </span>
             </Link>
-
+            <Link
+              to="/helpline"
+              className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left"
+            >
+              <HeartHandshake size={20} />
+              <span className={`${isOpen ? "block" : "hidden"}`}>
+                {translatedLinks[6]}
+              </span>
+            </Link>
             {!user && (
               <Link
                 to="/login"
@@ -251,6 +261,12 @@ const Navbar = ({ user, setAppLanguage }) => {
               className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left"
             >
               <User size={20} />
+            </Link>
+            <Link
+              to="/helpline"
+              className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left"
+            >
+              <HeartHandshake size={20} />
             </Link>
           </div>
           {user ? (

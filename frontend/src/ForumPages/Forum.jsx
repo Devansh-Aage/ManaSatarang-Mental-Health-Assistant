@@ -9,6 +9,7 @@ import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { translateText } from "../utils";
 import Filter from "bad-words";
 import { toast } from "react-toastify";
+import Skeleton from 'react-loading-skeleton';
 
 const { TabPane } = Tabs;
 
@@ -31,6 +32,7 @@ function Forum({ lang }) {
   const [newComment, setNewComment] = useState("");
   const [currentPostId, setCurrentPostId] = useState(null);
   const [filterType, setFilterType] = useState("all");
+  const [loadingPosts, setLoadingPosts] = useState(true);
 
   const navigate = useNavigate();
   const filter = new Filter();
@@ -149,6 +151,7 @@ function Forum({ lang }) {
 
       const translatedPosts = await translatePosts(posts, lang);
       setPosts(translatedPosts);
+      setLoadingPosts(false);
       filterPosts(filterType, translatedPosts); // Filter posts after fetching
     });
     return () => unsubscribe();
@@ -249,75 +252,85 @@ function Forum({ lang }) {
             className="bg-indigo-950 text-white px-4 py-2 rounded hover:bg-purple-400 transition-colors duration-300"
             onClick={handleOpenModal}
           >
-            {staticText[2]}
+           {staticText[2]}
           </button>
           <Dropdown overlay={menu} trigger={['click']}>
-            <Button>
-              Filter<DownOutlined />
+            <Button className="ant-dropdown-link" onClick={(e) => e.preventDefault()}>
+              Filter <DownOutlined />
             </Button>
           </Dropdown>
         </div>
 
-        <div className="w-10/12">
-          <div>
-            {filteredPosts.length > 0 ? (
-              filteredPosts.map((post) => (
-                <div
-                  key={post.id}
-                  className="w-full backdrop-blur-md py-10 rounded-lg relative cursor-pointer"
-                  onClick={() => handlePostClick(post.id, post.imageURL)}
-                >
-                  <div className="flex ml-10">
-                    <div className="flex-1 flex flex-col items-start bg-white shadow-md rounded-lg">
-                      {post?.imageURL && (
-                        <>
-                          <img src={post?.imageURL} className="w-full mb-2 rounded-lg" alt="" />
-                          <p className="text-gray-800 px-4 mt-2 font-semibold">{post.displayName}</p>
-                        </>
-                      )}
-                      {!post?.imageURL && (
-                        <>
-                          <p className="text-gray-800 px-4 mt-4 text-lg font-semibold">{post.title}</p>
-                          <p className="text-gray-800 px-4 mt-1 text-sm font-normal">{post.displayName}</p>
-                        </>
-                      )}
-                      <p className="text-gray-800 mb-4 px-4 mt-3 text-sm font-normal">{post.desc}</p>
-                    </div>
-
+        <div className="w-full flex flex-col px-20 items-center">
+          {loadingPosts ? (
+            Array.from({ length: 3 }).map((_, index) => (
+              <div
+                key={index}
+                className="w-full backdrop-blur-md py-10 rounded-lg relative cursor-pointer"
+              >
+                <Skeleton height={200} className="mb-4" />
+                <Skeleton height={20} width="60%" className="mb-2" />
+                <Skeleton height={15} width="80%" className="mb-4" />
+                <Skeleton count={3} height={20} width="90%" />
+              </div>
+            ))
+          ) : filteredPosts.length > 0 ? (
+            filteredPosts.map((post) => (
+              <div
+                key={post.id}
+                className="w-full backdrop-blur-md py-10 rounded-lg relative cursor-pointer"
+                onClick={() => handlePostClick(post.id, post.imageURL)}
+              >
+                <div className="flex ml-10">
+                  <div className="flex-1 flex flex-col items-start bg-white shadow-md rounded-lg">
                     {post?.imageURL && (
-                      <div className="flex-1 flex flex-col items-end mx-10">
-                        <div className="w-full flex flex-col space-y-4">
-                          <div className="max-h-72 overflow-y-auto">
-                            {post.comments.map((comment) => (
-                              <div key={comment.id} className="bg-white p-2 rounded shadow-sm mb-2">
-                                <p className="font-semibold text-sm text-gray-800">{comment.username}</p>
-                                <p className="text-gray-700 text-xs">{comment.text}</p>
-                              </div>
-                            ))}
-                          </div>
-                          <textarea
-                            className="w-full border border-gray-300 rounded mb-2"
-                            placeholder="Write a comment..."
-                            rows="1"
-                            value={newComment}
-                            onChange={(e) => setNewComment(e.target.value)}
-                          />
-                          <button
-                            className="bg-indigo-950 text-white px-4 py-2 rounded hover:bg-purple-400 transition-colors duration-300"
-                            onClick={handlePostComment}
-                          >
-                            Post Comment
-                          </button>
-                        </div>
-                      </div>
+                      <>
+                        <img src={post?.imageURL} className="w-full mb-2 rounded-lg" alt="" />
+                        <p className="text-gray-800 px-4 mt-2 font-semibold">{post.displayName}</p>
+                      </>
                     )}
+                    {!post?.imageURL && (
+                      <>
+                        <p className="text-gray-800 px-4 mt-4 text-lg font-semibold">{post.title}</p>
+                        <p className="text-gray-800 px-4 mt-1 text-sm font-normal">{post.displayName}</p>
+                      </>
+                    )}
+                    <p className="text-gray-800 mb-4 px-4 mt-3 text-sm font-normal">{post.desc}</p>
                   </div>
+
+                  {post?.imageURL && (
+                    <div className="flex-1 flex flex-col items-end mx-10">
+                      <div className="w-full flex flex-col space-y-4">
+                        <div className="max-h-72 overflow-y-auto">
+                          {post.comments.map((comment) => (
+                            <div key={comment.id} className="bg-white p-2 rounded shadow-sm mb-2">
+                              <p className="font-semibold text-sm text-gray-800">{comment.username}</p>
+                              <p className="text-gray-700 text-xs">{comment.text}</p>
+                            </div>
+                          ))}
+                        </div>
+                        <textarea
+                          className="w-full border border-gray-300 rounded mb-2"
+                          placeholder="Write a comment..."
+                          rows="1"
+                          value={newComment}
+                          onChange={(e) => setNewComment(e.target.value)}
+                        />
+                        <button
+                          className="bg-indigo-950 text-white px-4 py-2 rounded hover:bg-purple-400 transition-colors duration-300"
+                          onClick={handlePostComment}
+                        >
+                          Post Comment
+                        </button>
+                      </div>
+                    </div>
+                  )}
                 </div>
-              ))
-            ) : (
-              <div>No posts</div>
-            )}
-          </div>
+              </div>
+            ))
+          ) : (
+            <div>No posts</div>
+          )}
         </div>
       </div>
 
