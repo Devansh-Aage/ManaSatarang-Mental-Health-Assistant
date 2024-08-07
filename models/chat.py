@@ -131,7 +131,7 @@ def fetch_recommendations(keywords):
     return youtube_videos[:10], articles[:10]
 
 def search_youtube(query, max_results=5):
-    youtube = build("youtube", "v3", developerKey=os.getenv('DEVELOPER_KEY'))
+    youtube = build("youtube", "v3", developerKey=os.getenv('YOUTUBE_KEY'))
     try:
         search_response = youtube.search().list(
             part="snippet",
@@ -145,7 +145,7 @@ def search_youtube(query, max_results=5):
         return []
 
 def get_video_details(video_ids):
-    youtube = build("youtube", "v3", developerKey=os.getenv('DEVELOPER_KEY'))
+    youtube = build("youtube", "v3", developerKey=os.getenv('YOUTUBE_KEY'))
     try:
         video_details_response = youtube.videos().list(
             part="snippet",

@@ -147,8 +147,8 @@ const App = () => {
   }, [appLanguage]);
 
   const fetchTaskData = async () => {
-    // const storedLastUpdateDate = localStorage.getItem("lastUpdateDate");
-    const storedLastUpdateDate = "04/06/2024";
+    const storedLastUpdateDate = localStorage.getItem("lastUpdateDate");
+    // const storedLastUpdateDate = "05/06/2024";
     const today = new Date().toLocaleDateString("en-GB");
     console.log(today);
     console.log(storedLastUpdateDate);
@@ -382,7 +382,13 @@ const App = () => {
             />
             <Route
               path="/saved-links"
-              element={<SavedLinks user={user} userData={userData} lang={appLanguage} />}
+              element={
+                <SavedLinks
+                  user={user}
+                  userData={userData}
+                  lang={appLanguage}
+                />
+              }
             />
             <Route path="/helpline" element={<Helpline />} />
           </Routes>
