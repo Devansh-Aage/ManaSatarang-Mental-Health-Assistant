@@ -2,12 +2,16 @@ import { collection, getDocs, query, where } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { db } from "../../config/firebase-config";
 import { useNavigate } from "react-router-dom";
-import { chatHrefConstructor } from "../../utils";
+import { chatHrefConstructor, translateText } from "../../utils";
 import { Card, Skeleton } from "antd";
 
-const AppointmentsDb = ({ user }) => {
+const AppointmentsDb = ({ user, lang }) => {
   const [appointment, setAppointment] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [staticText, setstaticText] = useState([
+    "Upcoming Appointments",
+    "View all Appointments",
+  ]);
   const router = useNavigate();
 
   useEffect(() => {
@@ -53,17 +57,33 @@ const AppointmentsDb = ({ user }) => {
     getAppointments();
   }, [user]);
 
+  useEffect(() => {
+    const translatePage=async()=>{
+      const translatedPage = await Promise.all(
+        staticText.map(async (t) => {
+          const translatedMsg = await translateText(t, lang);
+          return translatedMsg;
+        })
+      );
+      setstaticText(translatedPage)
+    }
+    translatePage()
+  }, [lang])
+  
+
   const handleViewAllClick = () => {
     router("/appointments");
   };
 
   return (
     <div className="bg-white border rounded-xl p-4 flex flex-col items-center justify-center row-span-2 md:row-span-3">
-      <h2 className="text-xl font-semibold mb-4 text-gray-900">Upcoming Appointments</h2>
+      <h2 className="text-xl font-semibold mb-4 text-gray-900">
+        {staticText[0]}
+      </h2>
       <div className="flex items-center justify-center flex-wrap gap-5 mx-2 mt-5 w-full">
         {loading ? (
           <Skeleton height={120} width={300} className="mb-4" count={1} />
-        ): appointment ? (
+        ) : appointment ? (
           <AppointmentItem appointment={appointment} router={router} />
         ) : (
           <div>You have no appointments</div>
@@ -73,7 +93,7 @@ const AppointmentsDb = ({ user }) => {
         className="mt-4 text-gray-600 cursor-pointer text-sm hover:underline"
         onClick={handleViewAllClick}
       >
-        View all appointments
+        {staticText[1]}
       </div>
     </div>
   );
@@ -96,9 +116,8 @@ const AppointmentItem = ({ appointment, router }) => {
         }
       } catch (error) {
         console.error("Error fetching patient data:", error);
-      }
-      finally {
-        setLoading(false); 
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -118,21 +137,21 @@ const AppointmentItem = ({ appointment, router }) => {
       {loading ? (
         <Skeleton height={120} width={300} className="mb-4" count={1} />
       ) : (
-      <Card
-        title={patient && patient.name}
-        bordered={false}
-        style={{ width: 300 }}
-        className="hover:border hover:border-purple-600 border-transparent"
-      >
-        <p>Date: {appointment.date}</p>
-        <p className="mb-2">Time: {appointment.time}</p>
-        <div
-          onClick={handleChatClick}
-          className="cursor-pointer bg-purple-900 hover:bg-purple-800 px-4 py-2 text-white rounded-lg"
+        <Card
+          title={patient && patient.name}
+          bordered={false}
+          style={{ width: 300 }}
+          className="hover:border hover:border-purple-600 border-transparent"
         >
-          Chat
-        </div>
-      </Card>
+          <p>Date: {appointment.date}</p>
+          <p className="mb-2">Time: {appointment.time}</p>
+          <div
+            onClick={handleChatClick}
+            className="cursor-pointer bg-purple-900 hover:bg-purple-800 px-4 py-2 text-white rounded-lg"
+          >
+            Chat
+          </div>
+        </Card>
       )}
     </div>
   );

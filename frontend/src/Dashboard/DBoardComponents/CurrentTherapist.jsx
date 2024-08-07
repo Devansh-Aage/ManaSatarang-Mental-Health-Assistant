@@ -8,10 +8,12 @@ import {
 } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { db } from "../../config/firebase-config";
+import { translateText } from "../../utils";
 
-function CurrentTherapist({ user }) {
+function CurrentTherapist({ user,lang }) {
   const [appointments, setAppointments] = useState([]);
   const [therapistData, settherapistData] = useState(null);
+  const [statictext, setstatictext] = useState('Current Therapist')
 
   useEffect(() => {
     const getAppointments = async () => {
@@ -63,11 +65,19 @@ function CurrentTherapist({ user }) {
     getTherapist();
   }, [appointments]);
 
+  useEffect(() => {
+    const translatePage=async()=>{
+      const translatedText= await translateText(statictext,lang)
+      setstatictext(translatedText)
+    }
+    translatePage()
+  }, [lang])
+
   return (
     <div className="bg-white border rounded-xl p-4 flex flex-col items-center justify-center row-span-2">
       {user ? (
         <>
-          <h2 className="text-lg text-black mb-7">Current Therapist</h2>
+          <h2 className="text-lg text-black mb-7">{statictext}</h2>
           <img
             src={therapistData?.photoURL || "default_therapist_icon.png"}
             alt="Therapist Icon"
