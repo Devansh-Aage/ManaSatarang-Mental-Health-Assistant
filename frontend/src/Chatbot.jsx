@@ -233,8 +233,8 @@ const Chatbot = ({ user, lang }) => {
           {staticText[1]}
         </h2>
       </div>
-      <div className="flex flex-col lg:w-[65vw] max-h-[80vh] overflow-hidden lg:mx-auto px-3 py-2 backdrop-blur-sm bg-white/30 rounded-lg">
-        <div className="flex-1 min-h-[40vh] overflow-y-auto backdrop-blur-sm bg-slate-200/30 border rounded-lg p-3 border-purple-400">
+      <div className="flex flex-col lg:w-[75vw] max-h-[80vh] overflow-hidden lg:mx-auto px-3 py-2 backdrop-blur-sm bg rounded-lg">
+        <div className="flex-1 min-h-[50vh] overflow-y-auto backdrop-blur-sm bg- rounded-lg p-3">
           <div className="flex flex-col gap-2">
             {messages?.length > 0 ? (
               messages.map((msg, index) => (
@@ -248,7 +248,7 @@ const Chatbot = ({ user, lang }) => {
                     className={`rounded-xl p-3 max-w-xs ${
                       msg.sender === "user"
                         ? "bg-purple-300 text-right"
-                        : "bg-white text-left"
+                        : "bg-gray-200 text-left"
                     }`}
                   >
                     {msg.text}
