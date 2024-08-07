@@ -14,7 +14,6 @@ const TherapistCard = ({
   lang
 }) => {
   const navigate = useNavigate();
-  console.log(lang);
   
 
   const toDetails = () => {

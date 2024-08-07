@@ -47,12 +47,6 @@ const TherapistDetails = () => {
     }
   };
 
-  // useEffect(() => {
-  //   if (userData?.points >= 200 & ) {
-  //     setFeesState((prev) => prev - 200);
-  //     setIsDiscountApplied(true);
-  //   }
-  // }, [userData]);
 
   const translatePage = async () => {
     const translatedBio = await translateText(bio, lang);

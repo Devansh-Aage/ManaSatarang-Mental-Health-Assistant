@@ -6,41 +6,6 @@ import { db } from "./config/firebase-config";
 import { collection, getDocs } from "firebase/firestore";
 import { toast } from "react-toastify";
 
-// const therapists = [
-//   {
-//     name: "Dr. Emily Johnson",
-//     degree: "Ph.D. in Clinical Psychology",
-//     experience: "10 years",
-//     specialty: "Cognitive Behavioral Therapy (CBT)",
-//     imgPath: "/female3.jpg",
-//     fees: 1500,
-//   },
-//   {
-//     name: "Dr. Michael Smith",
-//     degree: "Psy.D. in Clinical Psychology",
-//     experience: "8 years",
-//     specialty: "Trauma and PTSD",
-//     imgPath: "/male1.jpg",
-//     fees: 1400,
-//   },
-//   {
-//     name: "Dr. Sarah Brown",
-//     degree: "M.S. in Counseling Psychology",
-//     experience: "6 years",
-//     specialty: "Anxiety and Depression",
-//     imgPath: "/female2.jpg",
-//     fees: 1300,
-//   },
-//   {
-//     uid: "oQyoMJNC6oZ3gh2Xxv8LIZTgfuw2",
-//     name: "Dr. David Miller",
-//     degree: "Ph.D. in Counseling Psychology",
-//     experience: "12 years",
-//     specialty: "Family and Couples Therapy",
-//     imgPath: "/male2.jpg",
-//     fees: 1600,
-//   },
-// ];
 
 const Therapists = ({ lang, user,userData }) => {
   const [staticText, setStaticText] = useState([
@@ -95,6 +60,10 @@ const Therapists = ({ lang, user,userData }) => {
 
     translateStaticText();
   }, [lang]);
+  console.log(recommendTherapist);
+
+
+  
 
   return (
     <div className="relative w-full px-20 pb-10 pt-12 h-screen overflow-y-auto">
