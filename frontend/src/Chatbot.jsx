@@ -51,7 +51,7 @@ const Chatbot = ({ user, lang }) => {
       recognition.current = new window.webkitSpeechRecognition();
       recognition.current.continuous = false;
       recognition.current.interimResults = false;
-      recognition.current.lang = "en-US";
+      recognition.current.lang = lang;
 
       recognition.current.onstart = () => setIsListening(true);
       recognition.current.onend = () => setIsListening(false);
@@ -60,7 +60,7 @@ const Chatbot = ({ user, lang }) => {
         setUserInput(speechResult);
       };
     }
-  }, []);
+  }, [lang]);
 
   const handleVoiceChange = (event) => {
     const index = parseInt(event.target.value, 10);
