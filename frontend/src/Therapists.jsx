@@ -63,7 +63,10 @@ const Therapists = ({ lang, user,userData }) => {
   console.log(recommendTherapist);
 
 
-  
+  // const getRecTherapist=async()=>{
+  //   recommendTherapist.map(())
+  //   const tcoll= await getDocs(db,'therapists',)
+  // }
 
   return (
     <div className="relative w-full px-20 pb-10 pt-12 h-screen overflow-y-auto">
