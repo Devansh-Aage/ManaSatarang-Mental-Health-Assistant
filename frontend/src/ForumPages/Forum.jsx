@@ -271,7 +271,7 @@ function Forum({ lang }) {
                     <div className="flex-1 flex flex-col items-start bg-white shadow-md rounded-lg">
                       {post?.imageURL && (
                         <>
-                          <img src={post?.imageURL} className="w-full mb-2 rounded-lg" alt="" />
+                          <img src={post?.imageURL} className="w-full mb-2 rounded-t-lg" alt="" />
                           <p className="text-gray-800 px-4 mt-2 font-semibold">{post.displayName}</p>
                         </>
                       )}
