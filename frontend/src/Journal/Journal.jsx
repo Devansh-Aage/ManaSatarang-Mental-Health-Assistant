@@ -4,9 +4,12 @@ import { auth, db } from "../config/firebase-config";
 import {
   addDoc,
   collection,
+  doc,
+  increment,
   onSnapshot,
   orderBy,
   query,
+  updateDoc,
   where,
 } from "firebase/firestore";
 import { Smile } from "lucide-react";
@@ -121,10 +124,16 @@ function Journal({ user, lang }) {
         timestamp: new Date(),
       });
 
+      const userRef= doc(db,'users',user.uid);
+      await updateDoc(userRef,{
+        points:increment(5)
+      })
+
       toast.success("Journal entry saved!");
+      toast.success("You got 5 points for writing in the journal !");
     } catch (error) {
       console.error("Error adding document: ", error);
-      alert("Failed to save journal entry.");
+      toast.error("Failed to save journal entry.");
     } finally {
       setLoading(false);
       clearForm();

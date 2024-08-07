@@ -8,15 +8,28 @@ import { loadStripe } from "@stripe/stripe-js";
 import { toast } from "react-toastify";
 import { addDoc, collection, doc, getDoc } from "firebase/firestore";
 import "antd/dist/reset.css"; // Ensure Ant Design styles are imported
+import { translateText } from "../utils";
 
 const TherapistDetails = () => {
   const location = useLocation();
-  const { name, email, bio, specialization, profile, fees, offLocation, exp } =
-    location.state || {};
+  const {
+    name,
+    email,
+    bio,
+    specialization,
+    profile,
+    fees,
+    offLocation,
+    exp,
+    lang,
+  } = location.state || {};
+  console.log(lang);
+  
   const [feesState, setFeesState] = useState(fees);
   const [isDiscountApplied, setIsDiscountApplied] = useState(false);
   const [user, loading, error] = useAuthState(auth);
   const [userData, setUserData] = useState(null);
+  const [translatedBio, settranslatedBio] = useState(bio);
 
   const getUserFromDB = async () => {
     if (user) {
@@ -41,6 +54,17 @@ const TherapistDetails = () => {
   //   }
   // }, [userData]);
 
+  const translatePage = async () => {
+    const translatedBio = await translateText(bio, lang);
+    settranslatedBio(translatedBio);
+    console.log(translatedBio);
+    
+  };
+
+  useEffect(() => {
+    translatePage();
+  }, [lang]);
+
   const handleToggleDiscount = () => {
     if (isDiscountApplied) {
       setFeesState(feesState + 200);
@@ -57,15 +81,13 @@ const TherapistDetails = () => {
     TherapistId: "oQyoMJNC6oZ3gh2Xxv8LIZTgfuw2",
     appDate: "",
     time: "",
-    fee: feesState,
+    fee: isDiscountApplied ? feesState - 200 : feesState,
   });
 
   useEffect(() => {
     setFormState((prevState) => ({ ...prevState, userId: user?.uid }));
     getUserFromDB();
   }, [user]);
-
-  console.log(userData);
 
   const handleDateChange = (date, dateString) => {
     setFormState({ ...formState, appDate: dateString });
@@ -89,7 +111,7 @@ const TherapistDetails = () => {
         userId: user.uid,
         date: formState.appDate,
         time: formState.time,
-        fees: formState.fee,
+        fees: feesState,
       };
       await addDoc(mycollection, myDocumentData);
       console.log("db,", myDocumentData);
@@ -149,14 +171,14 @@ const TherapistDetails = () => {
               <h2 className="text-2xl font-extrabold text-indigo-950 mb-2">
                 {name}
               </h2>
-              <p className="text-lg text-gray-600">{bio}</p>
+              <p className="text-lg text-gray-600">{translatedBio}</p>
               <p className="text-lg text-gray-600">Experience: {exp}</p>
               <p className="text-lg text-gray-700">Location: {offLocation}</p>
               <p className="text-lg text-gray-700">
                 Specialization: {specialization}
               </p>
               <p className="text-lg font-semibold text-green-600 mt-2">
-                <span className={isDiscountApplied ? "line-through" : ""}>
+                <span className={isDiscountApplied ? "hidden" : ""}>
                   &#x20b9;{feesState} per Session
                 </span>{" "}
                 {isDiscountApplied && (

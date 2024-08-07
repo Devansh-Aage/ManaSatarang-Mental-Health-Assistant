@@ -10,9 +10,12 @@ const TherapistCard = ({
   fees,
   location,
   userData,
-  experience
+  experience,
+  lang
 }) => {
   const navigate = useNavigate();
+  console.log(lang);
+  
 
   const toDetails = () => {
     navigate("/therapists/therapistDetails", {
@@ -26,6 +29,7 @@ const TherapistCard = ({
         offLocation: location,
         userData:userData,
         exp:experience,
+        lang:lang
       }
     });
   };
