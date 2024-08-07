@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Slider from "react-slick";
-import { translateText } from "./utils"; // Ensure this function is defined
+import { translateText } from "./utils";
 
 const Helpline = ({ lang }) => {
   const [staticText, setStaticText] = useState([
@@ -45,7 +45,7 @@ const Helpline = ({ lang }) => {
     { name: "Workout Trainer", url: "https://www.workouttrainer.com" },
   ];
 
-  const emergencySituations = [
+  const [emergencySituations, setEmergencySituations] = useState([
     {
       title: "If You're Feeling Suicidal",
       actions: [
@@ -70,7 +70,7 @@ const Helpline = ({ lang }) => {
         "Seek professional support from a counselor.",
       ],
     },
-  ];
+  ]);
 
   useEffect(() => {
     const translateStaticText = async () => {
@@ -78,14 +78,35 @@ const Helpline = ({ lang }) => {
         const translatedTextArray = await Promise.all(
           staticText.map((text) => translateText(text, lang))
         );
+
         setStaticText(translatedTextArray);
       } catch (error) {
         console.error("Error translating text:", error);
       }
     };
 
+    const translateEmergencySituations = async () => {
+      try {
+        const translatedSituations = await Promise.all(
+          emergencySituations.map(async (situation) => {
+            const translatedTitle = await translateText(situation.title, lang);
+            const translatedActions = await Promise.all(
+              situation.actions.map((action) => translateText(action, lang))
+            );
+            return { title: translatedTitle, actions: translatedActions };
+          })
+        );
+        setEmergencySituations(translatedSituations);
+      } catch (error) {
+        console.error("Error translating emergency situations:", error);
+      }
+    };
+
+    translateEmergencySituations();
+
     translateStaticText();
   }, [lang]);
+
 
   const settings = {
     dots: true,
@@ -137,9 +158,7 @@ const Helpline = ({ lang }) => {
             whileHover={{ scale: 1.05 }}
             transition={{ duration: 0.2 }}
           >
-            <h2 className="text-xl font-semibold mb-2">
-              {staticText[2]}
-            </h2>
+            <h2 className="text-xl font-semibold mb-2">{staticText[2]}</h2>
             <ul className="list-disc pl-5">
               {mentalHealthWebsites.map((site) => (
                 <li key={site.name} className="mb-1">
@@ -157,9 +176,7 @@ const Helpline = ({ lang }) => {
             whileHover={{ scale: 1.05 }}
             transition={{ duration: 0.2 }}
           >
-            <h2 className="text-xl font-semibold mb-2">
-              {staticText[3]}
-            </h2>
+            <h2 className="text-xl font-semibold mb-2">{staticText[3]}</h2>
             <ul className="list-disc pl-5">
               {exerciseWebsites.map((site) => (
                 <li key={site.name} className="mb-1">
@@ -178,9 +195,7 @@ const Helpline = ({ lang }) => {
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5 }}
         >
-          <h2 className="text-xl font-semibold mb-2">
-            {staticText[4]}
-          </h2>
+          <h2 className="text-xl font-semibold mb-2">{staticText[4]}</h2>
           <Slider {...settings}>
             {emergencySituations.map((situation) => (
               <div key={situation.title} className="p-4">

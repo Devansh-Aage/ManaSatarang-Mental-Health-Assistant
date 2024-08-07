@@ -2,14 +2,23 @@ import React, { useState, useEffect } from "react";
 import { Tabs, Upload, Button, message, Dropdown, Menu } from "antd";
 import { UploadOutlined, DownOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
-import { collection, addDoc, query, orderBy, onSnapshot, doc, updateDoc, arrayUnion } from "firebase/firestore";
+import {
+  collection,
+  addDoc,
+  query,
+  orderBy,
+  onSnapshot,
+  doc,
+  updateDoc,
+  arrayUnion,
+} from "firebase/firestore";
 import { auth, db, storage } from "../config/firebase-config";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { translateText } from "../utils";
 import Filter from "bad-words";
 import { toast } from "react-toastify";
-import Skeleton from 'react-loading-skeleton';
+import Skeleton from "react-loading-skeleton";
 
 const { TabPane } = Tabs;
 
@@ -76,7 +85,10 @@ function Forum({ lang }) {
     try {
       const translatedPosts = await Promise.all(
         posts.map(async (post) => {
-          const translatedTitle = await translateText(post.title, targetLanguage);
+          const translatedTitle = await translateText(
+            post.title,
+            targetLanguage
+          );
           const translatedDesc = await translateText(post.desc, targetLanguage);
           return { ...post, title: translatedTitle, desc: translatedDesc };
         })
@@ -117,8 +129,13 @@ function Forum({ lang }) {
       message.error("Description is required!");
       return;
     }
-    if (filter.isProfane(newPost.title) || filter.isProfane(newPost.description)) {
-      toast.error("Title or Description contains inappropriate language and cannot be submitted.");
+    if (
+      filter.isProfane(newPost.title) ||
+      filter.isProfane(newPost.description)
+    ) {
+      toast.error(
+        "Title or Description contains inappropriate language and cannot be submitted."
+      );
       handleCloseModal();
       setNewPost({ title: "", description: "" });
       return;
@@ -243,19 +260,30 @@ function Forum({ lang }) {
   return (
     <div className="relative pt-10 pb-32 h-screen overflow-y-auto">
       <div className="flex flex-col items-center mb-10">
-        <h2 className="font-extrabold text-3xl text-indigo-950 mb-3">{staticText[0]}</h2>
-        <h2 className="font-semibold text-lg text-purple-400 mb-10">{staticText[1]}</h2>
+        <h2 className="font-extrabold text-3xl text-indigo-950 mb-3">
+          {staticText[0]}
+        </h2>
+        <h2 className="font-semibold text-lg text-purple-400 mb-10">
+          {staticText[1]}
+        </h2>
       </div>
-      <div className={`flex flex-col justify-center items-center ${isModalOpen ? "blur-sm" : ""}`}>
+      <div
+        className={`flex flex-col justify-center items-center ${
+          isModalOpen ? "blur-sm" : ""
+        }`}
+      >
         <div className="flex items-center mb-6 w-9/12 justify-between">
           <button
             className="bg-indigo-950 text-white px-4 py-2 rounded hover:bg-purple-400 transition-colors duration-300"
             onClick={handleOpenModal}
           >
-           {staticText[2]}
+            {staticText[2]}
           </button>
-          <Dropdown overlay={menu} trigger={['click']}>
-            <Button className="ant-dropdown-link" onClick={(e) => e.preventDefault()}>
+          <Dropdown overlay={menu} trigger={["click"]}>
+            <Button
+              className="ant-dropdown-link"
+              onClick={(e) => e.preventDefault()}
+            >
               Filter <DownOutlined />
             </Button>
           </Dropdown>
@@ -282,20 +310,34 @@ function Forum({ lang }) {
                 onClick={() => handlePostClick(post.id, post.imageURL)}
               >
                 <div className="flex ml-10">
-                  <div className="flex-1 flex flex-col items-start bg-white shadow-md rounded-lg">
+                  <div className="flex-1 flex  flex-col items-start bg-white shadow-md rounded-lg">
                     {post?.imageURL && (
                       <>
-                        <img src={post?.imageURL} className="w-full mb-2 rounded-lg" alt="" />
-                        <p className="text-gray-800 px-4 mt-2 font-semibold">{post.displayName}</p>
+                        <div className="h-[400px] w-full">
+                          <img
+                            src={post?.imageURL}
+                            className="w-full h-full mb-2 rounded-lg"
+                            alt=""
+                          />
+                        </div>
+                        <p className="text-gray-800 px-4 mt-2 font-semibold">
+                          {post.displayName}
+                        </p>
                       </>
                     )}
                     {!post?.imageURL && (
                       <>
-                        <p className="text-gray-800 px-4 mt-4 text-lg font-semibold">{post.title}</p>
-                        <p className="text-gray-800 px-4 mt-1 text-sm font-normal">{post.displayName}</p>
+                        <p className="text-gray-800 px-4 mt-4 text-lg font-semibold">
+                          {post.title}
+                        </p>
+                        <p className="text-gray-800 px-4 mt-1 text-sm font-normal">
+                          {post.displayName}
+                        </p>
                       </>
                     )}
-                    <p className="text-gray-800 mb-4 px-4 mt-3 text-sm font-normal">{post.desc}</p>
+                    <p className="text-gray-800 mb-4 px-4 mt-3 text-sm font-normal">
+                      {post.desc}
+                    </p>
                   </div>
 
                   {post?.imageURL && (
@@ -303,9 +345,16 @@ function Forum({ lang }) {
                       <div className="w-full flex flex-col space-y-4">
                         <div className="max-h-72 overflow-y-auto">
                           {post.comments.map((comment) => (
-                            <div key={comment.id} className="bg-white p-2 rounded shadow-sm mb-2">
-                              <p className="font-semibold text-sm text-gray-800">{comment.username}</p>
-                              <p className="text-gray-700 text-xs">{comment.text}</p>
+                            <div
+                              key={comment.id}
+                              className="bg-white p-2 rounded shadow-sm mb-2"
+                            >
+                              <p className="font-semibold text-sm text-gray-800">
+                                {comment.username}
+                              </p>
+                              <p className="text-gray-700 text-xs">
+                                {comment.text}
+                              </p>
                             </div>
                           ))}
                         </div>
@@ -341,7 +390,10 @@ function Forum({ lang }) {
               <TabPane tab="Post" key="1">
                 <h2 className="text-xl font-bold mb-6">Create a new Post</h2>
                 <div className="mb-4">
-                  <label htmlFor="description" className="block text-gray-700 font-bold">
+                  <label
+                    htmlFor="description"
+                    className="block text-gray-700 font-bold"
+                  >
                     Description
                   </label>
                   <textarea
@@ -373,9 +425,14 @@ function Forum({ lang }) {
                 </div>
               </TabPane>
               <TabPane tab="Discussion" key="2">
-                <h2 className="text-xl font-bold mb-6">Create a new Discussion</h2>
+                <h2 className="text-xl font-bold mb-6">
+                  Create a new Discussion
+                </h2>
                 <div className="mb-4">
-                  <label htmlFor="title" className="block text-gray-700 font-bold">
+                  <label
+                    htmlFor="title"
+                    className="block text-gray-700 font-bold"
+                  >
                     Title
                   </label>
                   <input
@@ -387,7 +444,10 @@ function Forum({ lang }) {
                   />
                 </div>
                 <div className="mb-4">
-                  <label htmlFor="description" className="block text-gray-700 font-bold">
+                  <label
+                    htmlFor="description"
+                    className="block text-gray-700 font-bold"
+                  >
                     Description
                   </label>
                   <textarea

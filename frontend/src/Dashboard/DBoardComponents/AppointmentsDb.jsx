@@ -93,7 +93,7 @@ const AppointmentsDb = ({ user, lang }) => {
         className="mt-4 text-gray-600 cursor-pointer text-sm hover:underline"
         onClick={handleViewAllClick}
       >
-        {staticText[1]}
+        {appointment && staticText[1]}
       </div>
     </div>
   );

@@ -390,7 +390,7 @@ const App = () => {
                 />
               }
             />
-            <Route path="/helpline" element={<Helpline />} />
+            <Route path="/helpline" element={<Helpline lang={appLanguage} />} />
           </Routes>
         </div>
       </div>

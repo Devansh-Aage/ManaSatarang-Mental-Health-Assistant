@@ -85,7 +85,6 @@ const Therapists = ({ lang, user, userData }) => {
       toast.error("Error fetching recommended therapists' details");
     }
     setrecTherapistData(therapistDetails);
-    console.log(therapistDetails);
   };
 
   // useMemo hook to cache the recommended therapist data
