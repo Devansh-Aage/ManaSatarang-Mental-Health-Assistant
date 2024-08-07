@@ -33,7 +33,7 @@ classifier_model = tf.keras.models.load_model('multi_activity_classifier_vgg16.h
 valid_activities = ['go_to_a_dog_park', 'listen_to_music', 'read_a_book', 'ride_a_bicycle', 'watch_a_sunrise_or_sunset']
 
 # Fetch API key from environment variables
-api_key = os.getenv('GENAI_API_KEY')
+api_key = os.getenv('SID_API')
 if not api_key:
     raise ValueError("API key not found. Please set your API key in the .env file.")
 
@@ -97,7 +97,6 @@ def predict():
     image_file = request.files['image']
     activity = request.form['activity'].strip().lower()
     print(image_file)
-    print(activity)
     if activity not in valid_activities:
         return jsonify({'error': f'Invalid activity. Valid activities are {valid_activities}'}), 400
 
