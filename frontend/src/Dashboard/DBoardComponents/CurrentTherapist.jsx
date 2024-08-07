@@ -10,10 +10,10 @@ import React, { useEffect, useState } from "react";
 import { db } from "../../config/firebase-config";
 import { translateText } from "../../utils";
 
-function CurrentTherapist({ user,lang }) {
+function CurrentTherapist({ user, lang }) {
   const [appointments, setAppointments] = useState([]);
   const [therapistData, settherapistData] = useState(null);
-  const [statictext, setstatictext] = useState('Current Therapist')
+  const [statictext, setstatictext] = useState("Current Therapist");
 
   useEffect(() => {
     const getAppointments = async () => {
@@ -66,27 +66,35 @@ function CurrentTherapist({ user,lang }) {
   }, [appointments]);
 
   useEffect(() => {
-    const translatePage=async()=>{
-      const translatedText= await translateText(statictext,lang)
-      setstatictext(translatedText)
-    }
-    translatePage()
-  }, [lang])
+    const translatePage = async () => {
+      const translatedText = await translateText(statictext, lang);
+      setstatictext(translatedText);
+    };
+    translatePage();
+  }, [lang]);
 
   return (
     <div className="bg-white border rounded-xl p-4 flex flex-col items-center justify-center row-span-2">
       {user ? (
         <>
           <h2 className="text-lg text-black mb-7">{statictext}</h2>
-          <img
-            src={therapistData?.photoURL || "default_therapist_icon.png"}
-            alt="Therapist Icon"
-            width={90}
-            height={90}
-            className="mb-4 rounded-full"
-          />
-          <p className="text-gray-700 text-md">{therapistData?.displayName}</p>
-          <p className="text-gray-400 text-sm">{therapistData?.email}</p>
+          {therapistData ? (
+            <>
+              <img
+                src={therapistData?.photoURL || "default_therapist_icon.png"}
+                alt="Therapist Icon"
+                width={90}
+                height={90}
+                className="mb-4 rounded-full"
+              />
+              <p className="text-gray-700 text-md">
+                {therapistData?.displayName}
+              </p>
+              <p className="text-gray-400 text-sm">{therapistData?.email}</p>
+            </>
+          ) : (
+            <p>Currently no active therapist</p>
+          )}
         </>
       ) : (
         <p className="text-gray-500 text-sm mb-4">Loading...</p>
