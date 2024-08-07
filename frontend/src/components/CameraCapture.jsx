@@ -141,7 +141,7 @@ const CameraCapture = ({ userData, userId, username }) => {
             Take Photo
           </button>
           <button
-            className={`bg-purple-900 text-white px-4 py-2 rounded-md mt-4  ${loading&& 'bg-slate-500'}`}
+            className={`bg-purple-900 text-white px-4 py-2 rounded-md mt-4 `}
             onClick={closeCamera}
           >
             Close Camera

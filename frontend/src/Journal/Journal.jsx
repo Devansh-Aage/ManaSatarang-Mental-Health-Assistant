@@ -308,7 +308,7 @@ function Journal({ user, lang }) {
           </form>
         </div>
       </div>
-      <div className="flex-1 max-w-500 p-4 bg-purple-100 rounded-lg shadow-md">
+      <div className="flex-1 max-w-500 p-4 bg-purple-100 rounded-lg shadow-md overflow-y-auto max-h-[550px]">
         <h2 className="text-2xl font-bold mb-4">{staticText[3]}</h2>
         {loadingTranslation ? (
           <Skeleton count={5} />

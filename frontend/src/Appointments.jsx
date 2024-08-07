@@ -43,9 +43,9 @@ const Appointments = ({ user }) => {
     <div className="mx-10 my-2 mt-10">
       <h1 className="font-extrabold text-3xl text-indigo-950">Your Appointments</h1>
       
-      <div className="mt-5 w-full overflow-x-auto">
+      <div className="mt-5 w-full overflow-x-auto rounded-lg">
         {appointments.length > 0 ? (
-          <table className="min-w-full bg-white border border-gray-300 rounded-lg shadow-md">
+          <table className="min-w-full bg-white border-gray-300 rounded-lg shadow-md">
             <thead className="bg-gray-100 border-b">
               <tr>
                 <th className="py-2 px-4 text-left text-gray-600">Patient</th>
