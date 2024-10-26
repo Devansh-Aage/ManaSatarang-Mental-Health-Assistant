@@ -109,7 +109,7 @@ const Navbar = ({ user, setAppLanguage }) => {
       <div
         className={`fixed flex flex-col h-screen transition-transform transform ${
           isOpen
-            ? "translate-x-0 lg:w-[250px] w-full shadow-lg lg:rounded-r-3xl lg:bg-transparent bg-white"
+            ? "translate-x-0 lg:w-[250px] w-full shadow-lg lg:rounded-r-3xl lg:bg-transparent bg-purple"
             : "-translate-x-0 w-[60px] items-center border-gray-200 lg:bg-transparent"
         }`}
       >

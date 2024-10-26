@@ -20,7 +20,7 @@ const Login = () => {
   const canvasRef = useRef(null);
   const [stream, setStream] = useState(null);
   const [photo, setPhoto] = useState(null);
-  const [userState, setUserState] = useState(null)
+  const [userState, setUserState] = useState(null);
 
   const videoConstraints = {
     width: 1280,
@@ -79,7 +79,9 @@ const Login = () => {
         setUserState(userData);
         // console.log('inside if loop');
         if (userData.hasBiometric) {
-          navigate("/scan",{state:{userUID:userData.uid, username:userData.name}});
+          navigate("/scan", {
+            state: { userUID: userData.uid, username: userData.name },
+          });
           // console.log('inside biometric');
           // openCamera(); // Start the camera when biometric check is needed
 
@@ -112,7 +114,7 @@ const Login = () => {
           //   }
           // }, 2000); // Adjust timeout as needed to ensure capture
         } else {
-          navigate("/dashboard");
+          navigate("/");
           toast.success(`Welcome back, ${userData.name}!`);
         }
       } else {
@@ -174,7 +176,6 @@ const Login = () => {
         <video ref={videoRef} autoPlay style={{ width: '50%' }} />
         <canvas ref={canvasRef} style={{ display: 'none' }} />
       </div> */}
-    
     </div>
   );
 };

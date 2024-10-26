@@ -17,6 +17,7 @@ initialize_app(cred)
 db = firestore.client()
 
 GENAI_API_KEY = "AIzaSyCpJwfwReAlATvyR3puWeKejomoPz26UUM"
+# GENAI_API_KEY = "AIzaSyCrd96hO0K3B9GFHy9Uj-ePewRbJ3WwtOo"
 # Initialize Gemini API
 genai.configure(api_key=GENAI_API_KEY)
 generation_config = {
@@ -38,7 +39,7 @@ model = genai.GenerativeModel(
         "Offer insights into their emotions and suggest additional activities they can try to improve their mood.\n"
         "Whenever the user asks for some exercises, provide a minimum of 5 structured exercises.\n"
         "Don't answer any questions that are not related to mental health.\n"
-        "If the user's mental health is critical or extreme, such as having suicidal thoughts, ask the user to contact emergency numbers."
+        "If the user's mental health is critical or extreme, such as having suicidal thoughts, ask the user to contact emergency numbers. name: Arpita Suicide Prevention Helpline, number: 080-23655557 name: Vandrevala Foundation, number: 9999 666 555"
         "For every response please reply in maximum 150 words and minimum can be according to you"
     ),
 )
@@ -126,9 +127,9 @@ def fetch_recommendations(keywords):
     youtube_videos, articles = [], []
     for keyword in keywords:
         youtube_videos.extend(get_video_details(search_youtube(keyword, max_results=4)))
-        articles.extend(search_google(keyword, num_results=4))
+        articles.extend(search_google("Motivation "+keyword, num_results=4))
 
-    return youtube_videos[:10], articles[:10]
+    return youtube_videos[:4], articles[:10]
 
 def search_youtube(query, max_results=5):
     youtube = build("youtube", "v3", developerKey=os.getenv('YOUTUBE_KEY'))
