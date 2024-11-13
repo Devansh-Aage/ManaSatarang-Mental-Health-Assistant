@@ -1,4 +1,4 @@
-import datetime
+import os
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -16,8 +16,7 @@ cred = credentials.Certificate("./config/firebase-config.json")
 initialize_app(cred)
 db = firestore.client()
 
-GENAI_API_KEY = "AIzaSyCpJwfwReAlATvyR3puWeKejomoPz26UUM"
-# GENAI_API_KEY = "AIzaSyCrd96hO0K3B9GFHy9Uj-ePewRbJ3WwtOo"
+GENAI_API_KEY = os.getenv("GENAI_API_KEY")
 # Initialize Gemini API
 genai.configure(api_key=GENAI_API_KEY)
 generation_config = {
