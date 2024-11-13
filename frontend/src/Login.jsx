@@ -79,7 +79,7 @@ const Login = () => {
             state: { userUID: userData.uid, username: userData.name },
           });
         } else {
-          navigate("/dashboard");
+          navigate("/");
           toast.success(`Welcome back, ${userData.name}!`);
         }
       } else {

@@ -104,7 +104,8 @@ const App = () => {
         const endOfDayUTC530 = new Date(
           startOfDayUTC530.getTime() + 24 * 60 * 60 * 1000
         );
-
+        console.log(startOfDayUTC530);
+        console.log(endOfDayUTC530);
         const tasksRef = collection(db, "tasks");
         const q = query(
           tasksRef,
@@ -147,8 +148,8 @@ const App = () => {
   }, [appLanguage]);
 
   const fetchTaskData = async () => {
-    const storedLastUpdateDate = localStorage.getItem("lastUpdateDate");
-    // const storedLastUpdateDate = "05/06/2024";
+    // const storedLastUpdateDate = localStorage.getItem("lastUpdateDate");
+    const storedLastUpdateDate = "06/06/2024";
     const today = new Date().toLocaleDateString("en-GB");
     console.log(today);
     console.log(storedLastUpdateDate);
@@ -156,7 +157,7 @@ const App = () => {
       await getTasksFromDB();
       setLastUpdateDate(storedLastUpdateDate);
     } else {
-      const todayActivities = getRandomActivities(activityList, 3);
+      const todayActivities = getRandomActivities(activityList, 5);
       localStorage.setItem("lastUpdateDate", today);
 
       if (user) {

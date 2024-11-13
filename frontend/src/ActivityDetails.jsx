@@ -185,7 +185,7 @@ const ActivityDetails = ({ activities, user, lang }) => {
           <div className="font-semibold text-2xl ml-4">{staticText[0]}</div>
         </div>
         {translatedActivities.length > 0
-          ? translatedActivities.slice(0, 3).map((a) => (
+          ? translatedActivities.slice(0, 5).map((a) => (
               <div key={a.id} onClick={() => handleActivityClick(a)}>
                 <ActivityBlock
                   key={a.id}
