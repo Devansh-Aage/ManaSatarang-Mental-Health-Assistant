@@ -158,7 +158,7 @@ const Chat = ({ lang }) => {
         />
         <button
           onClick={handleSendMessage}
-          className="absolute right-2 top-1/2 transform -translate-y-1/2 text-purple-500 hover:text-purple-600 mr-28"
+          className="absolute right-2 top-1/2 transform -translate-y-1/2 text-purple-500 hover:text-purple-600 mr-5"
         >
           Send
         </button>

@@ -99,7 +99,7 @@ const App = () => {
         const today = new Date();
         today.setUTCHours(0, 0, 0, 0);
 
-        const offset = 5.5 * 60 * 60 * 1000; // 5.5 hours in milliseconds
+        const offset = 1 * 60 * 60 * 1000; // 5.5 hours in milliseconds
         const startOfDayUTC530 = new Date(today.getTime() + offset);
         const endOfDayUTC530 = new Date(
           startOfDayUTC530.getTime() + 24 * 60 * 60 * 1000
@@ -196,7 +196,7 @@ const App = () => {
   };
 
   return (
-    <div className="flex absolute inset-0 h-full w-full bg-[#F9F9F9]">
+    <div className="flex absolute inset-0 h-full w-full bg-purple-50 ">
       <Navbar
         user={user}
         onNavbarToggle={(isOpen) =>

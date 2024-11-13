@@ -11,8 +11,6 @@ import {
 } from "firebase/firestore";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import CameraCapture from "./components/CameraCapture";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -20,7 +18,7 @@ const Login = () => {
   const canvasRef = useRef(null);
   const [stream, setStream] = useState(null);
   const [photo, setPhoto] = useState(null);
-  const [userState, setUserState] = useState(null)
+  const [userState, setUserState] = useState(null);
 
   const videoConstraints = {
     width: 1280,
@@ -74,43 +72,12 @@ const Login = () => {
       const userSnapshot = await getDocs(userQuery);
 
       if (userSnapshot.docs.length > 0) {
-        // User exists, fetch existing data
         const userData = userSnapshot.docs[0].data();
         setUserState(userData);
-        // console.log('inside if loop');
         if (userData.hasBiometric) {
-          navigate("/scan",{state:{userUID:userData.uid, username:userData.name}});
-          // console.log('inside biometric');
-          // openCamera(); // Start the camera when biometric check is needed
-
-          // // Wait for the camera to open and photo to be taken
-          // setTimeout(async () => {
-          //   takePhoto(); // Capture the photo
-
-          //   if (photo) {
-          //     const blob = await fetch(photo).then((res) => res.blob());
-          //     const formData = new FormData();
-          //     formData.append('image', blob);
-
-          //     const res = await axios.post(
-          //       'https://akki3110.pythonanywhere.com/login',
-          //       formData,
-          //       {
-          //         headers: {
-          //           'Content-Type': 'multipart/form-data',
-          //         },
-          //       }
-          //     );
-          //     if (res.data.success) {
-          //       navigate('/');
-          // toast.success(`Welcome back, ${userData.name}!`);
-          //     } else {
-          //       toast.error('Biometric authentication failed.');
-          //     }
-          //   } else {
-          //     toast.error('Failed to capture image from webcam.');
-          //   }
-          // }, 2000); // Adjust timeout as needed to ensure capture
+          navigate("/scan", {
+            state: { userUID: userData.uid, username: userData.name },
+          });
         } else {
           navigate("/dashboard");
           toast.success(`Welcome back, ${userData.name}!`);
@@ -170,11 +137,6 @@ const Login = () => {
         </svg>
         Login with Google
       </button>
-      {/* <div>
-        <video ref={videoRef} autoPlay style={{ width: '50%' }} />
-        <canvas ref={canvasRef} style={{ display: 'none' }} />
-      </div> */}
-    
     </div>
   );
 };

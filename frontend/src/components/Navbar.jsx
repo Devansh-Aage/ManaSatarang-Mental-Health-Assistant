@@ -101,7 +101,7 @@ const Navbar = ({ user, setAppLanguage }) => {
 
   return (
     <div
-      className={`relative z-50 lg:flex lg:flex-col lg:top-0 lg:left-0 lg:h-screen transition-all duration-300 ${
+      className={`relative z-50 lg:flex lg:flex-col   lg:top-0 lg:left-0 lg:h-screen transition-all bg-purple-700 duration-300 ${
         isOpen ? "lg:w-[250px]" : "lg:w-[60px]"
       } z-50`}
     >
@@ -109,7 +109,7 @@ const Navbar = ({ user, setAppLanguage }) => {
       <div
         className={`fixed flex flex-col h-screen transition-transform transform ${
           isOpen
-            ? "translate-x-0 lg:w-[250px] w-full shadow-lg lg:rounded-r-3xl lg:bg-transparent bg-white"
+            ? "translate-x-0 lg:w-[250px] w-full shadow-lg lg:rounded-r-3xl lg:bg-transparent "
             : "-translate-x-0 w-[60px] items-center border-gray-200 lg:bg-transparent"
         }`}
       >
@@ -117,9 +117,9 @@ const Navbar = ({ user, setAppLanguage }) => {
         <div className={`flex items-center justify-between p-3 border-y-0`}>
           <button
             onClick={handleToggle}
-            className="text-gray-700 hover:bg-gray-200 rounded transition-colors duration-200"
+            className="text-gray-700  rounded transition-colors duration-200"
           >
-            {isOpen ? <ChevronLeft size={24} /> : <ChevronRight size={24} />}
+            {isOpen ? <ChevronLeft size={24} color="white" /> : <ChevronRight color="white" size={24} />}
           </button>
           <Select
             value={language}
@@ -144,7 +144,7 @@ const Navbar = ({ user, setAppLanguage }) => {
             {user && (
               <Link
                 to="/"
-                className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left"
+                className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left text-white"
               >
                 <LayoutDashboard size={20} />
                 <span className={`${isOpen ? "block" : "hidden"}`}>
@@ -154,7 +154,7 @@ const Navbar = ({ user, setAppLanguage }) => {
             )}
             <Link
               to="/search"
-              className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left"
+              className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left text-white"
             >
               <TextSearch size={20} />
               <span className={`${isOpen ? "block" : "hidden"}`}>
@@ -163,7 +163,7 @@ const Navbar = ({ user, setAppLanguage }) => {
             </Link>
             <Link
               to="/chatbot"
-              className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left"
+              className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left text-white"
             >
               <MessageCircle size={20} />
               <span className={`${isOpen ? "block" : "hidden"}`}>
@@ -172,7 +172,7 @@ const Navbar = ({ user, setAppLanguage }) => {
             </Link>
             <Link
               to="/community/student"
-              className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left"
+              className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left text-white"
             >
               <Users size={20} />
               <span className={`${isOpen ? "block" : "hidden"}`}>
@@ -181,7 +181,7 @@ const Navbar = ({ user, setAppLanguage }) => {
             </Link>
             <Link
               to="/forum"
-              className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left"
+              className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left text-white"
             >
               <BookOpen size={20} />
               <span className={`${isOpen ? "block" : "hidden"}`}>
@@ -190,7 +190,7 @@ const Navbar = ({ user, setAppLanguage }) => {
             </Link>
             <Link
               to="/therapists"
-              className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left"
+              className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left text-white"
             >
               <User size={20} />
               <span className={`${isOpen ? "block" : "hidden"}`}>
@@ -199,7 +199,7 @@ const Navbar = ({ user, setAppLanguage }) => {
             </Link>
             <Link
               to="/helpline"
-              className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left"
+              className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left text-white"
             >
               <HeartHandshake size={20} />
               <span className={`${isOpen ? "block" : "hidden"}`}>
@@ -227,44 +227,44 @@ const Navbar = ({ user, setAppLanguage }) => {
             {user && (
               <Link
                 to="/"
-                className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left"
+                className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left text-white"
               >
                 <LayoutDashboard size={20} />
               </Link>
             )}
             <Link
               to="/search"
-              className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left"
+              className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left text-white"
             >
               <TextSearch size={20} />
             </Link>
             <Link
               to="/chatbot"
-              className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left"
+              className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left text-white"
             >
               <MessageCircle size={20} />
             </Link>
             <Link
               to="/community/student"
-              className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left"
+              className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left text-white"
             >
               <Users size={20} />
             </Link>
             <Link
               to="/forum"
-              className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left"
+              className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left text-white"
             >
               <BookOpen size={20} />
             </Link>
             <Link
               to="/therapists"
-              className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left"
+              className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left text-white"
             >
               <User size={20} />
             </Link>
             <Link
               to="/helpline"
-              className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left"
+              className="flex items-center space-x-3 transition-colors duration-200 hover:text-purple-400 text-left text-white"
             >
               <HeartHandshake size={20} />
             </Link>
@@ -289,7 +289,7 @@ const Navbar = ({ user, setAppLanguage }) => {
         {/* Profile Section */}
         {user && (
           <div
-            className={`p-4 bg-white shadow-md border-t border-gray-300 ${
+            className={`p-4 bg-white rounded-lg mx-2 mb-2 shadow-md border-t border-gray-300 ${
               isOpen ? "block " : "hidden"
             }`}
           >

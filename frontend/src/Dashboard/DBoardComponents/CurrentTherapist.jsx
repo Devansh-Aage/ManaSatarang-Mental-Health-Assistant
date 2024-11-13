@@ -9,11 +9,13 @@ import {
 import React, { useEffect, useState } from "react";
 import { db } from "../../config/firebase-config";
 import { translateText } from "../../utils";
+import { toast } from "react-toastify";
 
 function CurrentTherapist({ user, lang }) {
   const [appointments, setAppointments] = useState([]);
   const [therapistData, settherapistData] = useState(null);
   const [statictext, setstatictext] = useState("Current Therapist");
+  console.log(therapistData);
 
   useEffect(() => {
     const getAppointments = async () => {

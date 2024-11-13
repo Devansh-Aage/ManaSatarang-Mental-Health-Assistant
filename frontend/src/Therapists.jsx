@@ -112,7 +112,7 @@ const Therapists = ({ lang, user, userData }) => {
         {staticText[5]}
       </h2>
       <div className="flex flex-wrap gap-5 justify-center">
-        {therapists.map((therapist, index) => (
+        {therapists.slice(0,8).map((therapist, index) => (
           <TherapistCard
             key={index}
             {...therapist}
